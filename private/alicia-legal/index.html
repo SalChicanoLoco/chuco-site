@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alicia R. Atencio — Legal Package | Cardinal Trust Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0d1b2a;
+  --navy2:  #1b2d42;
+  --red:    #8b0000;
+  --gold:   #9a6a00;
+  --paper:  #f8f5ef;
+  --paper2: #f0ece2;
+  --ink:    #1a1a1a;
+  --grey:   #5c5445;
+  --rule:   rgba(26,26,26,0.12);
+  --display:'Libre Baskerville', serif;
+  --body:   'Source Serif 4', serif;
+  --mono:   'IBM Plex Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.8;}
+
+.site-header{background:var(--navy);border-bottom:3px solid var(--red);}
+.header-top{background:var(--red);height:3px;}
+.header-inner{max-width:860px;margin:0 auto;padding:28px 32px 22px;}
+.header-org{font-family:var(--mono);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.header-title{font-family:var(--display);font-size:clamp(26px,4vw,38px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:6px;}
+.header-sub{font-family:var(--body);font-size:14px;font-weight:300;color:rgba(255,255,255,0.55);margin-bottom:16px;line-height:1.5;}
+.header-meta{display:flex;flex-wrap:wrap;gap:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);}
+.meta-item{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
+.meta-item strong{color:rgba(255,255,255,0.75);display:block;margin-bottom:2px;}
+.conf-badge{display:inline-block;padding:5px 14px;background:var(--red);color:#fff;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-top:14px;}
+
+.alert-bar{background:var(--red);padding:12px 32px;}
+.alert-bar p{max-width:860px;margin:0 auto;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.9);}
+
+.main{max-width:860px;margin:0 auto;padding:40px 32px 80px;}
+@media(max-width:640px){.main,.header-inner{padding-left:20px;padding-right:20px;}}
+
+.section{margin-bottom:48px;}
+.section-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.section-title{font-family:var(--display);font-size:22px;font-weight:700;color:var(--navy);margin-bottom:4px;padding-bottom:10px;border-bottom:2px solid var(--navy);}
+.section-rule{width:40px;height:2px;background:var(--gold);margin-bottom:16px;}
+
+p.body{font-size:15.5px;line-height:1.82;margin-bottom:16px;color:var(--ink);}
+p.note{font-size:13px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;}
+
+.alert-box{background:#fff0f0;border:1px solid var(--red);border-left:5px solid var(--red);padding:18px 22px;margin:20px 0;}
+.alert-box h4{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.alert-box ul{list-style:none;padding:0;}
+.alert-box li{font-size:14px;color:var(--red);padding:4px 0 4px 16px;position:relative;line-height:1.5;}
+.alert-box li::before{content:'!';position:absolute;left:0;font-weight:700;font-family:var(--mono);}
+
+.tbl-wrap{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+thead tr{background:var(--navy);color:#fff;}
+thead th{padding:9px 10px;text-align:left;font-family:var(--mono);font-size:8.5px;letter-spacing:1px;text-transform:uppercase;font-weight:500;}
+tbody tr:nth-child(odd){background:#fff;}
+tbody tr:nth-child(even){background:var(--paper2);}
+tbody td{padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55;}
+tbody tr.highlight-red{background:#fff0f0 !important;}
+tbody tr.highlight-red td{color:var(--red);font-weight:600;}
+tbody tr.highlight-amber{background:#fff8e0 !important;}
+tfoot tr{background:var(--navy2);}
+tfoot td{padding:8px 10px;color:#fff;font-weight:700;font-family:var(--mono);font-size:9px;}
+.priority-critical{color:var(--red);font-weight:700;font-family:var(--mono);font-size:9px;}
+.priority-high{color:#b45309;font-weight:700;font-family:var(--mono);font-size:9px;}
+.priority-med{color:var(--grey);font-family:var(--mono);font-size:9px;}
+.conflict-warning{background:#fff0f0;border:1px solid var(--red);border-left:4px solid var(--red);padding:12px 16px;margin-bottom:14px;font-size:13.5px;color:var(--red);}
+
+.firm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+@media(max-width:580px){.firm-grid{grid-template-columns:1fr;}}
+.firm-card{border:1px solid var(--rule);border-left:4px solid var(--navy);padding:16px;background:#fff;}
+.firm-card.priority-1{border-left-color:var(--gold);}
+.firm-card h4{font-family:var(--display);font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.firm-card .priority-tag{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block;}
+.firm-card p{font-size:13px;line-height:1.65;color:var(--grey);margin-bottom:4px;}
+.firm-card a{color:var(--navy);font-weight:600;}
+.firm-card .firm-note{font-style:italic;font-size:12px;color:var(--grey);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);}
+
+.script-box{background:#f0f4f8;border:1px solid #3a5a9a;border-left:4px solid #3a5a9a;padding:18px 22px;margin:20px 0;}
+.script-box h4{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#3a5a9a;margin-bottom:10px;}
+.script-box p{font-size:15px;font-style:italic;line-height:1.75;color:var(--ink);}
+
+.toc{background:var(--navy2);padding:20px 24px;margin-bottom:32px;}
+.toc h3{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.toc ol{list-style:none;padding:0;columns:2;gap:20px;}
+@media(max-width:500px){.toc ol{columns:1;}}
+.toc li{margin-bottom:6px;}
+.toc a{font-family:var(--body);font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;}
+.toc a:hover{color:#fff;}
+
+footer{background:var(--navy);padding:24px 32px;border-top:3px solid var(--red);}
+footer p{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);line-height:2;max-width:860px;margin:0 auto;}
+
+@keyframes up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.main{animation:up .6s cubic-bezier(.16,1,.3,1) both;}
+</style>
+</head>
+<body>
+
+<div class="header-top"></div>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-org">Sena Colectivo · Legal Package · April 15, 2026</div>
+    <h1 class="header-title">Alicia R. Atencio<br>Legal Package</h1>
+    <p class="header-sub">Cardinal Trust Inc. — Trustee Resignation &amp; Successor Appointment<br>Prepared for Attorney Review · New Mexico Uniform Trust Code</p>
+    <div class="header-meta">
+      <div class="meta-item"><strong>Beneficiary</strong>Alicia R. Atencio</div>
+      <div class="meta-item"><strong>Trust</strong>Atencio Living Trust · Sept 7, 2016</div>
+      <div class="meta-item"><strong>Former Trustee</strong>Cardinal Trust Inc. — Resigned</div>
+      <div class="meta-item"><strong>Effective Date</strong>April 15, 2026</div>
+      <div class="meta-item"><strong>Status</strong>URGENT — Successor Required</div>
+    </div>
+    <div class="conf-badge">Confidential — Attorney &amp; Client Use Only</div>
+  </div>
+</header>
+
+<div class="alert-bar">
+  <p>&#9888; Urgent — Trust without active trustee as of today. Essential bills unpaid. Attorney action required immediately.</p>
+</div>
+
+<main class="main">
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#summary">01 · Executive Summary</a></li>
+      <li><a href="#parties">02 · Parties</a></li>
+      <li><a href="#timeline">03 · Timeline</a></li>
+      <li><a href="#distributions">04 · Distributions</a></li>
+      <li><a href="#legal">05 · Legal Basis</a></li>
+      <li><a href="#attorneys">06 · Recommended Attorneys</a></li>
+      <li><a href="#checklist">07 · Document Checklist</a></li>
+    </ol>
+  </nav>
+
+  <section class="section" id="summary">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">Executive Summary</h2>
+    <div class="section-rule"></div>
+    <p class="body">Alicia R. Atencio is the beneficiary of the Alicia Atencio Trust, created under the Living Trust for Pedro Atencio and Diane M. Atencio, dated September 7, 2016. Cardinal Trust Inc. accepted appointment as Successor Trustee on March 9, 2026. On April 15, 2026, through its attorneys at Hurley Toevs Styles Hamblin &amp; Panter, PA, Cardinal Trust gave written notice of its resignation as trustee, citing "recent communications from you, including threats of litigation."</p>
+    <p class="body">Cardinal Trust's resignation creates an immediate vacancy in the trusteeship. Per Article Three, Section 6 of the Trust, if no separately designated successor trustee exists, the vacancy shall be filled either by a majority in interest of the beneficiaries eligible to receive distributions, or by a court of competent jurisdiction. Cardinal's resignation is effective upon appointment of a successor trustee.</p>
+    <div class="alert-box">
+      <h4>Immediate concerns requiring attorney action</h4>
+      <ul>
+        <li>Essential bills (PNM, propane, loans) remain unpaid as of April 15, 2026</li>
+        <li>No successor trustee has been appointed — trust is in administrative limbo</li>
+        <li>Cardinal Trust will only act to preserve assets — no distributions until successor is named</li>
+        <li>Two law firms represent Cardinal Trust — beneficiary requires independent counsel urgently</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="parties">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Parties</h2>
+    <div class="section-rule"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Party</th><th>Name / Entity</th><th>Role</th><th>Contact</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Beneficiary</strong></td><td>Alicia R. Atencio</td><td>Trust beneficiary — client</td><td>alicek1ratencio@gmail.com<br>35 Nambe W, Santa Fe NM 87508</td></tr>
+          <tr><td><strong>Former Trustee</strong></td><td>Cardinal Trust Inc.</td><td>Resigned April 15, 2026</td><td>2424 Louisiana Blvd NE Ste 220<br>Albuquerque NM 87110<br>(505) 600-3002</td></tr>
+          <tr><td><strong>Cardinal Attorney</strong></td><td>Vincent M. Haslam<br>Hurley Toevs Styles<br>Hamblin &amp; Panter PA</td><td>Wrote resignation letter</td><td>4155 Montgomery Blvd NE<br>Albuquerque NM 87109<br>(505) 888-1188</td></tr>
+          <tr><td><strong>Cardinal Attorney 2</strong></td><td>Marcy Baysinger<br>PBWS Law</td><td>CC'd on resignation letter</td><td>MBaysinger@pbwslaw.com<br>(505) 247-0411</td></tr>
+          <tr><td><strong>Trust Officer</strong></td><td>Alyssa M. Trujillo</td><td>Filed correspondence</td><td>ATrujillo@cardinaltrust.org</td></tr>
+          <tr><td><strong>Trust VP</strong></td><td>John Attwood Sr.</td><td>Approved distributions (NCG)</td><td>jattwood@cardinaltrust.org</td></tr>
+          <tr><td><strong>COO</strong></td><td>Kim Finley</td><td>CC'd on correspondence</td><td>kfinley@cardinaltrust.org</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="timeline">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">Chronological Timeline</h2>
+    <div class="section-rule"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Event</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td>Sept 7, 2016</td><td>Living Trust created for Pedro &amp; Diane Atencio</td><td>Governing trust instrument</td></tr>
+          <tr><td>Mar 9, 2026</td><td>Cardinal Trust accepted appointment as Successor Trustee</td><td>Start of fiduciary relationship</td></tr>
+          <tr><td>Mar 23, 2026</td><td>Trust funds received by Cardinal Trust</td><td>Funds available — administration begins</td></tr>
+          <tr><td>Mar 24, 2026</td><td>$1,000 distributed — immediate expenses / food (JA)</td><td>First distribution</td></tr>
+          <tr><td>Mar 26, 2026</td><td>$932.40 — Discount Tires (JA/AT)<br>Budget meeting held with Alicia</td><td>Discretionary — no bills paid</td></tr>
+          <tr><td>Apr 1, 2026</td><td>$500 — overdraft coverage (AT, by phone)</td><td>Discretionary — no bills paid</td></tr>
+          <tr><td>Apr 3, 2026</td><td>$1,167.15 — overdraft coverage (AT)</td><td>Phone service disconnected due to non-payment</td></tr>
+          <tr><td>Apr 6, 2026</td><td>$3,000 — vacation funds<br>(Attwood discussed $6,000; Cardinal paid $3,000)</td><td>18 days since funds received — bills still unpaid</td></tr>
+          <tr class="highlight-amber"><td>Apr 6, 2026</td><td><strong>Alicia sends formal written complaint to Alyssa Trujillo</strong><br>Documents: unpaid bills, phone disconnection, vacation dispute, "green card" comment</td><td><strong>Key document — beneficiary puts concerns in writing</strong></td></tr>
+          <tr class="highlight-amber"><td>Apr 7, 2026</td><td><strong>Alyssa Trujillo responds via email</strong><br>CC: Attwood, Kim Finley<br>Confirms total disbursed: $6,599.55</td><td><strong>Key document — Cardinal admits only phone was paid</strong></td></tr>
+          <tr><td>Apr 10, 2026</td><td>Formal demand letter delivered to Cardinal Trust<br>5 business days to pay bills and provide accounting</td><td>Demand triggers legal response</td></tr>
+          <tr class="highlight-red"><td>Apr 15, 2026</td><td><strong>Hurley Firm delivers resignation letter</strong><br>Vincent M. Haslam on behalf of Cardinal<br>CC: Attwood, Trujillo, Finley, Baysinger (PBWS)</td><td><strong>Cardinal resigns citing "threats of litigation"</strong></td></tr>
+          <tr class="highlight-red"><td>Apr 15, 2026<br><strong>TODAY</strong></td><td><strong>Trust without active trustee<br>Essential bills still unpaid<br>Successor appointment required</strong></td><td><strong>URGENT — Attorney action needed immediately</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="distributions">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Distribution Record</h2>
+    <div class="section-rule"></div>
+    <p class="note">Source: Alyssa Trujillo email, April 7, 2026. Cardinal Trust confirmed all distributions since March 23, 2026.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Amount</th><th>Payee</th><th>Purpose</th><th>Auth.</th></tr></thead>
+        <tbody>
+          <tr><td>3/24/2026</td><td>$1,000.00</td><td>Alicia Atencio</td><td>Immediate expenses / food</td><td>JA</td></tr>
+          <tr><td>3/26/2026</td><td>$932.40</td><td>Discount Tires</td><td>New tires — vehicle</td><td>JA / AT</td></tr>
+          <tr><td>4/1/2026</td><td>$500.00</td><td>Alicia Atencio</td><td>Overdraft coverage</td><td>AT</td></tr>
+          <tr><td>4/3/2026</td><td>$1,167.15</td><td>Alicia Atencio</td><td>Overdraft coverage</td><td>AT</td></tr>
+          <tr><td>4/6/2026</td><td>$3,000.00</td><td>Alicia Atencio</td><td>Vacation funds</td><td>JA / AT</td></tr>
+        </tbody>
+        <tfoot><tr><td><strong>TOTAL</strong></td><td><strong>$6,599.55</strong></td><td colspan="3">Zero dollars applied to standing essential bills</td></tr></tfoot>
+      </table>
+    </div>
+    <p class="body">Of $6,599.55 distributed in the first 23 days, zero dollars were applied to standing essential bills — PNM, propane, or loans. Discretionary expenses (vacation, tires, overdraft) were processed same-day. Essential bills were deferred without explanation while phone service was disconnected due to non-payment.</p>
+  </section>
+
+  <section class="section" id="legal">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-title">Legal Basis</h2>
+    <div class="section-rule"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Statute</th><th>Duty</th><th>Potential Violation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>NMSA § 46A-8-802</strong></td><td>Duty of Loyalty — administer trust solely in interest of beneficiary</td><td>Prioritizing discretionary expenses over essential bills while phone service was disconnected</td></tr>
+          <tr><td><strong>NMSA § 46A-8-804</strong></td><td>Duty of Prudent Administration — administer as a prudent person would</td><td>Failure to pay identified standing bills for 23+ days after receiving trust funds; unilateral reduction of approved vacation distribution</td></tr>
+          <tr><td><strong>NMSA § 46A-8-813</strong></td><td>Duty to Inform &amp; Report — keep beneficiary reasonably informed</td><td>No proactive communication about bill payment delays; failure to provide written bill schedule despite request</td></tr>
+          <tr><td><strong>NMSA § 58-9-11</strong></td><td>Trust Company Reorganization — RLD FID approval required for certificate transfer</td><td>Active IPRA request pending with NM RLD re: Certificate #36 transfer from Decades LLC to Cardinal Trust — records due April 22, 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="attorneys">
+    <div class="section-label">Section 06</div>
+    <h2 class="section-title">Recommended Attorneys</h2>
+    <div class="section-rule"></div>
+    <div class="conflict-warning">
+      <strong>&#x26D4; Conflict of Interest — Do Not Contact:</strong> PBWS Law (Marcy Baysinger is on Cardinal's resignation letter) and Hurley Toevs Styles Hamblin &amp; Panter (wrote the resignation letter). Both firms represent Cardinal Trust.
+    </div>
+    <div class="firm-grid">
+      <div class="firm-card priority-1">
+        <span class="priority-tag">Priority 1 — Free Consult · Santa Fe</span>
+        <h4>Walk-in Wills</h4>
+        <p>Santa Fe, New Mexico</p>
+        <p><a href="mailto:info@walkinwills.com">info@walkinwills.com</a></p>
+        <p><a href="https://walkinwills.com">walkinwills.com</a></p>
+        <p class="firm-note">Free one-hour consultation. Specializes in NM Uniform Trust Code and beneficiary rights. Best option for same-day Santa Fe consultation.</p>
+      </div>
+      <div class="firm-card">
+        <span class="priority-tag">Priority 2 — Free Evaluation · Albuquerque</span>
+        <h4>New Mexico Legal Group</h4>
+        <p><a href="tel:5058437303">(505) 843-7303</a></p>
+        <p>2701 Arizona St NE, Albuquerque NM 87110</p>
+        <p>Mon–Fri 9:00am–5:00pm</p>
+        <p><a href="https://newmexicolegalgroup.com">newmexicolegalgroup.com</a></p>
+        <p class="firm-note">Super Lawyers rated. Estate and trust litigation, probate, beneficiary rights. Free case evaluation. Ask specifically for trust and estate attorney.</p>
+      </div>
+      <div class="firm-card">
+        <span class="priority-tag">Priority 3 — Litigation Ready · Albuquerque</span>
+        <h4>Sutin, Thayer &amp; Browne</h4>
+        <p>Marjorie A. Rogers or Lisa Y.W. Cosper</p>
+        <p><a href="tel:5058832500">(505) 883-2500</a></p>
+        <p>6100 Uptown Blvd NE, Suite 800<br>Albuquerque NM 87110</p>
+        <p class="firm-note">Established NM firm. Trust and estate litigation team. Request Marjorie Rogers or Lisa Cosper directly for trust matters.</p>
+      </div>
+      <div class="firm-card">
+        <span class="priority-tag">Priority 4 — Legal Aid · Statewide NM</span>
+        <h4>NM Legal Aid</h4>
+        <p><a href="tel:5053878866">(505) 387-8866</a></p>
+        <p>Statewide — multiple offices</p>
+        <p><a href="https://nmlegalaid.org">nmlegalaid.org</a></p>
+        <p class="firm-note">Free legal services if income-eligible. Can assist with trust beneficiary rights and successor trustee appointment proceedings.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="checklist">
+    <div class="section-label">Section 07</div>
+    <h2 class="section-title">Document Checklist</h2>
+    <div class="section-rule"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Document</th><th>Source</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Living Trust — Pedro &amp; Diane Atencio (Sept 7, 2016)</td><td>Original trust document</td><td class="priority-critical">CRITICAL</td><td>Obtain copy</td></tr>
+          <tr><td>Cardinal Trust Acceptance Letter (Mar 9, 2026)</td><td>Cardinal Trust</td><td class="priority-critical">CRITICAL</td><td>Obtain copy</td></tr>
+          <tr><td>Cardinal Trust Resignation Letter (Apr 15, 2026)</td><td>Hurley Toevs Firm — in hand</td><td class="priority-critical">CRITICAL</td><td>In hand</td></tr>
+          <tr><td>Alyssa Trujillo email — Distribution record (Apr 7, 2026)</td><td>Cardinal Trust email</td><td class="priority-critical">CRITICAL</td><td>In hand</td></tr>
+          <tr><td>Written complaint to Alyssa Trujillo (Apr 6, 2026)</td><td>Alicia Atencio — sent email</td><td class="priority-high">HIGH</td><td>In hand</td></tr>
+          <tr><td>Formal demand letter (Apr 10, 2026)</td><td>Delivered to Cardinal Trust</td><td class="priority-high">HIGH</td><td>In hand</td></tr>
+          <tr><td>IPRA Request — NM RLD Certificate #36</td><td>NM RLD — due April 22, 2026</td><td class="priority-high">HIGH</td><td>Pending</td></tr>
+          <tr><td>PNM utility bill — unpaid balance</td><td>PNM account</td><td class="priority-med">MEDIUM</td><td>Obtain copy</td></tr>
+          <tr><td>Propane bill — unpaid balance</td><td>Propane provider</td><td class="priority-med">MEDIUM</td><td>Obtain copy</td></tr>
+          <tr><td>Loan statements — unpaid balances</td><td>Lender(s)</td><td class="priority-med">MEDIUM</td><td>Obtain copy</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Alicia R. Atencio — Legal Package · Cardinal Trust Matter · Prepared April 15, 2026<br>
+  Sena Colectivo · Confidential — Attorney &amp; Client Use Only<br>
+  This document is prepared for informational purposes to assist in attorney consultation. It is not legal advice.</p>
+</footer>
+
+</body>
+</html>
