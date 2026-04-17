@@ -101,9 +101,38 @@ footer p{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;text-transfo
 
 @keyframes up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 .main{animation:up .6s cubic-bezier(.16,1,.3,1) both;}
+
+/* LOGIN GATE */
+#gate{position:fixed;inset:0;z-index:9999;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:24px;}
+#gate.hidden{display:none;}
+.gate-box{background:var(--paper);max-width:400px;width:100%;padding:40px 36px;border-top:4px solid var(--red);}
+.gate-org{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.gate-title{font-family:var(--display);font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.gate-sub{font-family:var(--body);font-size:13px;color:var(--grey);margin-bottom:28px;line-height:1.6;}
+.gate-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:6px;}
+.gate-input{width:100%;padding:10px 12px;border:1px solid var(--rule);background:#fff;font-family:var(--body);font-size:15px;color:var(--ink);margin-bottom:16px;outline:none;}
+.gate-input:focus{border-color:var(--navy);}
+.gate-btn{width:100%;padding:12px;background:var(--navy);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;margin-top:4px;}
+.gate-btn:hover{background:var(--red);}
+.gate-error{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--red);margin-top:14px;display:none;}
+.gate-error.visible{display:block;}
 </style>
 </head>
 <body>
+
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-org">Sena Colectivo · Secure Access</div>
+    <h2 class="gate-title">Alicia Atencio<br>Legal Package</h2>
+    <p class="gate-sub">Confidential document. Authorized access only.<br>Contact your representative if you need credentials.</p>
+    <label class="gate-label" for="g-user">Username</label>
+    <input class="gate-input" id="g-user" type="text" autocomplete="username" placeholder="Enter username">
+    <label class="gate-label" for="g-pass">Password</label>
+    <input class="gate-input" id="g-pass" type="password" autocomplete="current-password" placeholder="Enter password">
+    <button class="gate-btn" onclick="checkAuth()">Access Document</button>
+    <p class="gate-error" id="gate-err">Invalid credentials. Please try again.</p>
+  </div>
+</div>
 
 <div class="header-top"></div>
 <header class="site-header">
@@ -317,5 +346,28 @@ footer p{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;text-transfo
   This document is prepared for informational purposes to assist in attorney consultation. It is not legal advice.</p>
 </footer>
 
+<script>
+const VALID = [
+  '32352d244995f0c3392e83c3562d4873bec3df2d77b1ba90f99a18cd87314af7',
+  'ae09743966609acea626fd9a673c1856bf5f36b9165fdba361af024dc1ef3123'
+];
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function checkAuth() {
+  const u = document.getElementById('g-user').value.trim();
+  const p = document.getElementById('g-pass').value;
+  const h = await sha256(u + ':' + p);
+  if (VALID.includes(h)) {
+    document.getElementById('gate').classList.add('hidden');
+  } else {
+    const err = document.getElementById('gate-err');
+    err.classList.add('visible');
+    document.getElementById('g-pass').value = '';
+  }
+}
+document.addEventListener('keydown', e => { if(e.key==='Enter') checkAuth(); });
+</script>
 </body>
 </html>
