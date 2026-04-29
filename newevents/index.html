@@ -1,1 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Biblioteca · LAMA Day · General Strike · May 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
+:root {
+  --earth:  #1a1209;
+  --warm:   #2a1f0e;
+  --sand:   #f5ead8;
+  --terr:   #c2603a;
+  --gold:   #e8a825;
+  --sage:   #6b8f5e;
+  --sky:    #4a7fa5;
+  --cream:  #fdf6ea;
+  --ink:    #1c1410;
+  --border: rgba(194,96,58,0.18);
+  --serif:  'Fraunces', serif;
+  --sans:   'DM Sans', sans-serif;
+  --mono:   'DM Mono', monospace;
+}
+
+/* ── RESET ── */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: var(--earth);
+  border-bottom: 3px solid var(--terr);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.masthead-left { display: flex; flex-direction: column; gap: 4px; }
+
+.pub-name {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -0.3px;
+}
+
+.pub-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(245,234,216,0.45);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.lt-btn {
+  padding: 6px 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(194,96,58,0.3);
+  color: rgba(245,234,216,0.4);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.lt-btn:hover { border-color: var(--gold); color: var(--gold); }
+.lt-btn.active {
+  background: var(--terr);
+  border-color: var(--terr);
+  color: var(--cream);
+}
+
+/* ── COVER BAND ── */
+.cover-band {
+  background: var(--warm);
+  padding: 48px 32px 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cover-inner { max-width: 780px; margin: 0 auto; }
+
+.issue-flag {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--terr);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.issue-flag::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.cover-headline {
+  font-family: var(--serif);
+  font-size: clamp(36px, 6vw, 60px);
+  font-weight: 900;
+  color: var(--sand);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.cover-headline em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.cover-deck {
+  font-size: 17px;
+  color: rgba(245,234,216,0.65);
+  max-width: 560px;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.cover-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ctag {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  color: rgba(245,234,216,0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.ctag.hot { border-color: rgba(194,96,58,0.5); color: var(--terr); }
+
+/* ── BODY ── */
+.body-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 52px; }
+
+.section-flag {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-flag::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: rgba(232,168,37,0.3);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.section-title-es {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--terr);
+  margin-bottom: 20px;
+}
+
+hr.section-rule {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+/* ── TEXT BLOCKS ── */
+.lang-block { margin-bottom: 20px; }
+
+.lang-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--terr);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.body-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #2a1f0e;
+}
+
+.body-text strong { font-weight: 600; color: var(--ink); }
+.body-text em { font-style: italic; color: var(--terr); }
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  border-left: 4px solid var(--terr);
+  padding: 16px 24px;
+  margin: 28px 0;
+  background: rgba(194,96,58,0.05);
+}
+
+.pq-text {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.pq-attr {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--terr);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ── CALLOUT BOX ── */
+.callout {
+  background: var(--earth);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  padding: 24px 28px;
+  margin: 28px 0;
+}
+
+.callout-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.callout-text {
+  font-size: 14px;
+  color: var(--sand);
+  line-height: 1.75;
+}
+
+.callout-text strong { color: var(--gold); }
+
+/* ── FACT STRIP ── */
+.fact-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+.fact-cell {
+  background: var(--cream);
+  padding: 18px 20px;
+}
+
+.fact-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--terr);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.fact-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(26,18,9,0.5);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ── TRANSLATION CREDIT ── */
+.translation-credit {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(26,18,9,0.35);
+  letter-spacing: 1px;
+  margin-top: 12px;
+}
+
+/* ── FOOTER ── */
+.pub-footer {
+  background: var(--earth);
+  border-top: 1px solid var(--border);
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-id {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(245,234,216,0.3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.footer-org {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* ── LOCALE VISIBILITY ── */
+.en-only { display: block; }
+.es-only { display: none;  }
+body.es .en-only { display: none;  }
+body.es .es-only { display: block; }
+
+/* ── PRINT ── */
+@media print {
+  .masthead, .lang-toggle, .pub-footer { background: #000 !important; }
+  .en-only, .es-only { display: block !important; }
+  body.es .en-only { display: none !important; }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .masthead { padding: 16px 20px; }
+  .cover-band { padding: 32px 20px 28px; }
+  .body-wrap { padding: 32px 20px 60px; }
+  .section-title { font-size: 22px; }
+  .pq-text { font-size: 18px; }
+}
+</style>
+</head>
+<body id="page">
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-left">
+    <div class="pub-name">La Biblioteca</div>
+    <div class="pub-meta en-only">Sena's AI Collective · Santa Fe, NM · Special Edition · May 2026</div>
+    <div class="pub-meta es-only">Sena's AI Collective · Santa Fe, NM · Edición Especial · Mayo 2026</div>
+  </div>
+  <div class="lang-toggle">
+    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+  </div>
+</div>
+
+<!-- COVER BAND -->
+<div class="cover-band">
+  <div class="cover-inner">
+
+    <div class="issue-flag en-only">
+      Labor Rights · Direct Action · Special Edition · May 1, 2026
+    </div>
+    <div class="issue-flag es-only">
+      Derechos Laborales · Acción Directa · Edición Especial · 1 de Mayo, 2026
+    </div>
+
+    <div class="cover-headline en-only">
+      The Strike Is<br><em>the Argument.</em>
+    </div>
+    <div class="cover-headline es-only">
+      La Huelga Es<br><em>el Argumento.</em>
+    </div>
+
+    <div class="cover-deck en-only">
+      May Day 2026. Workers across the country are walking out. New Mexico Socialists stand with them — because the data has always been clear. The only language power understands is organized refusal.
+    </div>
+    <div class="cover-deck es-only">
+      1 de Mayo 2026. Trabajadores en todo el país están saliendo. Los Socialistas de Nuevo México están con ellos — porque los datos siempre han sido claros. El único idioma que el poder entiende es el rechazo organizado.
+    </div>
+
+    <div class="cover-tags">
+      <span class="ctag hot">May Day 2026</span>
+      <span class="ctag hot">General Strike</span>
+      <span class="ctag">LAMA Day · Santa Fe</span>
+      <span class="ctag">NM Socialists</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+
+  <!-- SECTION 01 -->
+  <div class="section">
+    <div class="section-flag en-only">Section 01</div>
+    <div class="section-flag es-only">Sección 01</div>
+
+    <div class="section-title en-only">May Day Is Not a Holiday.<br>It's a History Lesson.</div>
+    <div class="section-title es-only">El Primero de Mayo No Es un Feriado.<br>Es una Lección de Historia.</div>
+
+    <div class="section-title-es en-only">El Primero de Mayo no es un feriado. Es una lección de historia.</div>
+    <div class="section-title-es es-only">May Day is not a holiday. It's a history lesson.</div>
+
+    <hr class="section-rule">
+
+    <div class="lang-block">
+      <div class="body-text en-only">
+        On May 1, 1886, hundreds of thousands of American workers stopped working. They weren't asking for shorter hours — they were <strong>refusing to work more than eight</strong>. Over 300,000 walked out in cities across the country. The eight-hour workday you have today was not given. It was taken. In Chicago, in Pittsburgh, in Milwaukee — workers built it with their bodies, their time, and in some cases, their lives.
+        <br><br>
+        The United States later moved Labor Day to September specifically to separate the holiday from its radical origins. International Workers' Day — May 1st — is celebrated by workers in over 80 countries. It has never stopped being celebrated here either. They just made sure you didn't learn about it in school.
+      </div>
+      <div class="body-text es-only">
+        El 1 de mayo de 1886, cientos de miles de trabajadores estadounidenses dejaron de trabajar. No estaban pidiendo menos horas — estaban <strong>negándose a trabajar más de ocho</strong>. Más de 300,000 salieron en ciudades de todo el país. La jornada laboral de ocho horas que tienes hoy no fue otorgada. Fue tomada. En Chicago, en Pittsburgh, en Milwaukee — los trabajadores la construyeron con sus cuerpos, su tiempo y, en algunos casos, sus vidas.
+        <br><br>
+        Los Estados Unidos trasladaron el Día del Trabajo a septiembre específicamente para separar el feriado de sus orígenes radicales. El Día Internacional de los Trabajadores — el 1 de mayo — se celebra en más de 80 países. Nunca dejó de celebrarse aquí tampoco. Solo se aseguraron de que no lo aprendieras en la escuela.
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pq-text en-only">"The eight-hour day was not given. It was taken."</div>
+      <div class="pq-text es-only">"La jornada de ocho horas no fue otorgada. Fue tomada."</div>
+      <div class="pq-attr en-only">Labor History · 1886 · Chicago, IL</div>
+      <div class="pq-attr es-only">Historia Laboral · 1886 · Chicago, IL</div>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact-cell">
+        <div class="fact-num">300k+</div>
+        <div class="fact-label en-only">Workers walked out<br>May 1, 1886</div>
+        <div class="fact-label es-only">Trabajadores en huelga<br>1 de Mayo, 1886</div>
+      </div>
+      <div class="fact-cell">
+        <div class="fact-num">80+</div>
+        <div class="fact-label en-only">Countries that celebrate<br>May Day today</div>
+        <div class="fact-label es-only">Países que celebran<br>el 1 de Mayo hoy</div>
+      </div>
+      <div class="fact-cell">
+        <div class="fact-num">138</div>
+        <div class="fact-label en-only">Years of organized<br>worker action</div>
+        <div class="fact-label es-only">Años de acción<br>organizada obrera</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 02 -->
+  <div class="section">
+    <div class="section-flag en-only">Section 02</div>
+    <div class="section-flag es-only">Sección 02</div>
+
+    <div class="section-title en-only">What Is a General Strike —<br>and Why Does It Matter Now?</div>
+    <div class="section-title es-only">¿Qué Es una Huelga General —<br>y Por Qué Importa Ahora?</div>
+
+    <div class="section-title-es en-only">¿Qué es una huelga general y por qué importa ahora?</div>
+    <div class="section-title-es es-only">What is a general strike and why does it matter now?</div>
+
+    <hr class="section-rule">
+
+    <div class="lang-block">
+      <div class="body-text en-only">
+        A general strike is not a march. It is not a petition. It is the clearest possible demonstration of economic reality: <strong>the economy runs on labor</strong>, and labor can refuse. When workers across industries, across sectors, across zip codes stop together — production stops. Supply chains stall. Revenue halts. That silence is the argument.
+        <br><br>
+        A targeted strike asks a specific employer to change. A general strike asks a system to reckon with itself. It is organized nonparticipation. It is the withdrawal of consent at scale. Every historical gain workers have — the weekend, the minimum wage, workplace safety standards, the right to organize — came after labor demonstrated that it could, and would, stop.
+        <br><br>
+        The call for a General Strike on May 1, 2026 is not nostalgia. It is a data-driven response to material conditions: stagnant wages against record corporate profits, collapsing housing affordability, eroding public services, and an accelerating concentration of wealth at the top. <em>El socialismo es ciencia, no dogma.</em> The numbers make the argument.
+      </div>
+      <div class="body-text es-only">
+        Una huelga general no es una marcha. No es una petición. Es la demostración más clara posible de la realidad económica: <strong>la economía funciona con trabajo</strong>, y el trabajo puede negarse. Cuando los trabajadores de diferentes industrias, sectores y códigos postales se detienen juntos — la producción se detiene. Las cadenas de suministro se paralizan. Los ingresos se frenan. Ese silencio es el argumento.
+        <br><br>
+        Una huelga dirigida le pide a un empleador específico que cambie. Una huelga general le pide a un sistema que se enfrente a sí mismo. Es no-participación organizada. Es la retirada del consentimiento a escala. Cada ganancia histórica que tienen los trabajadores — el fin de semana, el salario mínimo, las normas de seguridad laboral, el derecho a organizarse — llegó después de que el trabajo demostró que podía, y lo haría, detenerse.
+        <br><br>
+        El llamado a una Huelga General el 1 de Mayo de 2026 no es nostalgia. Es una respuesta basada en datos a las condiciones materiales: salarios estancados frente a ganancias corporativas récord, asequibilidad de vivienda en colapso, servicios públicos erosionados y una concentración acelerada de riqueza en la cima. <em>El socialismo es ciencia, no dogma.</em> Los números hacen el argumento.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label en-only">The Logic of the Strike</div>
+      <div class="callout-label es-only">La Lógica de la Huelga</div>
+      <div class="callout-text en-only">
+        Every dollar in profit is the value created by labor minus what labor was paid.
+        That gap — between what workers produce and what workers take home — is not a market outcome.
+        It is a <strong>political outcome</strong>. And political outcomes can be changed through organized political action.
+      </div>
+      <div class="callout-text es-only">
+        Cada dólar de ganancia es el valor creado por el trabajo menos lo que se le pagó al trabajo.
+        Esa brecha — entre lo que los trabajadores producen y lo que los trabajadores llevan a casa — no es un resultado del mercado.
+        Es un <strong>resultado político</strong>. Y los resultados políticos se pueden cambiar mediante la acción política organizada.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 03 -->
+  <div class="section">
+    <div class="section-flag en-only">Section 03</div>
+    <div class="section-flag es-only">Sección 03</div>
+
+    <div class="section-title en-only">New Mexico Socialists:<br>Why We're in the Streets on Friday</div>
+    <div class="section-title es-only">Socialistas de Nuevo México:<br>Por Qué Estamos en las Calles el Viernes</div>
+
+    <div class="section-title-es en-only">Por qué estamos en las calles el viernes.</div>
+    <div class="section-title-es es-only">Why we're in the streets on Friday.</div>
+
+    <hr class="section-rule">
+
+    <div class="lang-block">
+      <div class="body-text en-only">
+        New Mexico Socialists Inc. is attending LAMA Day in Santa Fe on May 1, 2026 — with the team, with the community, and without apology. We are a research and organizing organization rooted in the land grant, acequia, and labor traditions of Northern New Mexico. May Day is not an abstraction to us. It is a continuation.
+        <br><br>
+        The same forces that stripped 98.4% of the San Miguel del Vado communal land grant through legal manipulation — converting 315,000 acres of shared Genízaro commons into private capital — are the same forces that keep wages below survival in one of the poorest states in the nation. The mechanism changes. The logic does not.
+        <br><br>
+        We do not march because it feels good. We march because presence is data. Because showing up is how communities learn their own size. Because every neighbor who sees us on Friday and thinks <em>"I'm not alone in this"</em> is a neighbor who may pick up a phone, join a meeting, or knock on a door. That is how organizing works. That is the science.
+      </div>
+      <div class="body-text es-only">
+        New Mexico Socialists Inc. estará en LAMA Day en Santa Fe el 1 de mayo de 2026 — con el equipo, con la comunidad y sin disculpas. Somos una organización de investigación y organización arraigada en las tradiciones de mercedes de tierra, acequias y trabajo del Norte de Nuevo México. El Primero de Mayo no es una abstracción para nosotros. Es una continuación.
+        <br><br>
+        Las mismas fuerzas que despojaron el 98.4% de la merced comunal de San Miguel del Vado mediante manipulación legal — convirtiendo 315,000 acres de bienes comunes Genízaros en capital privado — son las mismas fuerzas que mantienen los salarios por debajo de la subsistencia en uno de los estados más pobres de la nación. El mecanismo cambia. La lógica no.
+        <br><br>
+        No marchamos porque se sienta bien. Marchamos porque la presencia es datos. Porque aparecer es cómo las comunidades aprenden su propio tamaño. Porque cada vecino que nos ve el viernes y piensa <em>"no estoy solo en esto"</em> es un vecino que puede levantar un teléfono, unirse a una reunión o tocar una puerta. Así es como funciona la organización. Esa es la ciencia.
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pq-text en-only">"We do not march because it feels good. We march because presence is data."</div>
+      <div class="pq-text es-only">"No marchamos porque se sienta bien. Marchamos porque la presencia es datos."</div>
+      <div class="pq-attr en-only">New Mexico Socialists Inc. · May Day 2026</div>
+      <div class="pq-attr es-only">Socialistas de Nuevo México · 1 de Mayo 2026</div>
+    </div>
+  </div>
+
+  <!-- SECTION 04 -->
+  <div class="section">
+    <div class="section-flag en-only">Section 04</div>
+    <div class="section-flag es-only">Sección 04</div>
+
+    <div class="section-title en-only">What You Can Do — Right Now</div>
+    <div class="section-title es-only">Qué Puedes Hacer — Ahora Mismo</div>
+
+    <div class="section-title-es en-only">Qué puedes hacer ahora mismo.</div>
+    <div class="section-title-es es-only">What you can do right now.</div>
+
+    <hr class="section-rule">
+
+    <div class="lang-block">
+      <div class="body-text en-only">
+        You don't have to believe in any particular ideology to understand that <strong>wages have not kept up with productivity for fifty years</strong>. You don't need a party card to look at housing costs in Santa Fe and recognize the math doesn't work for working people. The data is the argument. The science is the organizing.
+        <br><br>
+        If you can be in the streets on May 1 — be there. If you can't — buy from a locally-owned business, talk to a coworker about what they're paid, or simply refuse to pretend things are fine. Solidarity doesn't require a banner. It requires honesty about material reality.
+        <br><br>
+        New Mexico Socialists holds weekly research sessions through <strong>La Biblioteca</strong> — our free bilingual publication on land, water, and labor rights in New Mexico. No dues. No dogma. Just research and community. We want you there.
+      </div>
+      <div class="body-text es-only">
+        No tienes que creer en ninguna ideología particular para entender que <strong>los salarios no han seguido el ritmo de la productividad durante cincuenta años</strong>. No necesitas una credencial de partido para ver los costos de vivienda en Santa Fe y reconocer que los números no funcionan para la gente trabajadora. Los datos son el argumento. La ciencia es la organización.
+        <br><br>
+        Si puedes estar en las calles el 1 de mayo — estate. Si no puedes — compra en un negocio de propiedad local, habla con un compañero de trabajo sobre lo que le pagan, o simplemente niégate a fingir que todo está bien. La solidaridad no requiere una pancarta. Requiere honestidad sobre la realidad material.
+        <br><br>
+        New Mexico Socialists realiza sesiones de investigación semanales a través de <strong>La Biblioteca</strong> — nuestra publicación bilingüe gratuita sobre derechos de tierra, agua y trabajo en Nuevo México. Sin cuotas. Sin dogma. Solo investigación y comunidad. Te queremos ahí.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label en-only">New Mexico Socialists Inc. · EIN 41-5210879</div>
+      <div class="callout-label es-only">Socialistas de Nuevo México · EIN 41-5210879</div>
+      <div class="callout-text en-only">
+        Organized in Santa Fe · Research-driven · Community-rooted<br>
+        <strong>La Biblioteca</strong> · <strong>Comunidad Libre</strong> · <strong>Coffee With Commies</strong><br>
+        Find us at senacolectivo.com
+      </div>
+      <div class="callout-text es-only">
+        Organizado en Santa Fe · Basado en investigación · Arraigado en la comunidad<br>
+        <strong>La Biblioteca</strong> · <strong>Comunidad Libre</strong> · <strong>Coffee With Commies</strong><br>
+        Encuéntranos en senacolectivo.com
+      </div>
+    </div>
+
+    <div class="translation-credit es-only">
+      Traducción · Aria — Sena's AI Collective
+    </div>
+
+  </div>
+
+</div><!-- /body-wrap -->
+
+<!-- FOOTER -->
+<div class="pub-footer">
+  <div class="footer-id en-only">La Biblioteca · Special Edition · May 2026 · CC BY-NC-SA 4.0 · Free to Share</div>
+  <div class="footer-id es-only">La Biblioteca · Edición Especial · Mayo 2026 · CC BY-NC-SA 4.0 · Libre para Compartir</div>
+  <div class="footer-org">New Mexico Socialists · Sena's AI Collective</div>
+</div>
+
+<script>
+(function(){
+  var saved = localStorage.getItem('bib_lang');
+  var lang = saved || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
+  setLang(lang, true);
+})();
+
+function setLang(l, init) {
+  document.getElementById('page').className = l === 'es' ? 'es' : '';
+  document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
+  document.getElementById('btnES').className = 'lt-btn' + (l === 'es' ? ' active' : '');
+  if (!init) localStorage.setItem('bib_lang', l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
