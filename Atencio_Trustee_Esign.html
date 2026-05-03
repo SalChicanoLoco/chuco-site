@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trustee Appointment &amp; Acceptance — Atencio Living Trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #faf8f3;
+  --ink: #1a1410;
+  --ink-mid: #3a2e22;
+  --ink-light: #6a5a48;
+  --accent: #8b1a1a;
+  --green: #1e5c1e;
+  --green-light: #eaf5ea;
+  --red: #991010;
+  --red-light: #fff0f0;
+  --border: #c8b89a;
+  --border-light: #e0d4bc;
+  --topbar-bg: #14100c;
+  --topbar-fg: #d8cbb8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'EB Garamond',Georgia,serif;
+  background:#d8cdb8;
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.65;
+  min-height:100vh;
+}
+
+/* ── STICKY HEADER ── */
+#sticky-header{
+  position:sticky;top:0;z-index:200;
+}
+#topbar{
+  background:var(--topbar-bg);
+  color:var(--topbar-fg);
+  padding:8px 16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  box-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+#topbar .doc-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:#806858;
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#topbar .doc-label span{
+  color:#a09080;
+}
+.tb-btn{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  padding:5px 11px;
+  border:1px solid #3a2e24;
+  background:transparent;
+  color:var(--topbar-fg);
+  cursor:pointer;
+  border-radius:2px;
+  transition:background .15s,border-color .15s;
+  white-space:nowrap;
+}
+.tb-btn:hover{background:#2a1e14;border-color:#6a5a4a}
+.tb-btn.primary{background:var(--accent);border-color:#a03030;color:#fff}
+.tb-btn.primary:hover{background:#a02020}
+.tb-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+#progress-wrap{
+  height:3px;
+  background:#1e160e;
+}
+#progress-bar{
+  height:100%;
+  background:linear-gradient(90deg,#8b1a1a,#c84040);
+  width:0%;
+  transition:width .35s ease;
+}
+
+/* ── DOCUMENT PAPER ── */
+#doc-paper{
+  max-width:860px;
+  margin:28px auto 60px;
+  background:var(--paper);
+  padding:56px 68px;
+  box-shadow:0 4px 40px rgba(0,0,0,.22);
+  border:1px solid #b8a88a;
+  position:relative;
+}
+@media(max-width:720px){
+  #doc-paper{padding:28px 18px;margin:10px}
+}
+
+/* ── TYPOGRAPHY ── */
+.doc-header{
+  text-align:center;
+  padding-bottom:28px;
+  margin-bottom:32px;
+  border-bottom:2px solid var(--border);
+}
+.trust-name-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--ink-light);
+  margin-bottom:10px;
+}
+.doc-header h1{
+  font-size:22px;
+  font-weight:600;
+  line-height:1.3;
+  color:var(--ink);
+  margin-bottom:6px;
+}
+.doc-subtitle{
+  font-size:14px;
+  font-style:italic;
+  color:var(--ink-light);
+  margin-bottom:4px;
+}
+.doc-id-line{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:#9a8878;
+  margin-top:10px;
+}
+h2.section-head{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--accent);
+  margin:32px 0 14px;
+  padding-bottom:5px;
+  border-bottom:1px solid var(--border);
+}
+p{margin-bottom:12px;text-align:justify;hyphens:auto}
+.recital{
+  padding:8px 16px;
+  border-left:3px solid var(--border);
+  margin:10px 0;
+  font-style:italic;
+  color:var(--ink-mid);
+}
+.cite{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  background:#f0e8d8;
+  padding:1px 5px;
+  border-radius:2px;
+  font-style:normal;
+}
+.notice{
+  background:#fef9ec;
+  border:1px solid #d4b060;
+  border-left:4px solid #b89020;
+  padding:12px 16px;
+  margin:18px 0;
+  font-size:14px;
+}
+.notice strong{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#806020;
+  display:block;
+  margin-bottom:4px;
+}
+
+/* ── INFO TABLE ── */
+.info-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+  font-size:14px;
+}
+.info-table th{
+  background:#ede4d4;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--ink-light);
+  padding:7px 10px;
+  text-align:left;
+  border:1px solid var(--border);
+}
+.info-table td{
+  padding:8px 10px;
+  border:1px solid var(--border);
+  vertical-align:top;
+  color:var(--ink-mid);
+}
+.info-table tr:nth-child(even) td{background:#f4f0e8}
+
+/* ── FORM FIELDS ── */
+.fields-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin:16px 0;
+}
+.fields-grid.single{grid-template-columns:1fr}
+.fields-grid.triple{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:600px){
+  .fields-grid,.fields-grid.triple{grid-template-columns:1fr}
+}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  color:var(--ink-light);
+}
+.field label .req{color:var(--accent)}
+.field input,.field textarea{
+  padding:7px 10px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-family:'EB Garamond',serif;
+  font-size:15px;
+  color:var(--ink);
+  width:100%;
+  transition:border-color .2s;
+}
+.field input:focus,.field textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(139,26,26,.08);
+}
+.field input.err,.field textarea.err{
+  border-color:var(--red);
+  background:var(--red-light);
+}
+.field textarea{resize:vertical;min-height:72px}
+
+/* ── SIGNATURE BLOCK ── */
+.sig-block{
+  border:2px solid var(--border);
+  border-radius:3px;
+  background:#fff;
+  padding:22px;
+  margin:24px 0;
+  transition:border-color .3s,background .3s;
+}
+.sig-block.confirmed{
+  border-color:var(--green);
+  background:var(--green-light);
+}
+.sig-block-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+  gap:10px;
+}
+.sig-block-title{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--ink-light);
+}
+.sig-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  padding:3px 9px;
+  border-radius:10px;
+  background:#e8e0d0;
+  color:var(--ink-light);
+  flex-shrink:0;
+}
+.sig-badge.ok{background:var(--green);color:#fff}
+
+/* Canvas */
+.canvas-wrap{
+  position:relative;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:2px;
+  margin:10px 0;
+  cursor:crosshair;
+  overflow:hidden;
+}
+.canvas-wrap canvas{
+  display:block;
+  width:100%;
+  height:150px;
+  touch-action:none;
+}
+.canvas-hint{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:#c8b890;
+  transition:opacity .25s;
+}
+.canvas-hint.hidden{opacity:0}
+
+.sig-controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+  align-items:center;
+}
+.btn{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  padding:6px 13px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--ink);
+  cursor:pointer;
+  border-radius:2px;
+  transition:background .15s,border-color .15s;
+  white-space:nowrap;
+}
+.btn:hover{background:#f0e8d8}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.btn.green:hover{background:#164816}
+.btn.red-ghost{color:var(--red)}
+.btn.red-ghost:hover{background:var(--red-light);border-color:var(--red)}
+.name-confirm-input{
+  flex:1;
+  min-width:160px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-family:'EB Garamond',serif;
+  font-size:14px;
+  color:var(--ink);
+}
+.name-confirm-input:focus{outline:none;border-color:var(--accent)}
+.name-confirm-input.err{border-color:var(--red);background:var(--red-light)}
+
+/* Confirmed display */
+.sig-result{
+  display:none;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px dashed var(--green);
+}
+.sig-result.show{display:block}
+.sig-result img{
+  max-height:80px;
+  max-width:100%;
+  border:1px solid var(--green);
+  border-radius:2px;
+  background:#fff;
+  padding:3px;
+  display:block;
+}
+.sig-ts{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--green);
+  margin-top:5px;
+}
+.sig-mini-audit{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--ink-light);
+  background:#f0ebe0;
+  padding:5px 8px;
+  border-radius:2px;
+  margin-top:6px;
+  line-height:1.7;
+}
+
+/* ── AUDIT TRAIL ── */
+#audit-section{
+  display:none;
+  margin-top:40px;
+  padding-top:32px;
+  border-top:2px solid var(--border);
+}
+#audit-section.show{display:block}
+.audit-box{
+  background:#060606;
+  color:#00cc44;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  line-height:1.9;
+  padding:18px 20px;
+  border-radius:3px;
+  white-space:pre-wrap;
+  word-break:break-all;
+  margin:10px 0;
+}
+.hash-box{
+  background:#060606;
+  color:#00ff66;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:14px;
+  font-weight:500;
+  padding:14px 20px;
+  border-radius:3px;
+  border:1px solid #00cc44;
+  word-break:break-all;
+  margin:10px 0;
+  letter-spacing:.04em;
+}
+.tamper-note{
+  background:#160404;
+  color:#ff7070;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  padding:9px 12px;
+  border-left:3px solid #cc2222;
+  border-radius:2px;
+  margin-top:8px;
+  line-height:1.6;
+}
+
+/* ── FINALIZE ── */
+#finalize-wrap{
+  text-align:center;
+  padding:28px;
+  background:#f0ebe0;
+  border:1px solid var(--border);
+  border-radius:3px;
+  margin-top:32px;
+}
+#finalize-wrap.done{background:var(--green-light);border-color:var(--green)}
+#finalize-wrap p{
+  font-size:13px;
+  color:var(--ink-light);
+  margin-bottom:16px;
+  text-align:center;
+}
+.btn-finalize{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;
+  font-weight:500;
+  padding:13px 32px;
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  border-radius:2px;
+  letter-spacing:.04em;
+  transition:background .2s;
+}
+.btn-finalize:hover{background:#a02020}
+.btn-finalize:disabled{opacity:.35;cursor:default}
+
+/* ── PRINT ── */
+@media print{
+  #sticky-header,#finalize-wrap,
+  .sig-controls,.canvas-wrap,.btn,
+  .tb-btn{display:none!important}
+  body{background:#fff}
+  #doc-paper{
+    box-shadow:none;border:none;
+    padding:0;margin:0;max-width:100%;
+  }
+  .sig-result{display:block!important}
+  #audit-section{display:block!important}
+  .audit-box,.hash-box{
+    background:#f4f4f4!important;
+    color:#000!important;
+    border:1px solid #999;
+  }
+  .tamper-note{background:#fff3f3!important;color:#880000!important}
+  @page{margin:1in;size:letter portrait}
+}
+
+/* misc */
+hr.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+.spacer{height:20px}
+.small-note{font-size:13px;color:var(--ink-light)}
+.bold{font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ STICKY HEADER ══════════════════════════════ -->
+<div id="sticky-header">
+  <div id="topbar">
+    <div class="doc-label">
+      <span id="doc-id-label">Generating…</span> &nbsp;·&nbsp; Atencio Living Trust &nbsp;·&nbsp; Trustee Appointment &amp; Acceptance
+    </div>
+    <button class="tb-btn" onclick="window.print()">Print / Save PDF</button>
+    <button class="tb-btn" id="btn-download" onclick="downloadPDF()">Download PDF</button>
+    <button class="tb-btn" id="btn-copy-link" onclick="copySigningLink()">Copy Signing Link</button>
+    <button class="tb-btn" id="btn-email" onclick="emailToSigner()">Email to Trustee</button>
+    <button class="tb-btn primary" id="btn-finalize" onclick="finalizeDocument()">Finalize &amp; Generate Hash</button>
+  </div>
+  <div id="progress-wrap"><div id="progress-bar"></div></div>
+</div>
+
+<!-- ══════════════════════════════ DOCUMENT PAPER ══════════════════════════════ -->
+<div id="doc-paper">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="trust-name-label">State of New Mexico &nbsp;·&nbsp; County of Santa Fe</div>
+    <h1>Trustee Appointment and Acceptance<br>of Successor Trustee</h1>
+    <div class="doc-subtitle">Pedro and Diane M. Atencio Living Trust &mdash; Established September 7, 2016</div>
+    <div class="doc-subtitle">Special Needs Sub-Trust for Alicia R. Atencio</div>
+    <div class="doc-id-line">Document ID: <span id="doc-id-display">—</span> &nbsp;|&nbsp; Generated: <span id="doc-gen-time">—</span></div>
+  </div>
+
+  <!-- RECITALS -->
+  <h2 class="section-head">I. Recitals</h2>
+
+  <p>This Trustee Appointment and Acceptance (the "Instrument") is entered into as of the Execution Date set forth below, by and between <span class="bold">Alicia R. Atencio</span>, the surviving beneficiary of the Special Needs Sub-Trust (the "Beneficiary"), residing in Santa Fe, New Mexico, and the successor trustee identified and signing below.</p>
+
+  <div class="recital">WHEREAS, Pedro Atencio and Diane M. Atencio (the "Settlors") created the <em>Pedro and Diane M. Atencio Living Trust</em>, a revocable living trust instrument dated September 7, 2016, under the laws of the State of New Mexico;</div>
+
+  <div class="recital">WHEREAS, Article VII of the Trust Instrument establishes a Special Needs Sub-Trust for the sole benefit of Alicia R. Atencio, the Settlors' daughter, qualifying as a supplemental needs trust within the meaning of <span class="cite">42 U.S.C. § 1396p(d)(4)(A)</span> and designed to supplement, not supplant, any public benefits to which the Beneficiary may be entitled;</div>
+
+  <div class="recital">WHEREAS, a change in trustee circumstances has created a vacancy in the office of Trustee of the Special Needs Sub-Trust, or the Beneficiary seeks to formally ratify and document the appointment of a successor trustee in accordance with the succession provisions of the Trust Instrument;</div>
+
+  <div class="recital">WHEREAS, the Beneficiary, in accordance with the powers reserved to her under the Trust Instrument and applicable New Mexico Trust Code, <span class="cite">N.M. Stat. Ann. § 46A-1-101 et seq.</span>, desires to appoint a qualified individual to serve as Successor Trustee;</div>
+
+  <div class="recital">WHEREAS, the individual named herein as Successor Trustee has agreed to accept said appointment subject to the terms of the Trust Instrument and this Instrument.</div>
+
+  <p>NOW, THEREFORE, in consideration of the foregoing recitals and the mutual covenants herein, and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows:</p>
+
+  <!-- TRUST DETAILS TABLE -->
+  <h2 class="section-head">II. Trust Identification</h2>
+
+  <div class="notice">
+    <strong>Special Needs Trust Notice</strong>
+    This trust is established pursuant to <span class="cite">42 U.S.C. § 1396p(d)(4)(A)</span>. Distributions must be made solely for the Beneficiary's supplemental needs and shall not be used to replace, reduce, or supplant public benefits including SSI, Medicaid, or other means-tested programs. The Trustee has a fiduciary obligation to administer this trust in a manner that preserves the Beneficiary's eligibility for such benefits.
+  </div>
+
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Trust Name</td><td>Pedro and Diane M. Atencio Living Trust</td></tr>
+      <tr><td>Trust Date</td><td>September 7, 2016</td></tr>
+      <tr><td>Settlors</td><td>Pedro Atencio and Diane M. Atencio</td></tr>
+      <tr><td>Governing Law</td><td>State of New Mexico</td></tr>
+      <tr><td>Trust Type</td><td>Revocable Living Trust with irrevocable Special Needs Sub-Trust</td></tr>
+      <tr><td>Federal Authority</td><td><span class="cite">42 U.S.C. § 1396p(d)(4)(A)</span> — Supplemental Needs Trust Exception</td></tr>
+      <tr><td>Beneficiary</td><td>Alicia R. Atencio</td></tr>
+      <tr><td>Beneficiary Residence</td><td>Santa Fe, New Mexico</td></tr>
+      <tr><td>Sub-Trust Purpose</td><td>Supplement the Beneficiary's quality of life without displacing public benefits</td></tr>
+      <tr><td>Remainder Provision</td><td>Upon Beneficiary's death: State of New Mexico reimbursement per Medicaid rules, then per Trust Instrument</td></tr>
+    </tbody>
+  </table>
+
+  <!-- EXECUTION DATE -->
+  <h2 class="section-head">III. Appointment of Successor Trustee</h2>
+
+  <p>The Beneficiary, by executing this Instrument, hereby appoints the individual identified in Section IV below as Successor Trustee of the Special Needs Sub-Trust, effective as of the Execution Date below. This appointment is made pursuant to the successor trustee provisions of the Trust Instrument and <span class="cite">N.M. Stat. Ann. § 46A-7-704</span>.</p>
+
+  <div class="fields-grid single">
+    <div class="field">
+      <label>Execution Date <span class="req">*</span></label>
+      <input type="date" id="exec-date" onchange="updateProgress()" placeholder="MM/DD/YYYY">
+    </div>
+  </div>
+
+  <!-- TRUSTEE INFO -->
+  <h2 class="section-head">IV. Successor Trustee Information</h2>
+
+  <p>The following individual is hereby appointed as Successor Trustee and, by signature below, accepts the fiduciary obligations attendant to this office:</p>
+
+  <div class="fields-grid">
+    <div class="field">
+      <label>Full Legal Name <span class="req">*</span></label>
+      <input type="text" id="trustee-name" oninput="updateProgress()" placeholder="e.g., Father Brenen M. Smith">
+    </div>
+    <div class="field">
+      <label>Title / Capacity</label>
+      <input type="text" id="trustee-title" placeholder="e.g., Priest, Archdiocese of Cincinnati">
+    </div>
+    <div class="field">
+      <label>Phone Number <span class="req">*</span></label>
+      <input type="tel" id="trustee-phone" oninput="updateProgress()" placeholder="(xxx) xxx-xxxx">
+    </div>
+    <div class="field">
+      <label>Email Address <span class="req">*</span></label>
+      <input type="email" id="trustee-email" oninput="updateProgress()" placeholder="email@example.com">
+    </div>
+  </div>
+  <div class="fields-grid single">
+    <div class="field">
+      <label>Mailing Address — City, State, ZIP <span class="req">*</span></label>
+      <textarea id="trustee-address" oninput="updateProgress()" placeholder="Street address&#10;City, OH  XXXXX" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- COVENANTS -->
+  <h2 class="section-head">V. Trustee Covenants and Duties</h2>
+
+  <p>By accepting appointment, the Successor Trustee covenants and agrees to the following:</p>
+
+  <p><span class="bold">5.1 Fiduciary Duty.</span> The Trustee shall act in the best interests of the Beneficiary, with the care, skill, prudence, and diligence that a person of ordinary intelligence and prudence would exercise under similar circumstances, in accordance with <span class="cite">N.M. Stat. Ann. § 46A-8-804</span>.</p>
+
+  <p><span class="bold">5.2 Special Needs Administration.</span> The Trustee shall administer the trust solely to supplement the Beneficiary's receipt of public benefits, including but not limited to Supplemental Security Income (SSI) and Medicaid. The Trustee shall not make any distribution that would disqualify the Beneficiary from receiving public assistance benefits.</p>
+
+  <p><span class="bold">5.3 Prohibited Distributions.</span> No distribution shall be made for items or services covered by government benefit programs unless a qualified special needs attorney has determined in writing that the distribution will not adversely affect the Beneficiary's benefit eligibility.</p>
+
+  <p><span class="bold">5.4 Recordkeeping.</span> The Trustee shall maintain complete and accurate records of all trust assets, receipts, disbursements, and investments, and shall provide annual accountings to the Beneficiary.</p>
+
+  <p><span class="bold">5.5 Loyalty.</span> The Trustee shall act in the sole interest of the Beneficiary and shall avoid any conflict of interest. The Trustee shall not profit personally from the administration of this trust beyond reasonable compensation as authorized by the Trust Instrument.</p>
+
+  <p><span class="bold">5.6 Compliance.</span> The Trustee shall comply with all applicable federal and state laws governing special needs trusts, including applicable reporting requirements and any state Medicaid agency notice requirements.</p>
+
+  <!-- BENEFICIARY SIGNATURE -->
+  <h2 class="section-head">VI. Signature — Beneficiary and Appointor</h2>
+
+  <p>The undersigned Beneficiary hereby executes this Instrument, confirming the appointment of the Successor Trustee named above, and represents that this appointment is made of the Beneficiary's own free will and accord.</p>
+
+  <div class="sig-block" id="sig-block-1">
+    <div class="sig-block-head">
+      <div class="sig-block-title">Alicia R. Atencio &mdash; Beneficiary / Appointor</div>
+      <div class="sig-badge" id="sig-badge-1">Pending</div>
+    </div>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Signature Date <span class="req">*</span></label>
+      <input type="date" id="sig-date-1" style="max-width:240px" onchange="updateProgress()">
+    </div>
+
+    <div class="canvas-wrap" id="canvas-wrap-1">
+      <canvas id="canvas-1"></canvas>
+      <div class="canvas-hint" id="hint-1">Sign here — draw your signature</div>
+    </div>
+
+    <div class="sig-controls">
+      <input type="text" class="name-confirm-input" id="name-confirm-1"
+             placeholder="Type your full name to confirm identity" autocomplete="off">
+      <button class="btn green" onclick="confirmSignature(1)">Confirm Signature</button>
+      <button class="btn red-ghost" onclick="clearCanvas(1)">Clear</button>
+    </div>
+
+    <div class="sig-result" id="sig-result-1">
+      <img id="sig-img-1" src="" alt="Signature">
+      <div class="sig-ts" id="sig-ts-1"></div>
+      <div class="sig-mini-audit" id="sig-mini-1"></div>
+    </div>
+  </div>
+
+  <!-- TRUSTEE ACCEPTANCE + SIGNATURE -->
+  <h2 class="section-head">VII. Acceptance and Signature — Successor Trustee</h2>
+
+  <p>The undersigned hereby accepts appointment as Successor Trustee of the Special Needs Sub-Trust created under the Pedro and Diane M. Atencio Living Trust dated September 7, 2016, and agrees to faithfully discharge all duties and obligations of the trustee office in accordance with the Trust Instrument, this Instrument, and applicable law.</p>
+
+  <p>The Successor Trustee acknowledges receipt of a copy of the Trust Instrument (or the relevant portions thereof) and understands the nature and scope of the special needs trust administration required.</p>
+
+  <div class="sig-block" id="sig-block-2">
+    <div class="sig-block-head">
+      <div class="sig-block-title">Successor Trustee — Acceptance of Appointment</div>
+      <div class="sig-badge" id="sig-badge-2">Pending</div>
+    </div>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Signature Date <span class="req">*</span></label>
+      <input type="date" id="sig-date-2" style="max-width:240px" onchange="updateProgress()">
+    </div>
+
+    <div class="canvas-wrap" id="canvas-wrap-2">
+      <canvas id="canvas-2"></canvas>
+      <div class="canvas-hint" id="hint-2">Sign here — draw your signature</div>
+    </div>
+
+    <div class="sig-controls">
+      <input type="text" class="name-confirm-input" id="name-confirm-2"
+             placeholder="Type your full legal name to confirm identity" autocomplete="off">
+      <button class="btn green" onclick="confirmSignature(2)">Confirm Signature</button>
+      <button class="btn red-ghost" onclick="clearCanvas(2)">Clear</button>
+    </div>
+
+    <div class="sig-result" id="sig-result-2">
+      <img id="sig-img-2" src="" alt="Signature">
+      <div class="sig-ts" id="sig-ts-2"></div>
+      <div class="sig-mini-audit" id="sig-mini-2"></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <p class="small-note" style="text-align:center;font-style:italic">
+    This document is electronically executed. Electronic signatures applied herein are intended to have the same legal effect as handwritten signatures pursuant to the Uniform Electronic Transactions Act (UETA), <span class="cite">N.M. Stat. Ann. § 14-16-1 et seq.</span>, and the federal Electronic Signatures in Global and National Commerce Act (E-SIGN), <span class="cite">15 U.S.C. § 7001 et seq.</span>
+  </p>
+
+  <!-- FINALIZE BUTTON -->
+  <div id="finalize-wrap">
+    <p>Both signatures required before finalizing. Finalization generates a tamper-evident SHA-256 hash of the complete document state.</p>
+    <button class="btn-finalize" id="btn-finalize-doc" onclick="finalizeDocument()">Finalize Document &amp; Generate Security Hash</button>
+  </div>
+
+  <!-- AUDIT TRAIL -->
+  <div id="audit-section">
+    <h2 class="section-head">VIII. Audit Trail &amp; Security Record</h2>
+
+    <p>The following audit trail and cryptographic hash were generated at the time of document finalization. Any alteration of the document content, signatures, or metadata after this point will invalidate the hash.</p>
+
+    <pre class="audit-box" id="audit-box"></pre>
+
+    <p style="margin-top:16px"><strong style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em">SHA-256 DOCUMENT HASH</strong></p>
+    <div class="hash-box" id="hash-display"></div>
+    <div class="tamper-note">⚠ TAMPER-EVIDENT RECORD — This hash was computed from the complete document state including all field values, signature image data, and timestamps at the moment of finalization. Any modification to this document after finalization — including changes to form fields, signature images, dates, or legal text — will produce a different hash, invalidating this record. Retain this page with the signed document.</div>
+  </div>
+
+</div><!-- end #doc-paper -->
+
+<!-- ══════════════════════════════ JAVASCRIPT ══════════════════════════════ -->
+<script>
+'use strict';
+
+// ── Document ID & Session State ──────────────────────────────────────────────
+const DOC_ID = 'ATA-' + Array.from(crypto.getRandomValues(new Uint8Array(6)))
+  .map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
+
+const GEN_TIME = new Date();
+
+const sigState = {
+  1: { drawn: false, dataURL: null, confirmedName: null, timestamp: null },
+  2: { drawn: false, dataURL: null, confirmedName: null, timestamp: null }
+};
+
+let finalized = false;
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('doc-id-display').textContent = DOC_ID;
+  document.getElementById('doc-id-label').textContent = DOC_ID;
+  document.getElementById('doc-gen-time').textContent =
+    GEN_TIME.toLocaleString('en-US', { timeZoneName: 'short' });
+
+  initCanvas(1);
+  initCanvas(2);
+  parseURLParams();
+  updateProgress();
+});
+
+// ── URL Param Pre-fill ────────────────────────────────────────────────────────
+function parseURLParams() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('trustee'))  setField('trustee-name',    p.get('trustee'));
+  if (p.get('title'))    setField('trustee-title',   p.get('title'));
+  if (p.get('phone'))    setField('trustee-phone',   p.get('phone'));
+  if (p.get('email'))    setField('trustee-email',   p.get('email'));
+  if (p.get('address'))  setField('trustee-address', p.get('address'));
+  if (p.get('sigdate2')) setField('sig-date-2',      p.get('sigdate2'));
+}
+
+function setField(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) { el.value = val; }
+}
+
+// ── Canvas Signature Pad ──────────────────────────────────────────────────────
+function initCanvas(n) {
+  const canvas = document.getElementById('canvas-' + n);
+  const wrap   = document.getElementById('canvas-wrap-' + n);
+  const hint   = document.getElementById('hint-' + n);
+
+  // Set internal resolution
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = wrap.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = 150 * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.strokeStyle = '#1a1410';
+    ctx.lineJoin = 'round';
+    ctx.lineCap  = 'round';
+  }
+  resize();
+  window.addEventListener('resize', () => {
+    if (!sigState[n].dataURL) resize();
+  });
+
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let lastX = 0, lastY = 0, lastTime = 0;
+  let lastWidth = 1.5;
+
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    if (e.touches) {
+      return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+    }
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  function startDraw(e) {
+    if (sigState[n].dataURL) return; // already confirmed
+    e.preventDefault();
+    drawing = true;
+    const pos = getPos(e);
+    lastX = pos.x; lastY = pos.y;
+    lastTime = Date.now();
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 0.8, 0, Math.PI * 2);
+    ctx.fill();
+    hint.classList.add('hidden');
+  }
+
+  function draw(e) {
+    if (!drawing || sigState[n].dataURL) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    const now = Date.now();
+    const dt = Math.max(now - lastTime, 1);
+    const dist = Math.hypot(pos.x - lastX, pos.y - lastY);
+    const velocity = dist / dt; // px/ms
+    // Velocity-based width: slow=thick, fast=thin
+    const targetWidth = Math.max(0.6, Math.min(3.2, 2.8 - velocity * 6));
+    lastWidth = lastWidth * 0.7 + targetWidth * 0.3; // smooth
+
+    ctx.beginPath();
+    ctx.lineWidth = lastWidth;
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+
+    lastX = pos.x; lastY = pos.y; lastTime = now;
+    sigState[n].drawn = true;
+  }
+
+  function endDraw(e) {
+    if (!drawing) return;
+    drawing = false;
+    updateProgress();
+  }
+
+  canvas.addEventListener('mousedown',  startDraw);
+  canvas.addEventListener('mousemove',  draw);
+  canvas.addEventListener('mouseup',    endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove',  draw,      { passive: false });
+  canvas.addEventListener('touchend',   endDraw);
+}
+
+function clearCanvas(n) {
+  if (sigState[n].dataURL) {
+    // Already confirmed — ask
+    if (!confirm('Clear confirmed signature? This will require re-signing.')) return;
+    sigState[n] = { drawn: false, dataURL: null, confirmedName: null, timestamp: null };
+    document.getElementById('sig-result-' + n).classList.remove('show');
+    document.getElementById('sig-block-' + n).classList.remove('confirmed');
+    document.getElementById('sig-badge-' + n).textContent = 'Pending';
+    document.getElementById('sig-badge-' + n).classList.remove('ok');
+    document.getElementById('canvas-wrap-' + n).style.display = '';
+    document.querySelector('#sig-block-' + n + ' .sig-controls').style.display = '';
+  }
+  const canvas = document.getElementById('canvas-' + n);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sigState[n].drawn = false;
+  document.getElementById('hint-' + n).classList.remove('hidden');
+  updateProgress();
+}
+
+// ── Confirm Signature ─────────────────────────────────────────────────────────
+function confirmSignature(n) {
+  const nameInput = document.getElementById('name-confirm-' + n);
+  const name = nameInput.value.trim();
+
+  if (!sigState[n].drawn) {
+    alert('Please draw your signature on the pad before confirming.');
+    return;
+  }
+  if (!name) {
+    nameInput.classList.add('err');
+    nameInput.focus();
+    alert('Please type your full name to confirm your identity.');
+    return;
+  }
+  nameInput.classList.remove('err');
+
+  const canvas = document.getElementById('canvas-' + n);
+  const dataURL = canvas.toDataURL('image/png');
+  const ts = new Date();
+
+  sigState[n].dataURL = dataURL;
+  sigState[n].confirmedName = name;
+  sigState[n].timestamp = ts;
+
+  // Show result
+  document.getElementById('sig-img-' + n).src = dataURL;
+  document.getElementById('sig-ts-' + n).textContent =
+    '✓ Signed: ' + ts.toLocaleString('en-US', { timeZoneName: 'short' });
+  document.getElementById('sig-mini-' + n).textContent =
+    'Name confirmed: ' + name + '\n' +
+    'Document ID: ' + DOC_ID + '\n' +
+    'Agent: ' + (n === 1 ? 'Beneficiary / Appointor' : 'Successor Trustee') + '\n' +
+    'Browser: ' + navigator.userAgent.slice(0, 80);
+
+  document.getElementById('sig-result-' + n).classList.add('show');
+  document.getElementById('sig-block-' + n).classList.add('confirmed');
+  document.getElementById('sig-badge-' + n).textContent = '✓ Signed';
+  document.getElementById('sig-badge-' + n).classList.add('ok');
+
+  // Hide pad controls (keep canvas visible as read-only display)
+  document.getElementById('canvas-wrap-' + n).style.display = 'none';
+  document.querySelector('#sig-block-' + n + ' .sig-controls').style.display = 'none';
+
+  updateProgress();
+}
+
+// ── Progress Bar ──────────────────────────────────────────────────────────────
+function updateProgress() {
+  const checks = [
+    () => !!document.getElementById('exec-date').value,
+    () => !!document.getElementById('trustee-name').value.trim(),
+    () => !!document.getElementById('trustee-phone').value.trim(),
+    () => !!document.getElementById('trustee-email').value.trim(),
+    () => !!document.getElementById('trustee-address').value.trim(),
+    () => !!document.getElementById('sig-date-1').value,
+    () => !!document.getElementById('sig-date-2').value,
+    () => sigState[1].drawn,
+    () => !!sigState[1].dataURL,
+    () => !!sigState[2].dataURL
+  ];
+  const score = checks.filter(c => c()).length;
+  const pct = Math.round((score / checks.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ── Validation ────────────────────────────────────────────────────────────────
+function validate() {
+  let ok = true;
+  const required = [
+    'exec-date', 'trustee-name', 'trustee-phone',
+    'trustee-email', 'trustee-address', 'sig-date-1', 'sig-date-2'
+  ];
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('err');
+      ok = false;
+    } else {
+      el.classList.remove('err');
+    }
+  });
+  if (!sigState[1].dataURL) {
+    alert('Beneficiary signature (Section VI) is required.');
+    ok = false;
+  }
+  if (!sigState[2].dataURL) {
+    alert('Successor Trustee signature (Section VII) is required.');
+    ok = false;
+  }
+  return ok;
+}
+
+// ── SHA-256 Hash ──────────────────────────────────────────────────────────────
+async function sha256(str) {
+  const buf = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ── Finalize & Audit Trail ────────────────────────────────────────────────────
+async function finalizeDocument() {
+  if (finalized) {
+    document.getElementById('audit-section').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  if (!validate()) return;
+
+  const now = new Date();
+  const tz  = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  // Collect all document state
+  const docState = {
+    documentId:       DOC_ID,
+    documentTitle:    'Trustee Appointment and Acceptance — Atencio Living Trust',
+    generatedAt:      GEN_TIME.toISOString(),
+    finalizedAt:      now.toISOString(),
+    executionDate:    document.getElementById('exec-date').value,
+    trusteeName:      document.getElementById('trustee-name').value.trim(),
+    trusteeTitle:     document.getElementById('trustee-title').value.trim(),
+    trusteePhone:     document.getElementById('trustee-phone').value.trim(),
+    trusteeEmail:     document.getElementById('trustee-email').value.trim(),
+    trusteeAddress:   document.getElementById('trustee-address').value.trim(),
+    signer1Name:      sigState[1].confirmedName,
+    signer1Date:      document.getElementById('sig-date-1').value,
+    signer1Timestamp: sigState[1].timestamp ? sigState[1].timestamp.toISOString() : '',
+    signer1SigData:   sigState[1].dataURL || '',
+    signer2Name:      sigState[2].confirmedName,
+    signer2Date:      document.getElementById('sig-date-2').value,
+    signer2Timestamp: sigState[2].timestamp ? sigState[2].timestamp.toISOString() : '',
+    signer2SigData:   sigState[2].dataURL || '',
+    browserFingerprint: {
+      userAgent:  navigator.userAgent,
+      screen:     screen.width + 'x' + screen.height + ' @' + (window.devicePixelRatio || 1) + 'x',
+      timezone:   tz,
+      language:   navigator.language
+    }
+  };
+
+  const hashInput = JSON.stringify(docState);
+  const hash = await sha256(hashInput);
+
+  // Build audit trail text
+  const line = s => s;
+  const audit = [
+    '╔══════════════════════════════════════════════════════════════════════╗',
+    '║           ELECTRONIC SIGNATURE AUDIT TRAIL                          ║',
+    '║           Pedro and Diane M. Atencio Living Trust                   ║',
+    '╚══════════════════════════════════════════════════════════════════════╝',
+    '',
+    'DOCUMENT IDENTIFICATION',
+    '─────────────────────────────────────────────────────────────────────',
+    'Document ID       : ' + DOC_ID,
+    'Document Title    : Trustee Appointment and Acceptance',
+    'Trust             : Pedro and Diane M. Atencio Living Trust',
+    'Trust Date        : September 7, 2016',
+    'Federal Citation  : 42 U.S.C. § 1396p(d)(4)(A)',
+    'Governing Law     : State of New Mexico',
+    'Session Generated : ' + GEN_TIME.toLocaleString('en-US', { timeZoneName: 'short' }),
+    'Finalized         : ' + now.toLocaleString('en-US', { timeZoneName: 'short' }),
+    'Execution Date    : ' + docState.executionDate,
+    '',
+    'SIGNER 1 — BENEFICIARY / APPOINTOR',
+    '─────────────────────────────────────────────────────────────────────',
+    'Full Name         : Alicia R. Atencio',
+    'Role              : Beneficiary and Appointor',
+    'Residence         : Santa Fe, New Mexico',
+    'Typed Confirmation: ' + (sigState[1].confirmedName || 'n/a'),
+    'Signature Date    : ' + docState.signer1Date,
+    'Signed At         : ' + (sigState[1].timestamp
+      ? sigState[1].timestamp.toLocaleString('en-US', { timeZoneName: 'short' }) : 'n/a'),
+    'Sig Data Present  : ' + (sigState[1].dataURL ? 'YES (PNG embedded)' : 'NO'),
+    '',
+    'SIGNER 2 — SUCCESSOR TRUSTEE',
+    '─────────────────────────────────────────────────────────────────────',
+    'Full Name         : ' + docState.trusteeName,
+    'Title/Capacity    : ' + (docState.trusteeTitle || 'n/a'),
+    'Phone             : ' + docState.trusteePhone,
+    'Email             : ' + docState.trusteeEmail,
+    'Address           : ' + docState.trusteeAddress.replace(/\n/g, ' | '),
+    'Typed Confirmation: ' + (sigState[2].confirmedName || 'n/a'),
+    'Signature Date    : ' + docState.signer2Date,
+    'Signed At         : ' + (sigState[2].timestamp
+      ? sigState[2].timestamp.toLocaleString('en-US', { timeZoneName: 'short' }) : 'n/a'),
+    'Sig Data Present  : ' + (sigState[2].dataURL ? 'YES (PNG embedded)' : 'NO'),
+    '',
+    'BROWSER FINGERPRINT (Signer Session)',
+    '─────────────────────────────────────────────────────────────────────',
+    'User Agent        : ' + docState.browserFingerprint.userAgent.slice(0, 100),
+    'Screen Resolution : ' + docState.browserFingerprint.screen,
+    'Timezone          : ' + docState.browserFingerprint.timezone,
+    'Language          : ' + docState.browserFingerprint.language,
+    'IP Address        : [Client-side limitation — IP not available without server]',
+    '',
+    'INTEGRITY RECORD',
+    '─────────────────────────────────────────────────────────────────────',
+    'Hash Algorithm    : SHA-256 (Web Crypto API — crypto.subtle.digest)',
+    'Hash Input        : Full document state JSON (fields + sig PNGs + timestamps)',
+    'SHA-256 Hash      : ' + hash,
+    '',
+    'NOTE: This hash was computed over: execution date, all trustee fields,',
+    'both signer names, typed confirmations, signature PNG data URLs,',
+    'signature timestamps, and document ID. Any post-finalization alteration',
+    'to any of these values will produce a different hash.',
+    '',
+    '──────────────────────────────────────────────────────────────────────',
+    'Electronic signatures applied herein are governed by UETA (N.M. Stat.',
+    'Ann. § 14-16-1 et seq.) and E-SIGN (15 U.S.C. § 7001 et seq.).',
+    '──────────────────────────────────────────────────────────────────────'
+  ].join('\n');
+
+  document.getElementById('audit-box').textContent = audit;
+  document.getElementById('hash-display').textContent = hash;
+  document.getElementById('audit-section').classList.add('show');
+
+  document.getElementById('finalize-wrap').classList.add('done');
+  document.getElementById('finalize-wrap').innerHTML =
+    '<p style="color:var(--green);font-weight:600;font-family:\'IBM Plex Mono\',monospace;font-size:12px">✓ DOCUMENT FINALIZED — SHA-256 HASH GENERATED</p>' +
+    '<p style="margin-top:8px">Scroll down to view the audit trail and security hash. Use Print or Download PDF to save the signed document.</p>';
+
+  finalized = true;
+  updateProgress();
+
+  setTimeout(() => {
+    document.getElementById('audit-section').scrollIntoView({ behavior: 'smooth' });
+  }, 300);
+}
+
+// ── Download PDF ──────────────────────────────────────────────────────────────
+async function downloadPDF() {
+  // Try jsPDF + html2canvas if loaded
+  if (typeof window.jspdf !== 'undefined' && typeof window.html2canvas !== 'undefined') {
+    const { jsPDF } = window.jspdf;
+    const btn = document.getElementById('btn-download');
+    const origText = btn.textContent;
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+
+    try {
+      // Temporarily show audit section for capture
+      const wasHidden = !document.getElementById('audit-section').classList.contains('show');
+      if (wasHidden) document.getElementById('audit-section').classList.add('show');
+
+      const canvas = await html2canvas(document.getElementById('doc-paper'), {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#faf8f3'
+      });
+
+      if (wasHidden) document.getElementById('audit-section').classList.remove('show');
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+
+      // PDF metadata
+      pdf.setProperties({
+        title: 'Trustee Appointment and Acceptance — Atencio Living Trust',
+        author: 'Pedro and Diane M. Atencio Living Trust — ' + DOC_ID,
+        subject: 'Special Needs Trust Successor Trustee Appointment',
+        keywords: 'trustee, appointment, special needs trust, Atencio',
+        creator: 'SenaColectivo E-Sign'
+      });
+
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const contentW = pageW - margin * 2;
+      const contentH = (canvas.height / canvas.width) * contentW;
+
+      let y = margin;
+      let remaining = contentH;
+      const usableH = pageH - margin * 2;
+
+      while (remaining > 0) {
+        const sliceH = Math.min(remaining, usableH);
+        const srcY = (contentH - remaining) / contentH * canvas.height;
+        const srcH = sliceH / contentH * canvas.height;
+
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width  = canvas.width;
+        sliceCanvas.height = srcH;
+        const sliceCtx = sliceCanvas.getContext('2d');
+        sliceCtx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+
+        pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.92),
+          'JPEG', margin, y, contentW, sliceH);
+
+        remaining -= sliceH;
+        if (remaining > 0) { pdf.addPage(); y = margin; }
+      }
+
+      const fname = 'Atencio_Trustee_Appointment_' + DOC_ID + '.pdf';
+      pdf.save(fname);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+      alert('PDF generation failed. Use Print (Ctrl/Cmd+P) and choose "Save as PDF" instead.');
+    }
+    btn.textContent = origText;
+    btn.disabled = false;
+  } else {
+    // Fallback
+    alert('PDF library loading — please use Print (Ctrl/Cmd+P) → "Save as PDF" as an alternative.');
+    window.print();
+  }
+}
+
+// ── Copy Signing Link ─────────────────────────────────────────────────────────
+function copySigningLink() {
+  const base = 'https://salchicanoloco.github.io/collective/Atencio_Trustee_Esign.html';
+  const params = new URLSearchParams();
+
+  const name    = document.getElementById('trustee-name').value.trim();
+  const title   = document.getElementById('trustee-title').value.trim();
+  const phone   = document.getElementById('trustee-phone').value.trim();
+  const email   = document.getElementById('trustee-email').value.trim();
+  const address = document.getElementById('trustee-address').value.trim();
+  const date2   = document.getElementById('sig-date-2').value;
+
+  if (name)    params.set('trustee', name);
+  if (title)   params.set('title',   title);
+  if (phone)   params.set('phone',   phone);
+  if (email)   params.set('email',   email);
+  if (address) params.set('address', address);
+  if (date2)   params.set('sigdate2', date2);
+
+  const url = params.toString() ? base + '?' + params.toString() : base;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('btn-copy-link');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  } else {
+    prompt('Copy this signing link for Father Brenen:', url);
+  }
+}
+
+// ── Email to Signer ───────────────────────────────────────────────────────────
+function emailToSigner() {
+  const base = 'https://salchicanoloco.github.io/collective/Atencio_Trustee_Esign.html';
+  const params = new URLSearchParams();
+
+  const name    = document.getElementById('trustee-name').value.trim();
+  const title   = document.getElementById('trustee-title').value.trim();
+  const phone   = document.getElementById('trustee-phone').value.trim();
+  const email   = document.getElementById('trustee-email').value.trim();
+  const address = document.getElementById('trustee-address').value.trim();
+
+  if (name)    params.set('trustee', name);
+  if (title)   params.set('title',   title);
+  if (phone)   params.set('phone',   phone);
+  if (email)   params.set('email',   email);
+  if (address) params.set('address', address);
+
+  const url = params.toString() ? base + '?' + params.toString() : base;
+  const emailTo = email || '';
+
+  const subject = encodeURIComponent(
+    'Trustee Appointment & Acceptance — Atencio Living Trust — Action Required'
+  );
+  const body = encodeURIComponent(
+    'Dear ' + (name || 'Father Brenen') + ',\n\n' +
+    'Please review and electronically sign the Trustee Appointment and Acceptance for the ' +
+    'Pedro and Diane M. Atencio Living Trust (Special Needs Sub-Trust).\n\n' +
+    'To sign, please open the following link in your browser:\n' +
+    url + '\n\n' +
+    'Instructions:\n' +
+    '1. Review the full document carefully.\n' +
+    '2. Complete any pre-filled fields as needed.\n' +
+    '3. Draw your signature in Section VII.\n' +
+    '4. Type your full legal name to confirm your identity.\n' +
+    '5. Click "Confirm Signature."\n' +
+    '6. Click "Finalize Document & Generate Security Hash."\n' +
+    '7. Download or print the signed document for your records.\n\n' +
+    'Document ID: ' + DOC_ID + '\n\n' +
+    'If you have any questions, please contact Alicia R. Atencio.\n\n' +
+    'This document is electronically executed pursuant to UETA and E-SIGN.'
+  );
+
+  window.location.href = 'mailto:' + emailTo + '?subject=' + subject + '&body=' + body;
+}
+</script>
+
+<!-- Load jsPDF and html2canvas async so they don't block render -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" async></script>
+
+</body>
+</html>
