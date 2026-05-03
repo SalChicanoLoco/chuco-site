@@ -593,7 +593,7 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
   <div class="fields-grid">
     <div class="field">
       <label>Full Legal Name <span class="req">*</span></label>
-      <input type="text" id="trustee-name" oninput="updateProgress()" placeholder="e.g., Father Brenen M. Smith">
+      <input type="text" id="trustee-name" oninput="updateProgress()" placeholder="e.g., Father Terry Brennan">
     </div>
     <div class="field">
       <label>Title / Capacity</label>
@@ -1219,7 +1219,7 @@ function copySigningLink() {
       setTimeout(() => { btn.textContent = orig; }, 2000);
     });
   } else {
-    prompt('Copy this signing link for Father Brenen:', url);
+    prompt('Copy this signing link for Father Terry Brennan:', url);
   }
 }
 
@@ -1247,7 +1247,7 @@ function emailToSigner() {
     'Trustee Appointment & Acceptance — Atencio Living Trust — Action Required'
   );
   const body = encodeURIComponent(
-    'Dear ' + (name || 'Father Brenen') + ',\n\n' +
+    'Dear ' + (name || 'Father Terry Brennan') + ',\n\n' +
     'Please review and electronically sign the Trustee Appointment and Acceptance for the ' +
     'Pedro and Diane M. Atencio Living Trust (Special Needs Sub-Trust).\n\n' +
     'To sign, please open the following link in your browser:\n' +
