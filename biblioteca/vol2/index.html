@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol. 02 — The Bloodlines of Power · La Biblioteca</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--earth:#1a1209;--warm:#2a1f0e;--sand:#f5ead8;--terr:#c2603a;--gold:#e8a825;--sage:#6b8f5e;--sky:#4a7fa5;--cream:#fdf6ea;--ink:#1c1410;--border:rgba(194,96,58,0.18);--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+
+/* MASTHEAD */
+.mast{background:var(--earth);border-bottom:3px solid var(--terr);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mast-brand{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.mast-right{display:flex;align-items:center;gap:16px}
+.back-link{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.45);text-decoration:none}
+.back-link:hover{color:var(--terr)}
+.lang-toggle{display:flex;border:1px solid rgba(194,96,58,.35);border-radius:3px;overflow:hidden}
+.lt-btn{padding:5px 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:rgba(245,234,216,.4);cursor:pointer;transition:all .15s}
+.lt-btn.active{background:var(--terr);color:var(--cream)}
+
+/* COVER */
+.cover{background:var(--warm);padding:56px 32px 48px;border-bottom:2px solid var(--border)}
+.cover-inner{max-width:720px;margin:0 auto}
+.vol-id{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.cover-series{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.35);margin-bottom:20px}
+.cover-h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--sand);line-height:1.1;margin-bottom:8px}
+.cover-h1 em{color:var(--gold);font-style:italic}
+.cover-sub{font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);font-weight:300;color:rgba(245,234,216,.55);margin-bottom:24px;line-height:1.3}
+.cover-lede{font-size:15px;color:rgba(245,234,216,.65);max-width:580px;line-height:1.8;border-left:3px solid var(--terr);padding-left:16px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.ctag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(194,96,58,.3);color:rgba(245,234,216,.45)}
+.ctag.hot{border-color:var(--terr);color:var(--terr)}
+
+/* BODY */
+.pub-body{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.section{margin-bottom:48px}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.section-h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:16px}
+.section-h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:24px 0 12px}
+.body-text{color:#3a2c1e;font-size:15.5px;line-height:1.8;margin-bottom:14px}
+.body-text strong{color:var(--ink);font-weight:600}
+.body-text em{font-style:italic}
+
+/* PULL QUOTE */
+.pq{border-left:4px solid var(--gold);padding:16px 20px;margin:28px 0;background:rgba(232,168,37,.05)}
+.pq-text{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;font-style:italic}
+.pq-attr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--terr);margin-top:8px}
+
+/* BULLET LIST */
+.pub-ul{margin:12px 0 16px 20px}
+.pub-ul li{color:#3a2c1e;font-size:15px;line-height:1.75;margin-bottom:8px}
+.pub-ul li strong{color:var(--ink);font-weight:600}
+.pub-ul li em{font-style:italic}
+
+/* STAT ROW */
+.stat-row{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat-box{flex:1;min-width:140px;background:white;border:1px solid var(--border);border-top:3px solid var(--terr);padding:16px}
+.stat-num{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--terr)}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-top:4px}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+
+/* REFERENCES */
+.refs{background:white;border:1px solid var(--border);padding:24px;margin-top:48px}
+.refs-title{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--terr);margin-bottom:16px}
+.ref-item{font-size:13px;color:#5a4a3a;line-height:1.6;margin-bottom:8px;padding-left:20px;text-indent:-20px}
+
+/* FOOTER */
+.pub-footer{background:var(--earth);border-top:2px solid var(--warm);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold)}
+.footer-id{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,234,216,.25)}
+
+/* EN/ES */
+.en{display:block}.es{display:none}
+body.lang-es .en{display:none}body.lang-es .es{display:block}
+.en-inline{display:inline}.es-inline{display:none}
+body.lang-es .en-inline{display:none}body.lang-es .es-inline{display:inline}
+
+@media(max-width:640px){
+  .cover,.mast,.pub-body,.pub-footer{padding-left:20px;padding-right:20px}
+  .cover{padding-top:36px;padding-bottom:32px}
+}
+@media print{
+  .mast,.pub-footer{display:none}
+  .cover{background:white;color:black}
+  .cover-h1,.cover-sub{color:black}
+  .cover-lede{color:#333}
+  body{font-size:12pt}
+}
+</style>
+</head>
+<body id="page">
+
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca-worker/biblioteca-app-clean.html">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca-worker/biblioteca-app-clean.html">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="vol-id">Vol. 02 · Land Grant Series · April 2026</div>
+    <div class="cover-series en">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <div class="cover-series es">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <h1 class="cover-h1 en">The <em>Bloodlines</em><br>of Power</h1>
+    <h1 class="cover-h1 es">Los <em>Linajes</em><br>del Poder</h1>
+    <div class="cover-sub en">The Santa Fe Ring and the Genízaro Struggle</div>
+    <div class="cover-sub es">El Anillo de Santa Fe y la Lucha Genízara</div>
+    <p class="cover-lede en">The surname traversal. The Rico-Anglo Syndicate. How the legal scalpel of the 19th century became the modern Familyocracy of New Mexico politics — and who is still running it.</p>
+    <p class="cover-lede es">El recorrido de apellidos. El Sindicato Rico-Anglo. Cómo el bisturí legal del siglo XIX se convirtió en la Familiocracia moderna de la política de Nuevo México — y quién todavía la dirige.</p>
+    <div class="cover-tags">
+      <span class="ctag hot">Land Grant</span>
+      <span class="ctag hot">Genízaro</span>
+      <span class="ctag">Santa Fe Ring</span>
+      <span class="ctag">Dispossession</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+  </div>
+</div>
+
+<main class="pub-body">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label en">Section 01</div>
+    <div class="section-label es">Sección 01</div>
+    <h2 class="section-h2 en">The Genízaro Subaltern: The Buffer and the Betrayal</h2>
+    <h2 class="section-h2 es">El Subalterno Genízaro: El Escudo y la Traición</h2>
+
+    <p class="body-text en">The history of the <strong>San Miguel del Vado (Bado)</strong> land grant is the primary case study for the systemic legalized theft of New Mexican land. Established in 1794, the grant was specifically populated by <strong>Genízaros</strong> — detribalized Native Americans, often ransomed or "rescued" children of Plains tribes — who were settled at the frontier as a military buffer against Comanche and Apache raids.</p>
+    <p class="body-text es">La historia de la merced de tierra de <strong>San Miguel del Vado</strong> es el caso de estudio principal del robo legalizado y sistemático de las tierras de Nuevo México. Establecida en 1794, la merced fue específicamente poblada por <strong>Genízaros</strong> — nativos americanos destribalizados, frecuentemente niños canjeados o "rescatados" de tribus de las llanuras — que fueron asentados en la frontera como escudo militar contra las incursiones Comanche y Apache.</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>The Sacrifice:</strong> Genízaro settlers were granted land in exchange for building fortified villages and defending the Spanish/Mexican interior from the "Indios Bárbaros."</li>
+      <li class="es"><strong>El Sacrificio:</strong> Los colonos Genízaros recibieron tierra a cambio de construir aldeas fortificadas y defender el interior español/mexicano de los "Indios Bárbaros."</li>
+      <li class="en"><strong>The Theft:</strong> In the 1897 Supreme Court case <em>United States v. Sandoval</em>, the legal mechanism of the <em>ejido</em> (communal land) was deliberately misinterpreted. The court ruled that communal lands were held in trust by the sovereign — effectively stripping the herederos of <strong>300,000 acres</strong> and leaving them with only 5,000 acres of individual plots. This turned a self-sufficient community into a dependent wage-labor class almost overnight.</li>
+      <li class="es"><strong>El Robo:</strong> En el caso de la Corte Suprema de 1897 <em>Estados Unidos v. Sandoval</em>, el mecanismo legal del <em>ejido</em> (tierra comunal) fue deliberadamente malinterpretado. La corte dictaminó que las tierras comunales eran administradas en fideicomiso por el soberano — despojando efectivamente a los herederos de <strong>300,000 acres</strong> y dejándolos con solo 5,000 acres de parcelas individuales. Esto convirtió a una comunidad autosuficiente en una clase obrera asalariada dependiente casi de la noche a la mañana.</li>
+    </ul>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">315,000</div>
+        <div class="stat-label en">Acres — original ejido</div>
+        <div class="stat-label es">Acres — ejido original</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5,000</div>
+        <div class="stat-label en">Acres — what remained</div>
+        <div class="stat-label es">Acres — lo que quedó</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">98.4%</div>
+        <div class="stat-label en">Of the grant — taken</div>
+        <div class="stat-label es">De la merced — robado</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$775M</div>
+        <div class="stat-label en">Estimated displaced equity</div>
+        <div class="stat-label es">Capital desplazado estimado</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+    <h2 class="section-h2 en">The "Rico-Anglo" Accord: Collaborators and the Sena/Aragon Paradox</h2>
+    <h2 class="section-h2 es">El Acuerdo "Rico-Anglo": Colaboradores y la Paradoja Sena/Aragon</h2>
+
+    <p class="body-text en">The Santa Fe Ring was not merely an Anglo invasion. It was an alliance between newly arrived lawyers — Catron, Elkins — and established <strong>Hispano Ricos</strong>. This elite class chose accommodation over resistance to consolidate their own power.</p>
+    <p class="body-text es">El Anillo de Santa Fe no fue meramente una invasión anglosajona. Fue una alianza entre abogados recién llegados — Catron, Elkins — y los <strong>Hispano Ricos</strong> establecidos. Esta clase elite eligió la acomodación sobre la resistencia para consolidar su propio poder.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"The 'Rico' families often traded land grant titles for legal 'services' from Ring lawyers. This created the modern Familyocracy where power remained in a handful of hands."</div>
+      <div class="pq-text es">"Las familias 'Ricas' frecuentemente canjeaban títulos de mercedes de tierra por 'servicios' legales de abogados del Anillo. Esto creó la Familiocracia moderna donde el poder permaneció en pocas manos."</div>
+      <div class="pq-attr en">Salvador Sena · NM Socialists Research · 2026</div>
+      <div class="pq-attr es">Salvador Sena · Investigación Socialistas de NM · 2026</div>
+    </div>
+
+    <h3 class="section-h3 en">The Sena Name: A Divided Legacy</h3>
+    <h3 class="section-h3 es">El Apellido Sena: Un Legado Dividido</h3>
+    <p class="body-text en">While many Senas were victims of land loss, members of the family — like <strong>José Desiderio Sena</strong> — were influential in the territorial era. The paradox lies in this split: the Sena herederos who were robbed, and the Sena elites who participated in the legal system that facilitated it.</p>
+    <p class="body-text es">Aunque muchos Senas fueron víctimas del despojo de tierras, miembros de la familia — como <strong>José Desiderio Sena</strong> — fueron influyentes en la era territorial. La paradoja radica en esta división: los herederos Sena que fueron despojados, y las élites Sena que participaron en el sistema legal que lo facilitó.</p>
+
+    <h3 class="section-h3 en">The Aragon Connection</h3>
+    <h3 class="section-h3 es">La Conexión Aragon</h3>
+    <p class="body-text en">Authors like <strong>Ray John de Aragon</strong> have documented the "dark history" of fraud and deceit by the Ring. The Aragon family — like the santero José Rafael Aragón — were deeply embedded in the social fabric of San Miguel del Bado and the Pecos Valley, representing the cultural continuity the Ring worked to fracture.</p>
+    <p class="body-text es">Autores como <strong>Ray John de Aragon</strong> han documentado la "historia oscura" de fraude y engaño del Anillo. La familia Aragon — como el santero José Rafael Aragón — estaban profundamente integrados en el tejido social de San Miguel del Bado y el Valle de Pecos, representando la continuidad cultural que el Anillo trabajó para fracturar.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+    <h2 class="section-h2 en">The Genealogy of Modern Power: Chavez, Lujan, and Otero</h2>
+    <h2 class="section-h2 es">La Genealogía del Poder Moderno: Chavez, Lujan y Otero</h2>
+
+    <p class="body-text en">The families that survived the Ring's era with their wealth intact are the "Patrons" of today. The parallel to modern New Mexican politicians is direct.</p>
+    <p class="body-text es">Las familias que sobrevivieron la era del Anillo con su riqueza intacta son los "Patrones" de hoy. El paralelo con los políticos modernos de Nuevo México es directo.</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>The Otero Legacy:</strong> Mariano Otero, a member of the Santa Fe Ring, acquired the <strong>Baca Float No. 1</strong> through land speculation in 1899. This land became private equity for the Otero-controlled "Valles Land Company."</li>
+      <li class="es"><strong>El Legado Otero:</strong> Mariano Otero, miembro del Anillo de Santa Fe, adquirió el <strong>Baca Float No. 1</strong> mediante especulación de tierras en 1899. Esta tierra se convirtió en capital privado de la "Valles Land Company" controlada por los Otero.</li>
+      <li class="en"><strong>The Chavez-Lujan Nexus:</strong> Ben Lujan (former Speaker) and Ben Ray Lujan (US Senator) are descendants of these colonial settlers. As Governor Michelle Lujan Grisham once noted: <em>"We were related to everyone here"</em> — illustrating the closed-loop nature of Santa Fe's political elite.</li>
+      <li class="es"><strong>El Nexo Chavez-Lujan:</strong> Ben Lujan (ex-Presidente de la Cámara) y Ben Ray Lujan (Senador de EE.UU.) son descendientes de estos colonos coloniales. Como señaló la Gobernadora Michelle Lujan Grisham: <em>"Estábamos relacionados con todos aquí"</em> — ilustrando la naturaleza de circuito cerrado de la élite política de Santa Fe.</li>
+      <li class="en"><strong>The "Tri-Cultural Trope":</strong> The narrative of three equal cultures — Spanish, Indian, Anglo — was a public relations tool used to erase the Mestizo/Genízaro reality while legitimizing the existing power structure.</li>
+      <li class="es"><strong>El "Tropo Tri-Cultural":</strong> La narrativa de tres culturas iguales — española, indígena, anglosajona — fue una herramienta de relaciones públicas usada para borrar la realidad Mestiza/Genízara y al mismo tiempo legitimar la estructura de poder existente.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label en">Section 04</div>
+    <div class="section-label es">Sección 04</div>
+    <h2 class="section-h2 en">The Acequias: The Last Stand of Communal Power</h2>
+    <h2 class="section-h2 es">Las Acequias: La Última Resistencia del Poder Comunal</h2>
+
+    <p class="body-text en">South of Albuquerque, the acequias remain the last vestige of the 400-year-old community democracy. They are not relics. They are infrastructure — living systems of shared water governance that the Ring never fully extinguished.</p>
+    <p class="body-text es">Al sur de Albuquerque, las acequias siguen siendo el último vestigio de la democracia comunitaria de 400 años. No son reliquias. Son infraestructura — sistemas vivos de gestión compartida del agua que el Anillo nunca extinguió completamente.</p>
+
+    <p class="body-text en">The <strong>Cedillo</strong> family, along with names like <strong>Castellano</strong> and <strong>Romero</strong>, are central to the preservation of water systems in the South Valley and beyond. Branches of the Castellano family were specifically identified as Genízaros of San Juan Pueblo who settled in Spanish villages — connecting the modern defenders of communal water rights directly to the original Genízaro buffer families who built the infrastructure in the first place.</p>
+    <p class="body-text es">La familia <strong>Cedillo</strong>, junto con apellidos como <strong>Castellano</strong> y <strong>Romero</strong>, son centrales para la preservación de los sistemas hídricos en el Valle del Sur y más allá. Ramas de la familia Castellano fueron específicamente identificadas como Genízaros del Pueblo de San Juan que se asentaron en aldeas españolas — conectando a los defensores modernos de los derechos comunitarios del agua directamente con las familias Genízaras de escudo original que construyeron la infraestructura.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"The acequia is a socialist machine. It doesn't ask for a credit score — it asks if you cleaned the ditch. We've shared water for 400 years. That's our shape."</div>
+      <div class="pq-text es">"La acequia es una máquina socialista. No pide un puntaje de crédito — pregunta si limpiaste la acequia. Hemos compartido el agua por 400 años. Esa es nuestra forma."</div>
+      <div class="pq-attr en">SANGRE KV1 — Morphology of the Commons · 2026</div>
+      <div class="pq-attr es">SANGRE KV1 — Morfología de los Bienes Comunes · 2026</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- REFERENCES -->
+  <div class="refs">
+    <div class="refs-title en">References / Fuentes</div>
+    <div class="refs-title es">Fuentes / References</div>
+    <p class="ref-item">Sena, S. (2026). <em>Mexicans in New Mexico: Deconstructing the Tri-Cultural Trope.</em> NM Socialists Research.</p>
+    <p class="ref-item"><em>United States v. Sandoval</em> (1897), 167 U.S. 278.</p>
+    <p class="ref-item">De Aragon, R. J. (2024). <em>New Mexico's Stolen Lands: A History of Racism, Fraud & Deceit.</em></p>
+    <p class="ref-item">Jenks, K. L. (2025). <em>San Miguel del Vado Land Grant Oral History Project.</em> NMSU.</p>
+    <p class="ref-item"><em>Santa Fe Ring.</em> Wikipedia. Retrieved April 2026.</p>
+    <p class="ref-item">Ben Lujan & Ben Ray Lujan biographical records. Congressional Research Service.</p>
+    <p class="ref-item">Baca Land Grants & Mariano Otero land speculation records. NM State Archives.</p>
+  </div>
+
+</main>
+
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. 02 · Sena's AI Collective</div>
+  <div class="footer-id en">New Mexico Socialists Inc. · EIN 41-5210879 · CC BY-NC-SA 4.0 · Free to Share</div>
+  <div class="footer-id es">Socialistas de NM · EIN 41-5210879 · CC BY-NC-SA 4.0 · Libre de Compartir</div>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('bib_lang');
+  const lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if(lang==='es') setLang('es',true);
+})();
+function setLang(l, init){
+  document.getElementById('page').className = l==='es' ? 'lang-es' : '';
+  document.getElementById('btnEN').className = 'lt-btn'+(l==='en'?' active':'');
+  document.getElementById('btnES').className = 'lt-btn'+(l==='es'?' active':'');
+  if(!init) localStorage.setItem('bib_lang',l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
