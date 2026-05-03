@@ -118,12 +118,11 @@ body.es .es-only { display:block; }
 </head>
 <body id="page">
 
-<!-- ── CONFIG ─────────────────────────────────────────────────────
-     After `wrangler deploy`, replace this URL with your Worker URL:
-     e.g. https://biblioteca-api.YOUR-SUBDOMAIN.workers.dev
-     or your custom route: https://api.senacolectivo.com/biblioteca
+<!-- ── DATA SOURCE ───────────────────────────────────────────────
+     Static JSON served from GitHub Pages — no API key needed.
+     Upgrade path: swap DATA_URL for a Cloudflare Worker endpoint.
 ──────────────────────────────────────────────────────────────── -->
-<script>const WORKER_URL = 'https://biblioteca-api.YOUR-SUBDOMAIN.workers.dev';</script>
+<script>const DATA_URL = 'https://docs.senacolectivo.com/biblioteca-worker/biblioteca-data.json';</script>
 
 <div class="masthead">
   <div>
@@ -189,11 +188,11 @@ window.addEventListener('DOMContentLoaded', () => {
   fetchVolumes();
 });
 
-// ── FETCH FROM WORKER ─────────────────────────────────────────────
+// ── FETCH DATA ────────────────────────────────────────────────────
 async function fetchVolumes() {
   try {
-    const res  = await fetch(`${WORKER_URL}/volumes`);
-    if (!res.ok) throw new Error('Worker error ' + res.status);
+    const res  = await fetch(DATA_URL);
+    if (!res.ok) throw new Error('Fetch error ' + res.status);
     const data = await res.json();
     allVolumes = data.volumes || [];
     renderGrid();

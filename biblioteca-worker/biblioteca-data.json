@@ -1,0 +1,84 @@
+{
+  "generated": "2026-05-03",
+  "source": "Airtable · appinUNP5LSKBC33H",
+  "volumes": [
+    {
+      "id": "recqQDAsj8IXPvE7G",
+      "vol": 1,
+      "titleEN": "The Shape of Us: SANGRE, the Acequia, and the Morphology of the Commons",
+      "titleES": "La Forma de Nosotros: SANGRE, la Acequia y la Morfología de los Bienes Comunes",
+      "series": "Water Rights",
+      "excerptEN": "The acequia is a socialist machine. It doesn't ask for a credit score — it asks if you cleaned the ditch. Four hundred years of shared water as the foundation of everything that follows.",
+      "excerptES": "La acequia es una máquina socialista. No pide un puntaje de crédito — pregunta si limpiaste la acequia. Cuatrocientos años de agua compartida como fundamento de todo lo que sigue.",
+      "url": "",
+      "date": "",
+      "tags": "acequia, commons, water, tierra, SANGRE",
+      "freeToShare": true
+    },
+    {
+      "id": "rec9TcnHLQrci4nMq",
+      "vol": 2,
+      "titleEN": "The Bloodlines of Power: The Santa Fe Ring and the Genízaro Struggle",
+      "titleES": "Los Linajes del Poder: El Anillo de Santa Fe y la Lucha Genízara",
+      "series": "Land Grant",
+      "excerptEN": "The surname traversal. The Rico-Anglo Syndicate. How the legal scalpel of the 19th century became the modern Familyocracy of NM politics.",
+      "excerptES": "El recorrido de apellidos. El Sindicato Rico-Anglo. Cómo el bisturí legal del siglo XIX se convirtió en la Familiocracia moderna de la política de NM.",
+      "url": "",
+      "date": "",
+      "tags": "Santa Fe Ring, Genízaro, land grant, power, dispossession",
+      "freeToShare": true
+    },
+    {
+      "id": "recXD6W8cAicO39xC",
+      "vol": 3,
+      "titleEN": "How Courts Rewrote the Acequia",
+      "titleES": "Cómo los Tribunales Reescribieron la Acequia",
+      "series": "Water Rights",
+      "excerptEN": "The Pueblo Water Doctrine was constructed by US courts post-1848 to transfer communal water rights away from acequia communities. Based on Peter Reich's primary legal analysis.",
+      "excerptES": "La Doctrina del Agua Pueblo fue construida por tribunales estadounidenses post-1848 para transferir derechos de agua comunales lejos de las comunidades de acequias.",
+      "url": "",
+      "date": "",
+      "tags": "Pueblo Doctrine, water rights, acequia, Treaty of Guadalupe Hidalgo, Peter Reich",
+      "freeToShare": true
+    },
+    {
+      "id": "recxWygfQ5DgqbuiY",
+      "vol": 4,
+      "titleEN": "San Miguel del Vado: 315,000 Acres and the Architecture of Dispossession",
+      "titleES": "San Miguel del Vado: 315,000 Acres y la Arquitectura del Despojo",
+      "series": "Land Grant",
+      "excerptEN": "US v. Sandoval (1897) stripped 98.4% of the Genízaro communal land grant in a single ruling. The legal mechanism, $775M in displaced equity, and the active reclamation today.",
+      "excerptES": "US v. Sandoval (1897) despojó el 98.4% de la merced comunal Genízara en una sola resolución. El mecanismo legal, $775M en capital desplazado, y la reclamación activa hoy.",
+      "url": "",
+      "date": "",
+      "tags": "SMDVLG, land grant, Sandoval, Genízaro, dispossession, 315000 acres",
+      "freeToShare": true
+    },
+    {
+      "id": "recgwrfrxWjZCKNKM",
+      "vol": 5,
+      "titleEN": "Build MILPA: Your Community Greenhouse",
+      "titleES": "Construye MILPA: Tu Invernadero Comunitario",
+      "series": "Community Agriculture",
+      "excerptEN": "CGS-C1 build guide. Four tiers from free to commercial. Passive solar, aquaponics, earth thermal, compute waste heat. Built for the high desert of Northern NM at 6,900 ft.",
+      "excerptES": "Guía de construcción CGS-C1. Cuatro niveles de gratuito a comercial. Solar pasivo, acuaponía, calor terrestre. Hecho para el desierto alto del Norte de NM a 2,100 m.",
+      "url": "",
+      "date": "",
+      "tags": "MILPA, greenhouse, CEA, aquaponics, food sovereignty, CGS-C1",
+      "freeToShare": true
+    },
+    {
+      "id": "recpOdnHYCB6sTZrG",
+      "vol": 6,
+      "titleEN": "No Work. No School. No Shopping.",
+      "titleES": "Sin Trabajo. Sin Escuela. Sin Compras.",
+      "series": "Special Edition",
+      "excerptEN": "The May Day Strong general strike — 85+ cities, the Minnesota ICE origin story, $240M in suppressed wages, who's in, and what your rights are if you walk out.",
+      "excerptES": "La huelga general May Day Strong — más de 85 ciudades, la historia de origen del ICE en Minnesota, $240M en salarios suprimidos, quién está adentro y cuáles son tus derechos.",
+      "url": "",
+      "date": "2026-05-01",
+      "tags": "May Day, general strike, ICE, labor rights, Minneapolis, May Day Strong",
+      "freeToShare": true
+    }
+  ]
+}
