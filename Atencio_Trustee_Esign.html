@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trustee Appointment &amp; Acceptance — Atencio Living Trust</title>
-<script>if(!sessionStorage.getItem('atencio_portal_auth')){window.location.replace('atencio/index.html')}</script>
+<script>if(!sessionStorage.getItem('atencio_portal_auth')){sessionStorage.setItem('atencio_portal_redirect',window.location.href);window.location.replace('atencio/index.html')}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1192,7 +1192,7 @@ async function downloadPDF() {
 
 // ── Copy Signing Link ─────────────────────────────────────────────────────────
 function copySigningLink() {
-  const base = 'https://salchicanoloco.github.io/collective/Atencio_Trustee_Esign.html';
+  const base = 'https://docs.senacolectivo.com/Atencio_Trustee_Esign.html';
   const params = new URLSearchParams();
 
   const name    = document.getElementById('trustee-name').value.trim();
@@ -1225,7 +1225,7 @@ function copySigningLink() {
 
 // ── Email to Signer ───────────────────────────────────────────────────────────
 function emailToSigner() {
-  const base = 'https://salchicanoloco.github.io/collective/Atencio_Trustee_Esign.html';
+  const base = 'https://docs.senacolectivo.com/Atencio_Trustee_Esign.html';
   const params = new URLSearchParams();
 
   const name    = document.getElementById('trustee-name').value.trim();

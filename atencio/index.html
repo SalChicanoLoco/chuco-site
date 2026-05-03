@@ -321,13 +321,21 @@ const ACCESS_CODES = [
   { code: 'FatherTerry', name: 'Father Terry Brennan' }
 ];
 
-const SESSION_KEY = 'atencio_portal_auth';
+const SESSION_KEY   = 'atencio_portal_auth';
+const REDIRECT_KEY  = 'atencio_portal_redirect';
 
 // ── AUTO-LOGIN if session active ──────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   const saved = sessionStorage.getItem(SESSION_KEY);
   if (saved) {
     const data = JSON.parse(saved);
+    // If a document redirected here (with params), bounce straight back
+    const dest = sessionStorage.getItem(REDIRECT_KEY);
+    if (dest) {
+      sessionStorage.removeItem(REDIRECT_KEY);
+      window.location.replace(dest);
+      return;
+    }
     showDocs(data.name);
   }
   document.getElementById('pw-field').focus();
@@ -341,11 +349,19 @@ function attemptLogin() {
   if (match) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ name: match.name }));
     document.getElementById('error-msg').textContent = '';
+
+    // Restore original destination (preserves URL params like ?trustee=...)
+    const dest = sessionStorage.getItem(REDIRECT_KEY);
+    if (dest) {
+      sessionStorage.removeItem(REDIRECT_KEY);
+      window.location.replace(dest);
+      return;
+    }
     showDocs(match.name);
   } else {
     const field = document.getElementById('pw-field');
     field.classList.remove('shake');
-    void field.offsetWidth; // reflow to restart animation
+    void field.offsetWidth;
     field.classList.add('shake');
     document.getElementById('error-msg').textContent = 'Incorrect access code. Try again.';
     field.value = '';
@@ -361,6 +377,7 @@ function showDocs(name) {
 
 function signOut() {
   sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(REDIRECT_KEY);
   document.getElementById('docs-view').classList.remove('show');
   document.getElementById('login-view').style.display = '';
   document.getElementById('pw-field').value = '';
