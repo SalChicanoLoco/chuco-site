@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atencio Trust — Secure Document Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #faf8f3;
+  --ink: #1a1410;
+  --ink-mid: #3a2e22;
+  --ink-light: #6a5a48;
+  --accent: #8b1a1a;
+  --green: #1e5c1e;
+  --border: #c8b89a;
+  --bg: #2a2018;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'EB Garamond',Georgia,serif;
+  background:var(--bg);
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:20px;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(139,26,26,.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(180,140,80,.06) 0%, transparent 50%);
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--paper);
+  border:1px solid #b8a88a;
+  box-shadow:0 8px 60px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.3);
+  width:100%;
+  max-width:480px;
+  padding:48px 48px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg, var(--accent), #c04040, var(--accent));
+}
+
+/* ── HEADER ── */
+.seal{
+  text-align:center;
+  margin-bottom:32px;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.seal-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--ink-light);
+  margin-bottom:12px;
+}
+.seal-title{
+  font-size:20px;
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.3;
+  margin-bottom:4px;
+}
+.seal-sub{
+  font-size:13px;
+  font-style:italic;
+  color:var(--ink-light);
+  margin-bottom:2px;
+}
+
+/* ── LOGIN FORM ── */
+#login-view{}
+.field-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--ink-light);
+  display:block;
+  margin-bottom:6px;
+}
+.pw-input{
+  width:100%;
+  padding:11px 14px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:15px;
+  letter-spacing:.08em;
+  color:var(--ink);
+  transition:border-color .2s, box-shadow .2s;
+}
+.pw-input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(139,26,26,.1);
+}
+.pw-input.shake{
+  animation:shake .35s ease;
+  border-color:#cc2020;
+  background:#fff5f5;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-7px)}
+  40%{transform:translateX(7px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+.error-msg{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:#cc2020;
+  margin-top:7px;
+  min-height:16px;
+  display:block;
+}
+.login-btn{
+  width:100%;
+  margin-top:18px;
+  padding:13px;
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:2px;
+  transition:background .2s;
+}
+.login-btn:hover{background:#a02020}
+.login-btn:active{background:#7a1010}
+
+.help-note{
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:var(--ink-light);
+  text-align:center;
+  line-height:1.6;
+}
+
+/* ── DOCUMENTS VIEW ── */
+#docs-view{display:none}
+#docs-view.show{display:block}
+
+.welcome-line{
+  font-size:15px;
+  color:var(--ink-mid);
+  margin-bottom:24px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.welcome-line strong{color:var(--ink)}
+
+.doc-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  border:1px solid var(--border);
+  border-radius:2px;
+  padding:18px 20px;
+  margin-bottom:12px;
+  background:#fff;
+  transition:border-color .2s, box-shadow .2s, transform .15s;
+  position:relative;
+}
+.doc-card:hover{
+  border-color:var(--accent);
+  box-shadow:0 2px 12px rgba(139,26,26,.12);
+  transform:translateY(-1px);
+}
+.doc-card-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#fff;
+  background:var(--accent);
+  padding:2px 7px;
+  border-radius:10px;
+  display:inline-block;
+  margin-bottom:8px;
+}
+.doc-card-badge.green{background:var(--green)}
+.doc-card-title{
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:4px;
+  line-height:1.3;
+}
+.doc-card-desc{
+  font-size:13px;
+  color:var(--ink-light);
+  line-height:1.5;
+}
+.doc-card-arrow{
+  position:absolute;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
+  color:var(--border);
+}
+.doc-card:hover .doc-card-arrow{color:var(--accent)}
+
+.signout-btn{
+  width:100%;
+  margin-top:20px;
+  padding:8px;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--ink-light);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:2px;
+  transition:all .2s;
+}
+.signout-btn:hover{background:#f0e8d8;border-color:var(--ink-light);color:var(--ink)}
+
+/* ── FOOTER ── */
+.portal-footer{
+  margin-top:24px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  color:#5a4a38;
+  text-align:center;
+  line-height:1.8;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="seal">
+    <div class="seal-eyebrow">Secure Document Portal</div>
+    <div class="seal-title">Pedro &amp; Diane M. Atencio<br>Living Trust</div>
+    <div class="seal-sub">Special Needs Trust f/b/o Alicia B. Atencio</div>
+    <div class="seal-sub" style="margin-top:3px;font-size:12px;font-family:'IBM Plex Mono',monospace;font-style:normal;color:#9a8878">Est. September 7, 2016 &nbsp;·&nbsp; EIN 41-6960554</div>
+  </div>
+
+  <!-- LOGIN VIEW -->
+  <div id="login-view">
+    <label class="field-label" for="pw-field">Access Code</label>
+    <input
+      type="password"
+      id="pw-field"
+      class="pw-input"
+      placeholder="Enter access code"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')attemptLogin()"
+    >
+    <span class="error-msg" id="error-msg"></span>
+    <button class="login-btn" onclick="attemptLogin()">Access Documents</button>
+    <div class="help-note">
+      This portal contains confidential legal documents.<br>
+      Contact Alicia B. Atencio for access.
+    </div>
+  </div>
+
+  <!-- DOCUMENTS VIEW -->
+  <div id="docs-view">
+    <div class="welcome-line">
+      Welcome, <strong id="welcome-name">Authorized User</strong>
+    </div>
+
+    <a class="doc-card" href="../Atencio_Trustee_Esign.html" id="link-esign">
+      <span class="doc-card-badge">E-Signature Required</span>
+      <div class="doc-card-title">Trustee Appointment &amp; Acceptance</div>
+      <div class="doc-card-desc">Sign electronically. Both Alicia and the Successor Trustee must sign. Generates a SHA-256 tamper-evident audit trail.</div>
+      <span class="doc-card-arrow">›</span>
+    </a>
+
+    <a class="doc-card" href="../Atencio_Certification_of_Trust.html" id="link-cert">
+      <span class="doc-card-badge green">Notary Required</span>
+      <div class="doc-card-title">Certification of Trust</div>
+      <div class="doc-card-desc">Print, fill in trustee name, sign in front of a notary. Two-page layout. Bring government-issued ID to the notary appointment.</div>
+      <span class="doc-card-arrow">›</span>
+    </a>
+
+    <button class="signout-btn" onclick="signOut()">Sign Out</button>
+  </div>
+</div>
+
+<div class="portal-footer">
+  Confidential &nbsp;·&nbsp; Atencio Special Needs Trust &nbsp;·&nbsp; New Mexico<br>
+  § 46A-10-1013 NMSA 1978 &nbsp;·&nbsp; 42 U.S.C. § 1396p(d)(4)(A)
+</div>
+
+<script>
+// ── ACCESS CODES ──────────────────────────────────────────────────────────────
+// Add or remove entries here. Format: { code: 'PASSWORD', name: 'Display Name' }
+// Keep codes private — share only with authorized parties.
+const ACCESS_CODES = [
+  { code: 'Atencio2016',  name: 'Alicia' },
+  { code: 'FatherBrenen', name: 'Father Brenen' }
+];
+
+const SESSION_KEY = 'atencio_portal_auth';
+
+// ── AUTO-LOGIN if session active ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem(SESSION_KEY);
+  if (saved) {
+    const data = JSON.parse(saved);
+    showDocs(data.name);
+  }
+  document.getElementById('pw-field').focus();
+});
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function attemptLogin() {
+  const input = document.getElementById('pw-field').value.trim();
+  const match = ACCESS_CODES.find(a => a.code === input);
+
+  if (match) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ name: match.name }));
+    document.getElementById('error-msg').textContent = '';
+    showDocs(match.name);
+  } else {
+    const field = document.getElementById('pw-field');
+    field.classList.remove('shake');
+    void field.offsetWidth; // reflow to restart animation
+    field.classList.add('shake');
+    document.getElementById('error-msg').textContent = 'Incorrect access code. Try again.';
+    field.value = '';
+    field.focus();
+  }
+}
+
+function showDocs(name) {
+  document.getElementById('login-view').style.display = 'none';
+  document.getElementById('docs-view').classList.add('show');
+  document.getElementById('welcome-name').textContent = name;
+}
+
+function signOut() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('docs-view').classList.remove('show');
+  document.getElementById('login-view').style.display = '';
+  document.getElementById('pw-field').value = '';
+  document.getElementById('pw-field').focus();
+}
+</script>
+
+</body>
+</html>
