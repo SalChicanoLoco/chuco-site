@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Biblioteca · Sena's AI Collective</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --earth:  #1a1209;
+  --warm:   #2a1f0e;
+  --sand:   #f5ead8;
+  --terr:   #c2603a;
+  --gold:   #e8a825;
+  --sage:   #6b8f5e;
+  --cream:  #fdf6ea;
+  --ink:    #1c1410;
+  --border: rgba(194,96,58,0.18);
+  --serif:  'Fraunces', serif;
+  --sans:   'DM Sans', sans-serif;
+  --mono:   'DM Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--cream); color:var(--ink); font-family:var(--sans); }
+
+/* ── MASTHEAD ── */
+.masthead {
+  background:var(--earth); border-bottom:3px solid var(--terr);
+  padding:20px 32px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px;
+}
+.pub-title { font-family:var(--serif); font-size:24px; font-weight:900; color:var(--gold); }
+.pub-sub { font-family:var(--mono); font-size:9px; color:rgba(245,234,216,0.4); letter-spacing:2px; text-transform:uppercase; margin-top:3px; }
+.lang-toggle { display:flex; gap:4px; }
+.lt-btn {
+  padding:5px 14px; font-family:var(--mono); font-size:10px;
+  letter-spacing:2px; text-transform:uppercase; background:transparent;
+  border:1px solid rgba(194,96,58,0.3); color:rgba(245,234,216,0.4);
+  cursor:pointer; transition:all 0.15s;
+}
+.lt-btn:hover { border-color:var(--gold); color:var(--gold); }
+.lt-btn.active { background:var(--terr); border-color:var(--terr); color:var(--cream); }
+
+/* ── HERO ── */
+.hero { background:var(--warm); padding:48px 32px 40px; border-bottom:1px solid var(--border); }
+.hero-inner { max-width:860px; margin:0 auto; }
+.hero-eyebrow {
+  font-family:var(--mono); font-size:9px; color:var(--terr);
+  letter-spacing:3px; text-transform:uppercase; margin-bottom:16px;
+  display:flex; align-items:center; gap:10px;
+}
+.hero-eyebrow::after { content:''; flex:1; height:1px; background:var(--border); }
+.hero-h1 { font-family:var(--serif); font-size:clamp(40px,6vw,68px); font-weight:900; color:var(--sand); line-height:1.0; margin-bottom:10px; }
+.hero-h1 em { color:var(--gold); font-style:italic; }
+.hero-desc { font-size:15px; color:rgba(245,234,216,0.65); max-width:560px; line-height:1.8; border-left:3px solid var(--terr); padding-left:16px; }
+
+/* ── FILTERS ── */
+.filters { max-width:860px; margin:0 auto; padding:28px 32px 0; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.filter-label { font-family:var(--mono); font-size:9px; color:rgba(26,18,9,0.35); letter-spacing:2px; text-transform:uppercase; }
+.filter-btn {
+  padding:5px 14px; font-family:var(--mono); font-size:9px;
+  letter-spacing:1px; text-transform:uppercase;
+  border:1px solid var(--border); background:transparent;
+  color:rgba(26,18,9,0.5); cursor:pointer; transition:all 0.15s;
+}
+.filter-btn:hover,.filter-btn.active { border-color:var(--terr); color:var(--terr); background:rgba(194,96,58,0.06); }
+
+/* ── GRID ── */
+.grid-wrap { max-width:860px; margin:0 auto; padding:28px 32px 80px; }
+.vol-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+
+/* ── CARD ── */
+.vol-card {
+  background:var(--warm); border:1px solid var(--border); border-top:3px solid var(--terr);
+  padding:24px 22px; display:flex; flex-direction:column;
+  text-decoration:none; transition:all 0.2s; cursor:pointer;
+}
+.vol-card:hover { border-color:var(--gold); border-top-color:var(--gold); transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+.vc-num { font-family:var(--mono); font-size:8px; color:rgba(245,234,216,0.3); letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; }
+.vc-series { font-family:var(--mono); font-size:8px; color:var(--terr); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+.vc-title { font-family:var(--serif); font-size:17px; font-weight:600; color:var(--sand); line-height:1.3; margin-bottom:10px; flex:1; }
+.vc-excerpt { font-size:12px; color:rgba(245,234,216,0.5); line-height:1.6; margin-bottom:16px; }
+.vc-tags { font-family:var(--mono); font-size:8px; color:rgba(245,234,216,0.2); margin-bottom:12px; }
+.vc-footer { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+.vc-date { font-family:var(--mono); font-size:9px; color:rgba(245,234,216,0.25); }
+.vc-badge { font-family:var(--mono); font-size:8px; padding:3px 10px; border:1px solid rgba(107,143,94,0.4); color:var(--sage); }
+
+/* ── STATES ── */
+.state-msg { padding:48px 32px; text-align:center; }
+.loading-dots { display:flex; gap:6px; justify-content:center; margin-bottom:12px; }
+.loading-dots span { width:8px; height:8px; border-radius:50%; background:var(--gold); opacity:0.2; animation:ld 1.4s ease-in-out infinite; }
+.loading-dots span:nth-child(2){animation-delay:.2s;}.loading-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes ld{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1.1)}}
+.state-text { font-family:var(--mono); font-size:9px; color:rgba(26,18,9,0.4); letter-spacing:2px; text-transform:uppercase; }
+
+/* ── FOOTER ── */
+.pub-footer {
+  background:var(--earth); border-top:1px solid var(--border);
+  padding:22px 32px; display:flex; justify-content:space-between;
+  align-items:center; flex-wrap:wrap; gap:10px;
+}
+.footer-id { font-family:var(--mono); font-size:9px; color:rgba(245,234,216,0.25); letter-spacing:1.5px; text-transform:uppercase; }
+.footer-brand { font-family:var(--serif); font-size:13px; font-weight:600; color:var(--gold); }
+
+/* ── LOCALE ── */
+.en-only { display:block; }
+.es-only  { display:none; }
+body.es .en-only { display:none; }
+body.es .es-only { display:block; }
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .masthead,.hero,.filters,.grid-wrap,.pub-footer { padding-left:20px; padding-right:20px; }
+  .vol-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body id="page">
+
+<!-- ── CONFIG ─────────────────────────────────────────────────────
+     After `wrangler deploy`, replace this URL with your Worker URL:
+     e.g. https://biblioteca-api.YOUR-SUBDOMAIN.workers.dev
+     or your custom route: https://api.senacolectivo.com/biblioteca
+──────────────────────────────────────────────────────────────── -->
+<script>const WORKER_URL = 'https://biblioteca-api.YOUR-SUBDOMAIN.workers.dev';</script>
+
+<div class="masthead">
+  <div>
+    <div class="pub-title">La Biblioteca</div>
+    <div class="pub-sub">Sena's AI Collective · Santa Fe, NM · senacolectivo.com/biblioteca</div>
+  </div>
+  <div class="lang-toggle">
+    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow en-only">Free Bilingual Research · Land · Water · Labor · New Mexico</div>
+    <div class="hero-eyebrow es-only">Investigación Bilingüe Gratuita · Tierra · Agua · Trabajo · Nuevo México</div>
+    <div class="hero-h1">La <em>Biblioteca</em></div>
+    <div class="hero-desc en-only">Research that belongs to the community that needs it. Every volume free, bilingual, and verified. No dues. No dogma.</div>
+    <div class="hero-desc es-only">Investigación que pertenece a la comunidad que la necesita. Cada volumen gratuito, bilingüe y verificado. Sin cuotas. Sin dogma.</div>
+  </div>
+</div>
+
+<div class="filters">
+  <span class="filter-label en-only">Filter:</span>
+  <span class="filter-label es-only">Filtrar:</span>
+  <button class="filter-btn active" onclick="filterSeries('all')">All / Todos</button>
+  <button class="filter-btn" onclick="filterSeries('Land Grant')">Land Grant</button>
+  <button class="filter-btn" onclick="filterSeries('Water Rights')">Water Rights</button>
+  <button class="filter-btn" onclick="filterSeries('Labor Rights')">Labor Rights</button>
+  <button class="filter-btn" onclick="filterSeries('Community Agriculture')">Agriculture</button>
+  <button class="filter-btn" onclick="filterSeries('Special Edition')">Special Edition</button>
+</div>
+
+<div class="grid-wrap">
+  <div class="vol-grid" id="volGrid">
+    <div class="state-msg">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <div class="state-text en-only">Loading volumes...</div>
+      <div class="state-text es-only">Cargando volúmenes...</div>
+    </div>
+  </div>
+</div>
+
+<div class="pub-footer">
+  <div>
+    <div class="footer-brand">La Biblioteca · Sena's AI Collective</div>
+    <div class="footer-id en-only">New Mexico Socialists Inc. · EIN 41-5210879 · Santa Fe, NM · CC BY-NC-SA 4.0</div>
+    <div class="footer-id es-only">Socialistas de Nuevo México · EIN 41-5210879 · Santa Fe, NM · CC BY-NC-SA 4.0</div>
+  </div>
+</div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────────
+let allVolumes   = [];
+let currentLang  = 'en';
+let activeSeries = 'all';
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('bib_lang');
+  const lang  = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  setLang(lang, true);
+  fetchVolumes();
+});
+
+// ── FETCH FROM WORKER ─────────────────────────────────────────────
+async function fetchVolumes() {
+  try {
+    const res  = await fetch(`${WORKER_URL}/volumes`);
+    if (!res.ok) throw new Error('Worker error ' + res.status);
+    const data = await res.json();
+    allVolumes = data.volumes || [];
+    renderGrid();
+  } catch(e) {
+    document.getElementById('volGrid').innerHTML = `
+      <div class="state-msg">
+        <div class="state-text">Connection error — try refreshing.</div>
+      </div>`;
+    console.error(e);
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('volGrid');
+  const es   = currentLang === 'es';
+
+  const vols = activeSeries === 'all'
+    ? allVolumes
+    : allVolumes.filter(v => v.series === activeSeries);
+
+  if (!vols.length) {
+    grid.innerHTML = `<div class="state-msg"><div class="state-text">No volumes found.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = vols.map(v => `
+    <a class="vol-card" href="${v.url || '#'}" target="_blank" rel="noopener">
+      <div class="vc-num">Vol. ${String(v.vol || 0).padStart(2,'0')}</div>
+      <div class="vc-series">${v.series || ''}</div>
+      <div class="vc-title">${es ? (v.titleES || v.titleEN) : v.titleEN}</div>
+      <div class="vc-excerpt">${es ? (v.excerptES || v.excerptEN) : v.excerptEN}</div>
+      ${v.tags ? `<div class="vc-tags">${v.tags}</div>` : ''}
+      <div class="vc-footer">
+        <span class="vc-date">${formatDate(v.date)}</span>
+        ${v.freeToShare ? `<span class="vc-badge">CC · Free</span>` : ''}
+      </div>
+    </a>
+  `).join('');
+}
+
+// ── CONTROLS ──────────────────────────────────────────────────────
+function filterSeries(s) {
+  activeSeries = s;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const isAll = s === 'all' && b.textContent.includes('All');
+    b.classList.toggle('active', isAll || b.onclick?.toString().includes(`'${s}'`));
+  });
+  renderGrid();
+}
+
+function setLang(l, init) {
+  currentLang = l;
+  document.getElementById('page').className = l === 'es' ? 'es' : '';
+  document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
+  document.getElementById('btnES').className = 'lt-btn' + (l === 'es' ? ' active' : '');
+  if (!init) localStorage.setItem('bib_lang', l);
+  document.documentElement.lang = l;
+  if (allVolumes.length) renderGrid();
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString('en-US', {month:'short', year:'numeric'}); }
+  catch { return d; }
+}
+</script>
+</body>
+</html>
