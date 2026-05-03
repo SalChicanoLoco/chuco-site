@@ -1,0 +1,11 @@
+name            = "biblioteca-api"
+main            = "index.js"
+compatibility_date = "2024-09-23"
+account_id      = "8ebf20b18b7419bbfdb87e18038867b4"
+
+[vars]
+AIRTABLE_BASE   = "appinUNP5LSKBC33H"
+AIRTABLE_TABLE  = "tblIjZIDiu41L9IUP"
+
+# Secret — set via CLI, never in this file:
+#   wrangler secret put AIRTABLE_KEY
