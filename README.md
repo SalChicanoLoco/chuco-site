@@ -11,3 +11,13 @@
 ### Staging Note
 
 `staging/newmexicosocialists/nmnewsfeed.html` is intended for the future newmexicosocialists.org rebuild.
+
+## Agent-friendly checks
+
+Agents should run the dependency-light verification harness before opening PRs:
+
+```bash
+make check
+```
+
+This runs `python3 scripts/agent_check.py`, which checks Worker syntax, Biblioteca privacy/UI guardrails, Quetzal Core naming, JSON validity, and balanced Clojure delimiters without requiring Cloudflare auth, production secrets, Clojure CLI, or a browser. See `docs/WEB_DEV_BOT.md` for the web-dev bot workflow.
