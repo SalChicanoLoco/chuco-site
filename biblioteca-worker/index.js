@@ -10,7 +10,7 @@
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
@@ -29,6 +29,43 @@ export default {
     // Health check
     if (url.pathname === '/health') {
       return new Response(JSON.stringify({ ok: true }), {
+        headers: { ...CORS, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (url.pathname === '/pipeline') {
+      const airtableUrl = new URL('https://api.airtable.com/v0/appdAZR1Yivj0XKRX/tblU6TwSvAXY6527q');
+      airtableUrl.searchParams.set('filterByFormula', 'NOT({Status}="Done")');
+      airtableUrl.searchParams.set('sort[0][field]', 'Priority');
+
+      // Only request the public-safe task fields this endpoint is allowed to expose.
+      const fields = ['Task', 'Priority', 'Status', 'Owner', 'Deadline'];
+      fields.forEach((f, i) => airtableUrl.searchParams.set(`fields[${i}]`, f));
+
+      const resp = await fetch(airtableUrl.toString(), {
+        headers: { Authorization: `Bearer ${env.AIRTABLE_KEY}` },
+      });
+
+      if (!resp.ok) {
+        const body = await resp.text();
+        console.error('Airtable pipeline error', resp.status, body);
+        return new Response(JSON.stringify({ error: 'Upstream error', status: resp.status }), {
+          status: 502,
+          headers: { ...CORS, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const data = await resp.json();
+      const tasks = (data.records || []).map(r => ({
+        id:       r.id,
+        task:     r.fields['Task']     || '',
+        priority: r.fields['Priority'] || '',
+        status:   r.fields['Status']   || '',
+        owner:    r.fields['Owner']    || '',
+        deadline: r.fields['Deadline'] || '',
+      }));
+
+      return new Response(JSON.stringify({ tasks }), {
         headers: { ...CORS, 'Content-Type': 'application/json' },
       });
     }
@@ -92,7 +129,11 @@ export default {
     }));
 
     return new Response(JSON.stringify({ volumes }), {
-      headers: { ...CORS, 'Content-Type': 'application/json' },
+      headers: {
+        ...CORS,
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=120, s-maxage=300',
+      },
     });
   },
 };
