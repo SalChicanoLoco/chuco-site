@@ -1,0 +1,578 @@
+/* ============================================================
+   Sena Colectivo — Shared Design System
+   Import from /shared/sena-system.css
+
+   Covers both sites:
+     docs.senacolectivo.com  (La Biblioteca, CGS tools)
+     newmexicosocialists.org (NM Socialists news feed)
+
+   Apply .theme-nms to <body> for the red-accent override.
+   Apply .lang-es to <body> for Spanish display.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  /* Core palette — La Biblioteca / Sena Colectivo */
+  --earth:  #1a1209;
+  --warm:   #2a1f0e;
+  --sand:   #f5ead8;
+  --terr:   #c2603a;   /* terracotta — primary accent */
+  --gold:   #e8a825;   /* gold — headline accent */
+  --sage:   #6b8f5e;   /* sage green — nature/land */
+  --sky:    #4a7fa5;   /* sky blue — water/acequia */
+  --cream:  #fdf6ea;   /* page background */
+  --ink:    #1c1410;   /* body text */
+  --border: rgba(194,96,58,0.18);
+
+  /* NM Socialists red overrides — active when body.theme-nms */
+  --nms-red:      #c0392b;
+  --nms-red-dark: #8b1a1a;
+  --nms-warm:     #1c0f0f;
+
+  /* Typography */
+  --serif: 'Fraunces', serif;
+  --sans:  'DM Sans', sans-serif;
+  --mono:  'DM Mono', monospace;
+}
+
+/* NMS theme — swap terracotta for red */
+body.theme-nms {
+  --terr:   var(--nms-red);
+  --warm:   var(--nms-warm);
+  --border: rgba(192,57,43,0.2);
+}
+
+
+/* ── BASE RESET ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:  var(--cream);
+  color:       var(--ink);
+  font-family: var(--sans);
+  font-size:   16px;
+  line-height: 1.75;
+}
+
+
+/* ── MASTHEAD ───────────────────────────────────────────────── */
+/* Usage:
+   <nav class="mast">
+     <a class="mast-brand" href="/">La Biblioteca</a>
+     <div class="mast-right">
+       <a class="back-link" href="/biblioteca/">← Archive</a>
+       <div class="lang-toggle">
+         <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+         <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+       </div>
+     </div>
+   </nav>
+*/
+.mast {
+  background:    var(--earth);
+  border-bottom: 3px solid var(--terr);
+  padding:       16px 32px;
+  display:       flex;
+  align-items:   center;
+  justify-content: space-between;
+  flex-wrap:     wrap;
+  gap:           12px;
+}
+
+.mast-brand {
+  font-family:     var(--serif);
+  font-size:       20px;
+  font-weight:     900;
+  color:           var(--gold);
+  text-decoration: none;
+}
+.mast-brand:hover { color: var(--sand); }
+
+.mast-right {
+  display:     flex;
+  align-items: center;
+  gap:         16px;
+}
+
+.back-link {
+  font-family:     var(--mono);
+  font-size:       9px;
+  letter-spacing:  .12em;
+  text-transform:  uppercase;
+  color:           rgba(245,234,216,.45);
+  text-decoration: none;
+}
+.back-link:hover { color: var(--terr); }
+
+.lang-toggle {
+  display:       flex;
+  border:        1px solid rgba(194,96,58,.35);
+  border-radius: 3px;
+  overflow:      hidden;
+}
+
+.lt-btn {
+  padding:        5px 12px;
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background:     transparent;
+  border:         none;
+  color:          rgba(245,234,216,.4);
+  cursor:         pointer;
+  transition:     all .15s;
+}
+.lt-btn.active  { background: var(--terr); color: var(--cream); }
+.lt-btn:hover   { color: var(--gold); }
+
+
+/* ── ARTICLE COVER ──────────────────────────────────────────── */
+/* Usage:
+   <div class="cover">
+     <div class="cover-inner">
+       <div class="vol-id">Vol. 02 · Series · Date</div>
+       <h1 class="cover-h1 en">Title <em>em</em></h1>
+       <div class="cover-sub en">Subtitle</div>
+       <p class="cover-lede en">Lede paragraph</p>
+       <div class="cover-tags">
+         <span class="ctag hot">Tag</span>
+         <span class="ctag">Tag</span>
+       </div>
+     </div>
+   </div>
+*/
+.cover {
+  background:    var(--warm);
+  padding:       56px 32px 48px;
+  border-bottom: 2px solid var(--border);
+}
+
+.cover-inner {
+  max-width: 720px;
+  margin:    0 auto;
+}
+
+.vol-id {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color:          var(--terr);
+  margin-bottom:  8px;
+}
+
+.cover-h1 {
+  font-family:   var(--serif);
+  font-size:     clamp(32px, 5vw, 56px);
+  font-weight:   900;
+  color:         var(--sand);
+  line-height:   1.1;
+  margin-bottom: 8px;
+}
+.cover-h1 em { color: var(--gold); font-style: italic; }
+
+.cover-sub {
+  font-family:   var(--serif);
+  font-size:     clamp(16px, 2.5vw, 22px);
+  font-weight:   300;
+  color:         rgba(245,234,216,.55);
+  margin-bottom: 24px;
+  line-height:   1.3;
+}
+
+.cover-lede {
+  font-size:    15px;
+  color:        rgba(245,234,216,.65);
+  max-width:    580px;
+  line-height:  1.8;
+  border-left:  3px solid var(--terr);
+  padding-left: 16px;
+}
+
+.cover-tags {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        8px;
+  margin-top: 24px;
+}
+
+.ctag {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding:        4px 10px;
+  border:         1px solid rgba(194,96,58,.3);
+  color:          rgba(245,234,216,.45);
+}
+.ctag.hot { border-color: var(--terr); color: var(--terr); }
+
+
+/* ── ARTICLE BODY ───────────────────────────────────────────── */
+.pub-body {
+  max-width: 720px;
+  margin:    0 auto;
+  padding:   48px 32px 80px;
+}
+
+.section        { margin-bottom: 48px; }
+
+.section-label {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color:          var(--terr);
+  margin-bottom:  8px;
+}
+
+.section-h2 {
+  font-family:   var(--serif);
+  font-size:     clamp(20px, 3vw, 28px);
+  font-weight:   700;
+  color:         var(--ink);
+  line-height:   1.25;
+  margin-bottom: 16px;
+}
+
+.section-h3 {
+  font-family:   var(--serif);
+  font-size:     18px;
+  font-weight:   600;
+  color:         var(--ink);
+  margin:        24px 0 12px;
+}
+
+.body-text {
+  color:         #3a2c1e;
+  font-size:     15.5px;
+  line-height:   1.8;
+  margin-bottom: 14px;
+}
+.body-text strong { color: var(--ink); font-weight: 600; }
+.body-text em     { font-style: italic; }
+
+
+/* ── PULL QUOTE ─────────────────────────────────────────────── */
+/* Usage:
+   <div class="pq">
+     <div class="pq-text en">Quote text</div>
+     <div class="pq-attr en">Attribution · Source · Year</div>
+   </div>
+*/
+.pq {
+  border-left: 4px solid var(--gold);
+  padding:     16px 20px;
+  margin:      28px 0;
+  background:  rgba(232,168,37,.05);
+}
+
+.pq-text {
+  font-family: var(--serif);
+  font-size:   18px;
+  font-weight: 600;
+  color:       var(--ink);
+  line-height: 1.4;
+  font-style:  italic;
+}
+
+.pq-attr {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color:          var(--terr);
+  margin-top:     8px;
+}
+
+
+/* ── STAT BOXES ─────────────────────────────────────────────── */
+/* Usage:
+   <div class="stat-row">
+     <div class="stat-box">
+       <div class="stat-num">315,000</div>
+       <div class="stat-label en">Acres — original ejido</div>
+     </div>
+   </div>
+*/
+.stat-row {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        16px;
+  margin:     24px 0;
+}
+
+.stat-box {
+  flex:         1;
+  min-width:    140px;
+  background:   white;
+  border:       1px solid var(--border);
+  border-top:   3px solid var(--terr);
+  padding:      16px;
+}
+
+.stat-num {
+  font-family: var(--serif);
+  font-size:   28px;
+  font-weight: 900;
+  color:       var(--terr);
+}
+
+.stat-label {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color:          #6a5a4a;
+  margin-top:     4px;
+}
+
+
+/* ── BULLET LIST ────────────────────────────────────────────── */
+.pub-ul {
+  margin: 12px 0 16px 20px;
+}
+.pub-ul li {
+  color:         #3a2c1e;
+  font-size:     15px;
+  line-height:   1.75;
+  margin-bottom: 8px;
+}
+.pub-ul li strong { color: var(--ink); font-weight: 600; }
+.pub-ul li em     { font-style: italic; }
+
+
+/* ── DIVIDER ────────────────────────────────────────────────── */
+.divider {
+  border:     none;
+  border-top: 1px solid var(--border);
+  margin:     40px 0;
+}
+
+
+/* ── REFERENCES BLOCK ───────────────────────────────────────── */
+/* Usage:
+   <div class="refs">
+     <div class="refs-title en">References / Fuentes</div>
+     <p class="ref-item">Author (Year). <em>Title.</em> Publisher.</p>
+   </div>
+*/
+.refs {
+  background: white;
+  border:     1px solid var(--border);
+  padding:    24px;
+  margin-top: 48px;
+}
+
+.refs-title {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color:          var(--terr);
+  margin-bottom:  16px;
+}
+
+.ref-item {
+  font-size:    13px;
+  color:        #5a4a3a;
+  line-height:  1.6;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  text-indent:  -20px;
+}
+
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+/* Usage:
+   <footer class="pub-footer">
+     <div class="footer-brand">La Biblioteca · Vol. 02</div>
+     <div class="footer-id en">NM Socialists · CC BY-NC-SA 4.0 · Free to Share</div>
+   </footer>
+*/
+.pub-footer {
+  background:      var(--earth);
+  border-top:      2px solid var(--warm);
+  padding:         24px 32px;
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  flex-wrap:       wrap;
+  gap:             12px;
+}
+
+.footer-brand {
+  font-family: var(--serif);
+  font-size:   14px;
+  font-weight: 600;
+  color:       var(--gold);
+}
+
+.footer-id {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color:          rgba(245,234,216,.25);
+}
+
+.footer-id a {
+  color:           inherit;
+  text-decoration: none;
+}
+.footer-id a:hover { color: var(--gold); }
+
+
+/* ── BILINGUAL TOGGLE ───────────────────────────────────────── */
+/*
+  Block-level:
+    .en  — visible in EN mode  (display: block)
+    .es  — visible in ES mode  (display: block)
+  Inline:
+    .en-inline — visible in EN mode
+    .es-inline — visible in ES mode
+
+  body.lang-es inverts the visibility.
+
+  Script pattern (put before </body>):
+    (function(){
+      const saved = localStorage.getItem('bib_lang');
+      const lang  = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+      if (lang === 'es') setLang('es', true);
+    })();
+    function setLang(l, init) {
+      document.getElementById('page').className = l === 'es' ? 'lang-es' : '';
+      document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
+      document.getElementById('btnES').className = 'lt-btn' + (l === 'es' ? ' active' : '');
+      if (!init) localStorage.setItem('bib_lang', l);
+      document.documentElement.lang = l;
+    }
+*/
+.en          { display: block;  }
+.es          { display: none;   }
+.en-inline   { display: inline; }
+.es-inline   { display: none;   }
+
+body.lang-es .en         { display: none;   }
+body.lang-es .es         { display: block;  }
+body.lang-es .en-inline  { display: none;   }
+body.lang-es .es-inline  { display: inline; }
+
+
+/* ── CARD GRID (landing pages) ───────────────────────────────── */
+/* Usage:
+   <div class="card-grid">
+     <a class="card" href="/path/">
+       <div class="card-label en">Category</div>
+       <div class="card-title">Title</div>
+       <div class="card-desc en">Description</div>
+       <div class="card-arrow en">Read more →</div>
+     </a>
+   </div>
+*/
+.card-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:                   16px;
+  margin-top:            32px;
+}
+
+.card {
+  background:      var(--warm);
+  border:          1px solid rgba(245,234,216,.07);
+  border-top:      2px solid var(--terr);
+  border-radius:   2px;
+  padding:         24px 20px 20px;
+  display:         flex;
+  flex-direction:  column;
+  gap:             10px;
+  text-decoration: none;
+  color:           inherit;
+  transition:      border-color .15s, transform .15s, box-shadow .15s;
+}
+.card:hover {
+  border-color:     var(--gold);
+  border-top-color: var(--gold);
+  transform:        translateY(-2px);
+  box-shadow:       0 6px 24px rgba(0,0,0,.3);
+}
+
+.card-label {
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color:          var(--terr);
+}
+
+.card-title {
+  font-family: var(--serif);
+  font-size:   18px;
+  font-weight: 700;
+  color:       var(--sand);
+  line-height: 1.25;
+}
+
+.card-desc {
+  font-size:   13px;
+  color:       rgba(245,234,216,.5);
+  line-height: 1.7;
+}
+
+.card-arrow {
+  margin-top:     auto;
+  font-family:    var(--mono);
+  font-size:      9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color:          rgba(245,234,216,.25);
+  padding-top:    8px;
+  border-top:     1px solid rgba(245,234,216,.06);
+}
+.card:hover .card-arrow { color: var(--gold); }
+
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .mast,
+  .cover,
+  .pub-body,
+  .pub-footer { padding-left: 20px; padding-right: 20px; }
+
+  .cover       { padding-top: 36px; padding-bottom: 32px; }
+  .pub-body    { padding-top: 32px; padding-bottom: 60px; }
+
+  .section-h2  { font-size: 22px; }
+  .pq-text     { font-size: 16px; }
+
+  .card-grid   { grid-template-columns: 1fr; }
+
+  .stat-row    { flex-direction: column; }
+  .stat-box    { min-width: unset; }
+}
+
+
+/* ── PRINT ──────────────────────────────────────────────────── */
+@media print {
+  .mast,
+  .pub-footer  { display: none; }
+
+  .cover       { background: white; color: black; }
+  .cover-h1,
+  .cover-sub   { color: black; }
+  .cover-lede  { color: #333; border-left-color: #999; }
+
+  body         { font-size: 12pt; background: white; }
+
+  .en          { display: block  !important; }
+  .es          { display: none   !important; }
+  body.lang-es .en { display: none  !important; }
+  body.lang-es .es { display: block !important; }
+}
