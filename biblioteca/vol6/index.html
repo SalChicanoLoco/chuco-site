@@ -47,6 +47,9 @@ body {
 }
 
 .masthead-left { display: flex; flex-direction: column; gap: 4px; }
+.masthead-right { display: flex; align-items: center; gap: 16px; }
+.back-link { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: rgba(245,234,216,.45); text-decoration: none; }
+.back-link:hover { color: var(--terr); }
 
 .pub-name {
   font-family: var(--serif);
@@ -353,6 +356,10 @@ hr.section-rule {
 .es-only { display: none;  }
 body.es .en-only { display: none;  }
 body.es .es-only { display: block; }
+.en-only.inline { display: inline; }
+.es-only.inline { display: none; }
+body.es .en-only.inline { display: none; }
+body.es .es-only.inline { display: inline; }
 
 /* ── PRINT ── */
 @media print {
@@ -376,13 +383,16 @@ body.es .es-only { display: block; }
 <!-- MASTHEAD -->
 <div class="masthead">
   <div class="masthead-left">
-    <div class="pub-name">La Biblioteca</div>
+    <a class="pub-name" href="/biblioteca/" style="text-decoration:none">La Biblioteca</a>
     <div class="pub-meta en-only">Sena's AI Collective · Santa Fe, NM · Special Edition · May 2026</div>
     <div class="pub-meta es-only">Sena's AI Collective · Santa Fe, NM · Edición Especial · Mayo 2026</div>
   </div>
-  <div class="lang-toggle">
-    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
-    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+  <div class="masthead-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-only inline">Archive</span><span class="es-only inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
   </div>
 </div>
 
