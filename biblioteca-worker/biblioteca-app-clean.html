@@ -238,6 +238,7 @@ let lang         = 'en';
   const saved = localStorage.getItem('bib_lang');
   lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
   applyLang(true);
+  bindCardInteractions();
   loadData();
 })();
 
@@ -254,6 +255,26 @@ async function loadData() {
       `<div class="state"><div class="state-text">Could not load — try refreshing.</div></div>`;
     console.error(e);
   }
+}
+
+
+function bindCardInteractions() {
+  const grid = document.getElementById('cards');
+
+  grid.addEventListener('click', event => {
+    const card = event.target.closest('.card');
+    if (!card || !grid.contains(card)) return;
+    openPanel(card.dataset.id, card);
+  });
+
+  grid.addEventListener('keydown', event => {
+    const card = event.target.closest('.card');
+    if (!card || !grid.contains(card)) return;
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      openPanel(card.dataset.id, card);
+    }
+  });
 }
 
 /* ── FILTERS ── */
@@ -296,7 +317,7 @@ function renderCards() {
     const dateStr = v.date ? fmtDate(v.date) : '';
     const isActive = v.id === activeId ? ' active' : '';
     return `
-      <div class="card${isActive}" onclick="openPanel('${v.id}')" role="button" tabindex="0">
+      <div class="card${isActive}" data-id="${v.id}" role="button" tabindex="0">
         <div class="card-meta">
           <span class="card-vol">${volNum}</span>
           <span class="card-series">${v.series || ''}</span>
@@ -312,7 +333,7 @@ function renderCards() {
 }
 
 /* ── PANEL ── */
-function openPanel(id) {
+function openPanel(id, cardEl) {
   const v = volumes.find(x => x.id === id);
   if (!v) return;
   activeId = id;
@@ -350,7 +371,8 @@ function openPanel(id) {
 
   // Highlight active card
   document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  event?.currentTarget?.classList.add('active');
+  const activeCard = cardEl || document.querySelector(`.card[data-id="${id}"]`);
+  activeCard?.classList.add('active');
 }
 
 function closePanel() {
