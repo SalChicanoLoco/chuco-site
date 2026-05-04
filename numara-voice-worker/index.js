@@ -17,7 +17,7 @@ export default {
       return new Response(null, { status: 204, headers: CORS });
     }
 
-    if (url.pathname !== "/tts" && url.pathname !== "/transcribe") {
+    if (url.pathname !== "/tts") {
       return new Response(JSON.stringify({ error: "Not found" }), {
         status: 404,
         headers: { ...CORS, "Content-Type": "application/json" },
@@ -28,54 +28,6 @@ export default {
       return new Response(JSON.stringify({ error: "POST only" }), {
         status: 405,
         headers: { ...CORS, "Content-Type": "application/json" },
-      });
-    }
-
-    if (url.pathname === "/transcribe") {
-      const contentType = request.headers.get("content-type") || "";
-      if (!contentType.includes("multipart/form-data")) {
-        return new Response(JSON.stringify({ error: "Use multipart/form-data with file" }), {
-          status: 400,
-          headers: { ...CORS, "Content-Type": "application/json" },
-        });
-      }
-
-      const form = await request.formData();
-      const file = form.get("file");
-      if (!(file instanceof File)) {
-        return new Response(JSON.stringify({ error: "Missing audio file field: file" }), {
-          status: 400,
-          headers: { ...CORS, "Content-Type": "application/json" },
-        });
-      }
-
-      if (file.size > 15 * 1024 * 1024) {
-        return new Response(JSON.stringify({ error: "Audio file too large (max 15MB)" }), {
-          status: 413,
-          headers: { ...CORS, "Content-Type": "application/json" },
-        });
-      }
-
-      const upstreamForm = new FormData();
-      upstreamForm.set("model", "whisper-1");
-      upstreamForm.set("file", file, file.name || "audio.webm");
-      const language = form.get("language");
-      if (typeof language === "string" && language.trim()) upstreamForm.set("language", language.trim());
-
-      const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${env.OPENAI_KEY}` },
-        body: upstreamForm,
-      });
-
-      if (!res.ok) {
-        return handleUpstreamError(res);
-      }
-
-      const data = await res.json();
-      return new Response(JSON.stringify({ text: data.text || "" }), {
-        status: 200,
-        headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "no-store" },
       });
     }
 
@@ -111,7 +63,11 @@ export default {
     });
 
     if (!res.ok) {
-      return handleUpstreamError(res);
+      const err = await res.text();
+      return new Response(JSON.stringify({ error: err }), {
+        status: res.status,
+        headers: { ...CORS, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(res.body, {
@@ -120,38 +76,3 @@ export default {
     });
   },
 };
-
-async function handleUpstreamError(res) {
-  let upstream = {};
-  try {
-    upstream = await res.json();
-  } catch {
-    upstream = {};
-  }
-
-  const safeMessageByStatus = {
-    400: "Invalid audio request.",
-    401: "Voice service authentication failed.",
-    403: "Voice service request forbidden.",
-    404: "Requested audio model or route not found.",
-    413: "Audio payload too large.",
-    429: "Voice service is rate-limited. Please retry shortly.",
-  };
-
-  const message = safeMessageByStatus[res.status] || "Audio request failed.";
-  const responseBody = {
-    error: message,
-    status: res.status,
-    code: upstream?.error?.code || null,
-    type: upstream?.error?.type || null,
-  };
-
-  const retryAfter = res.headers.get("retry-after");
-  const headers = { ...CORS, "Content-Type": "application/json" };
-  if (retryAfter) headers["Retry-After"] = retryAfter;
-
-  return new Response(JSON.stringify(responseBody), {
-    status: res.status,
-    headers,
-  });
-}
