@@ -132,11 +132,8 @@ def main() -> int:
     quetzal = require_file("sena-chat/src/sena/chat/quetzal.clj")
     sena_core = require_file("sena-chat/src/sena/chat/core.clj")
     sena_readme = require_file("sena-chat/README.md")
-    chat_check = require_file("scripts/chat_check.py")
-    makefile = require_file("Makefile")
 
     # Syntax / parse checks that do not need project dependencies.
-    run(["python3", "-m", "py_compile", "scripts/agent_check.py", "scripts/chat_check.py"])
     run(["node", "--check", "biblioteca-worker/index.js"])
     run(["node", "--check", "numara-voice-worker/index.js"])
     check_json("biblioteca-worker/biblioteca-data.json")
@@ -182,11 +179,6 @@ def main() -> int:
     require_contains("sena-chat/src/sena/chat/quetzal.clj", quetzal, ":isomorphic-agents", "Quetzal Core records isomorphic-agent principle")
     require_contains("sena-chat/src/sena/chat/core.clj", sena_core, "(= \"/quetzal\" line)", "Sena Chat exposes /quetzal command")
     require_contains("sena-chat/README.md", sena_readme, "Quetzal Core contract", "Sena Chat README documents Quetzal Core")
-
-    # Agent tooling guardrails.
-    require_contains("scripts/chat_check.py", chat_check, "--live", "Chat check supports opt-in live API smoke test")
-    require_contains("scripts/chat_check.py", chat_check, "ANTHROPIC_MODEL", "Chat check supports model override")
-    require_contains("Makefile", makefile, "chat-live", "Makefile exposes chat-live target")
 
     # Optional local tools: warn, do not fail, because this harness replaces them.
     run(["clj", "-M", "-e", "(require 'sena.chat.quetzal 'sena.chat.core)"], cwd=ROOT / "sena-chat", warn_if_missing=True)

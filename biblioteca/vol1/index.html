@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol. 01 — The Shape of Us · La Biblioteca</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--earth:#1a1209;--warm:#2a1f0e;--sand:#f5ead8;--terr:#c2603a;--gold:#e8a825;--sage:#6b8f5e;--sky:#4a7fa5;--cream:#fdf6ea;--ink:#1c1410;--border:rgba(194,96,58,0.18);--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.mast{background:var(--earth);border-bottom:3px solid var(--terr);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mast-brand{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.mast-right{display:flex;align-items:center;gap:16px}
+.back-link{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.45);text-decoration:none}
+.back-link:hover{color:var(--terr)}
+.lang-toggle{display:flex;border:1px solid rgba(194,96,58,.35);border-radius:3px;overflow:hidden}
+.lt-btn{padding:5px 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:rgba(245,234,216,.4);cursor:pointer;transition:all .15s}
+.lt-btn.active{background:var(--terr);color:var(--cream)}
+.cover{background:var(--warm);padding:56px 32px 48px;border-bottom:2px solid var(--border)}
+.cover-inner{max-width:720px;margin:0 auto}
+.vol-id{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.cover-series{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.35);margin-bottom:20px}
+.cover-h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--sand);line-height:1.1;margin-bottom:8px}
+.cover-h1 em{color:var(--gold);font-style:italic}
+.cover-sub{font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);font-weight:300;color:rgba(245,234,216,.55);margin-bottom:24px;line-height:1.3}
+.cover-lede{font-size:15px;color:rgba(245,234,216,.65);max-width:580px;line-height:1.8;border-left:3px solid var(--terr);padding-left:16px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.ctag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(194,96,58,.3);color:rgba(245,234,216,.45)}
+.ctag.hot{border-color:var(--sky);color:var(--sky)}
+.pub-body{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.section{margin-bottom:48px}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.section-h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:16px}
+.section-h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:24px 0 12px}
+.body-text{color:#3a2c1e;font-size:15.5px;line-height:1.8;margin-bottom:14px}
+.body-text strong{color:var(--ink);font-weight:600}
+.body-text em{font-style:italic}
+.pq{border-left:4px solid var(--gold);padding:16px 20px;margin:28px 0;background:rgba(232,168,37,.05)}
+.pq-text{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;font-style:italic}
+.pq-attr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--terr);margin-top:8px}
+.pub-ul{margin:12px 0 16px 20px}
+.pub-ul li{color:#3a2c1e;font-size:15px;line-height:1.75;margin-bottom:8px}
+.pub-ul li strong{color:var(--ink);font-weight:600}
+.stat-row{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat-box{flex:1;min-width:140px;background:white;border:1px solid var(--border);border-top:3px solid var(--sky);padding:16px}
+.stat-num{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--sky)}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-top:4px}
+.equity-bar{margin:24px 0;padding:20px;background:white;border:1px solid var(--border)}
+.eq-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-bottom:8px}
+.eq-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.eq-year{font-family:var(--mono);font-size:11px;color:var(--ink);width:40px;flex-shrink:0}
+.eq-bar-wrap{flex:1;height:20px;background:#f0e8d8;position:relative}
+.eq-bar{height:100%;background:var(--sky);transition:width .3s}
+.eq-bar.lost{background:var(--terr)}
+.eq-acres{font-family:var(--mono);font-size:11px;color:#6a5a4a;width:80px;text-align:right;flex-shrink:0}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.refs{background:white;border:1px solid var(--border);padding:24px;margin-top:48px}
+.refs-title{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--terr);margin-bottom:16px}
+.ref-item{font-size:13px;color:#5a4a3a;line-height:1.6;margin-bottom:8px;padding-left:20px;text-indent:-20px}
+.pub-footer{background:var(--earth);border-top:2px solid var(--warm);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold)}
+.footer-id{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,234,216,.25)}
+.en{display:block}.es{display:none}
+body.lang-es .en{display:none}body.lang-es .es{display:block}
+.en-inline{display:inline}.es-inline{display:none}
+body.lang-es .en-inline{display:none}body.lang-es .es-inline{display:inline}
+@media(max-width:640px){.cover,.mast,.pub-body,.pub-footer{padding-left:20px;padding-right:20px}.cover{padding-top:36px;padding-bottom:32px}}
+</style>
+</head>
+<body id="page">
+
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca/">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="vol-id">Vol. 01 · Water Rights Series · April 2026</div>
+    <div class="cover-series">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <h1 class="cover-h1 en">The Shape of <em>Us</em></h1>
+    <h1 class="cover-h1 es">La Forma de <em>Nosotros</em></h1>
+    <div class="cover-sub en">SANGRE, the Acequia, and the Morphology of the Commons</div>
+    <div class="cover-sub es">SANGRE, la Acequia y la Morfología de los Bienes Comunes</div>
+    <p class="cover-lede en">The acequia is a socialist machine. It doesn't ask for a credit score — it asks if you cleaned the ditch. Four hundred years of shared water as the foundation of everything that follows.</p>
+    <p class="cover-lede es">La acequia es una máquina socialista. No pide un puntaje de crédito — pregunta si limpiaste la acequia. Cuatrocientos años de agua compartida como fundamento de todo lo que sigue.</p>
+    <div class="cover-tags">
+      <span class="ctag hot">Water Rights</span>
+      <span class="ctag hot">Commons</span>
+      <span class="ctag">Acequia</span>
+      <span class="ctag">SANGRE KV1</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+  </div>
+</div>
+
+<main class="pub-body">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label en">Section 01</div>
+    <div class="section-label es">Sección 01</div>
+    <h2 class="section-h2 en">Morphology — The Shape of the Ditch</h2>
+    <h2 class="section-h2 es">Morfología — La Forma del Canal</h2>
+
+    <p class="body-text en"><strong>Morphology</strong> is the study of form. Look at an acequia from above — it looks like a vein, not a property line. That shape tells you everything about the system beneath it. The water doesn't flow through private channels. It flows through shared ones, tended by everyone who depends on it, governed by rules that predate any American court by four hundred years.</p>
+    <p class="body-text es"><strong>Morfología</strong> es el estudio de la forma. Mira una acequia desde arriba — parece una vena, no una línea de propiedad. Esa forma te dice todo sobre el sistema que está debajo. El agua no fluye por canales privados. Fluye por canales compartidos, mantenidos por todos los que dependen de ella, gobernados por reglas que anteceden a cualquier tribunal americano por cuatrocientos años.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"Socialism isn't foreign. The Acequia is a socialist machine. It doesn't ask for a credit score — it asks if you cleaned the ditch. We've shared water for 400 years. That's our shape."</div>
+      <div class="pq-text es">"El socialismo no es extranjero. La acequia es una máquina socialista. No pide un puntaje de crédito — pregunta si limpiaste la acequia. Hemos compartido el agua por 400 años. Esa es nuestra forma."</div>
+      <div class="pq-attr">SANGRE KV1 — Morphology of the Commons · 2026</div>
+    </div>
+
+    <p class="body-text en">This is what we call <strong>SANGRE KV1</strong> — the Symbolic Acequia Network Graph for Reclamation & Ejido. It is the research framework underlying La Biblioteca's land grant and water rights series. It is not a metaphor. It is a living map of how the commons were built, how they were taken, and how they can be reclaimed.</p>
+    <p class="body-text es">Esto es lo que llamamos <strong>SANGRE KV1</strong> — la Red Simbólica de la Acequia para Reclamación y Ejido. Es el marco de investigación que subyace a la serie de mercedes de tierra y derechos de agua de La Biblioteca. No es una metáfora. Es un mapa vivo de cómo se construyeron los bienes comunes, cómo fueron tomados, y cómo pueden ser recuperados.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+    <h2 class="section-h2 en">The Ejido — Ancestral Muscle</h2>
+    <h2 class="section-h2 es">El Ejido — Músculo Ancestral</h2>
+
+    <p class="body-text en">In 1794, Genízaro families — ransomed Indigenous people, often former captives of Plains tribes — were settled at <strong>San Miguel del Vado</strong> on the eastern frontier of New Spain. They were not given the land as charity. They were given it in exchange for their bodies: build the fortified village, defend the interior against Comanche and Apache raids, hold the line at the edge of the empire.</p>
+    <p class="body-text es">En 1794, familias Genízaras — personas indígenas rescatadas, frecuentemente ex cautivos de tribus de las llanuras — fueron asentadas en <strong>San Miguel del Vado</strong> en la frontera oriental de la Nueva España. No se les dio la tierra como caridad. Se les dio a cambio de sus cuerpos: construir el pueblo fortificado, defender el interior contra las incursiones Comanche y Apache, mantener la línea en el borde del imperio.</p>
+
+    <p class="body-text en">What they built was not a collection of private plots. It was an <strong>ejido</strong> — a commons. Each family held a <em>suerte</em> (a chance, a share) and together they held the ejido: the communal pastures, the forests, the water rights. The land was a bank they all had a key to. The community was a circle facing inward toward shared resources, not a grid of competing parcels.</p>
+    <p class="body-text es">Lo que construyeron no era una colección de parcelas privadas. Era un <strong>ejido</strong> — un bien común. Cada familia tenía una <em>suerte</em> (una oportunidad, una parte) y juntos poseían el ejido: los pastizales comunales, los bosques, los derechos de agua. La tierra era un banco al que todos tenían llave. La comunidad era un círculo que miraba hacia adentro hacia los recursos compartidos.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">1794</div>
+        <div class="stat-label en">San Miguel del Vado founded</div>
+        <div class="stat-label es">San Miguel del Vado fundado</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">400+</div>
+        <div class="stat-label en">Years of acequia governance</div>
+        <div class="stat-label es">Años de gobierno de acequias</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">315k</div>
+        <div class="stat-label en">Acres in the original ejido</div>
+        <div class="stat-label es">Acres en el ejido original</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+    <h2 class="section-h2 en">The Mayordomía — Comunión as Way of Life</h2>
+    <h2 class="section-h2 es">La Mayordomía — Comunión como Forma de Vida</h2>
+
+    <p class="body-text en">The acequia is governed by the <strong>Mayordomía</strong> — the system of shared duty that keeps the ditch clean, the water flowing, and the community intact. The <em>Mayordomo</em> is not a boss. The Mayordomo is the keeper of the order. He doesn't own the water. He manages the schedule. He settles disputes. He enforces the most fundamental rule of the commons: if you don't share the burden, you don't share the blessing.</p>
+    <p class="body-text es">La acequia es gobernada por la <strong>Mayordomía</strong> — el sistema de deber compartido que mantiene la acequia limpia, el agua fluyendo y la comunidad intacta. El <em>Mayordomo</em> no es un jefe. El Mayordomo es el guardián del orden. No es dueño del agua. Administra el horario. Resuelve disputas. Hace cumplir la regla más fundamental de los bienes comunes: si no compartes la carga, no compartes la bendición.</p>
+
+    <p class="body-text en">The same logic holds the church. The same logic held the plaza. The same logic held the granary. <em>Comunión</em> — sharing — is not an ideology imported from Berlin or Moscow. It is the way your grandfather shared wood. It is in our morphology. It is older than the nation that tried to replace it.</p>
+    <p class="body-text es">La misma lógica sostiene la iglesia. La misma lógica sostuvo la plaza. La misma lógica sostuvo el granero. <em>Comunión</em> — compartir — no es una ideología importada de Berlín o Moscú. Es la forma en que tu abuelo compartía la leña. Está en nuestra morfología. Es más antigua que la nación que intentó reemplazarla.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"Comunión is just communism as a way of life. The Mayordomo isn't a boss; he's the keeper of the order. If you don't share the burden, you don't share the blessing."</div>
+      <div class="pq-text es">"La Comunión es simplemente el comunismo como forma de vida. El Mayordomo no es un jefe; es el guardián del orden. Si no compartes la carga, no compartes la bendición."</div>
+      <div class="pq-attr">SANGRE KV1 · Mayordomía Node · 2026</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label en">Section 04</div>
+    <div class="section-label es">Sección 04</div>
+    <h2 class="section-h2 en">The Great Interruption — The Scalpel</h2>
+    <h2 class="section-h2 es">La Gran Interrupción — El Bisturí</h2>
+
+    <p class="body-text en">In 1848, the <strong>Treaty of Guadalupe Hidalgo</strong> transferred New Mexico from Mexico to the United States. The treaty promised to honor existing land grants. That promise was a legal fiction. What followed was a documentation bottleneck engineered to extract land from communities that governed by custom, not deed.</p>
+    <p class="body-text es">En 1848, el <strong>Tratado de Guadalupe Hidalgo</strong> transfirió Nuevo México de México a los Estados Unidos. El tratado prometió respetar las mercedes de tierra existentes. Esa promesa era una ficción legal. Lo que siguió fue un cuello de botella de documentación diseñado para extraer tierras de comunidades que gobernaban por costumbre, no por escritura.</p>
+
+    <p class="body-text en">The instrument was the <strong>Santa Fe Ring</strong> — an informal syndicate of lawyers and politicians (Catron, Elkins, and their allies) who used the Court of Private Land Claims (1891–1904) as a fee-extraction mechanism. Survey costs, legal fees, documentation requirements — every step of "adjudication" was a toll booth designed to bleed the herederos dry.</p>
+    <p class="body-text es">El instrumento fue el <strong>Anillo de Santa Fe</strong> — un sindicato informal de abogados y políticos (Catron, Elkins y sus aliados) que usaron el Tribunal de Reclamaciones de Tierras Privadas (1891–1904) como mecanismo de extracción de honorarios.</p>
+
+    <p class="body-text en">The decisive blow came on May 24, 1897: <strong><em>United States v. Sandoval</em></strong> (167 U.S. 278). The Supreme Court ruled that the unallotted communal lands of the San Miguel del Vado grant were held "in trust by the sovereign" — and transferred them to the U.S. public domain in a single ruling. A 315,300-acre circle became a 5,000-acre box. Herederos became employees. They rewrote our DNA to make us "poor" on land we already owned.</p>
+    <p class="body-text es">El golpe decisivo llegó el 24 de mayo de 1897: <strong><em>Estados Unidos v. Sandoval</em></strong> (167 U.S. 278). La Corte Suprema dictaminó que las tierras comunales no asignadas de la merced de San Miguel del Vado se mantenían "en fideicomiso por el soberano" — y las transfirió al dominio público de EE.UU. en una sola resolución. Un círculo de 315,300 acres se convirtió en una caja de 5,000 acres. Los herederos se convirtieron en empleados.</p>
+
+    <div class="equity-bar">
+      <div class="eq-label en">Estimated Displaced Community Equity / Equidad Comunitaria Desplazada Estimada</div>
+      <div class="eq-row">
+        <span class="eq-year">1794</span>
+        <div class="eq-bar-wrap"><div class="eq-bar" style="width:100%;background:var(--sky)"></div></div>
+        <span class="eq-acres">~315,000 ac</span>
+      </div>
+      <div class="eq-row">
+        <span class="eq-year">1897</span>
+        <div class="eq-bar-wrap"><div class="eq-bar" style="width:1.6%;background:var(--sage)"></div></div>
+        <span class="eq-acres">~5,000 ac</span>
+      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--terr);margin-top:8px;letter-spacing:.08em">98.4% LIFTED TO PUBLIC DOMAIN · 310,300 ACRES LOST · ~$775M ESTIMATED DISPLACED EQUITY</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-label en">Section 05</div>
+    <div class="section-label es">Sección 05</div>
+    <h2 class="section-h2 en">The Numbers — Displaced Equity</h2>
+    <h2 class="section-h2 es">Los Números — Equidad Desplazada</h2>
+
+    <p class="body-text en">Numbers are not neutral. The numbers in this case are an argument. When we calculate the displaced equity of the San Miguel del Vado land grant, we are not making a historical point. We are making a present-tense claim about who is standing on whose foundation right now.</p>
+    <p class="body-text es">Los números no son neutrales. Los números en este caso son un argumento. Cuando calculamos la equidad desplazada de la merced de San Miguel del Vado, no estamos haciendo un punto histórico. Estamos haciendo una afirmación en tiempo presente sobre quién está parado sobre la fundación de quién ahora mismo.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">310k</div>
+        <div class="stat-label en">Acres lost — 1897 ruling</div>
+        <div class="stat-label es">Acres perdidos — fallo de 1897</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$2,500</div>
+        <div class="stat-label en">Per acre — conservative market value</div>
+        <div class="stat-label es">Por acre — valor de mercado conservador</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$775M</div>
+        <div class="stat-label en">Estimated displaced community equity</div>
+        <div class="stat-label es">Equidad comunitaria desplazada estimada</div>
+      </div>
+    </div>
+
+    <p class="body-text en">Luxury developers aren't "creating value." They are standing on nearly $800 million of estimated displaced community equity. We aren't asking for a handout. We are asking for the balance. <em>El socialismo es ciencia, no dogma.</em> The numbers make the argument.</p>
+    <p class="body-text es">Los desarrolladores de lujo no están "creando valor." Están parados sobre casi $800 millones de equidad comunitaria desplazada estimada. No estamos pidiendo limosna. Estamos pidiendo el balance. <em>El socialismo es ciencia, no dogma.</em> Los números hacen el argumento.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6 -->
+  <div class="section">
+    <div class="section-label en">Section 06</div>
+    <div class="section-label es">Sección 06</div>
+    <h2 class="section-h2 en">The Return — Reclaiming the Muscle</h2>
+    <h2 class="section-h2 es">El Retorno — Reclamando el Músculo</h2>
+
+    <p class="body-text en">We aren't building a utopia. We are building a land bank. The model is already in the morphology — a modern acequia. The <strong>NM Socialist Fund / Cooperative Land Bank</strong> pools resources (money, AI, legal capacity) to put land back in the circle. The same circle the Genízaro families built in 1794.</p>
+    <p class="body-text es">No estamos construyendo una utopía. Estamos construyendo un banco de tierras. El modelo ya está en la morfología — una acequia moderna. El <strong>Fondo Socialista de NM / Banco Cooperativo de Tierras</strong> reúne recursos (dinero, IA, capacidad legal) para devolver la tierra al círculo. El mismo círculo que las familias Genízaras construyeron en 1794.</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>Acquire Title:</strong> Use the fund to purchase land within the original SMDVLG territory, returning it to community ownership through a Community Land Trust structure.</li>
+      <li class="es"><strong>Adquirir Título:</strong> Usar el fondo para comprar tierra dentro del territorio original de SMDVLG, devolviéndola a la propiedad comunitaria mediante una estructura de Fideicomiso de Tierra Comunitaria.</li>
+      <li class="en"><strong>Manage Acequias:</strong> Restore the Mayordomía governance model. Water managed by the community that built it, not by state allocation or market price.</li>
+      <li class="es"><strong>Administrar Acequias:</strong> Restaurar el modelo de gobernanza de la Mayordomía. Agua administrada por la comunidad que la construyó, no por asignación estatal o precio de mercado.</li>
+      <li class="en"><strong>Build the Data Layer:</strong> SANGRE KV1 is the technical graph — the living vein of the reclamation. GIS, legal research, historical documentation, AI analysis — all in service of the claim.</li>
+      <li class="es"><strong>Construir la Capa de Datos:</strong> SANGRE KV1 es el grafo técnico — la vena viva de la reclamación. GIS, investigación legal, documentación histórica, análisis de IA — todo al servicio de la reclamación.</li>
+    </ul>
+
+    <div class="pq">
+      <div class="pq-text en">"Socialism isn't from Berlin or Moscow. It's the way your grandfather shared wood. It's in our morphology. It's time we start acting like it."</div>
+      <div class="pq-text es">"El socialismo no viene de Berlín ni de Moscú. Es la forma en que tu abuelo compartía la leña. Está en nuestra morfología. Es hora de que empecemos a actuar como tal."</div>
+      <div class="pq-attr">SANGRE KV1 · Reclamation Node · NM Socialist Fund · 2026</div>
+    </div>
+  </div>
+
+  <div class="refs">
+    <div class="refs-title">References / Fuentes</div>
+    <p class="ref-item"><em>United States v. Sandoval</em> (1897), 167 U.S. 278. Supreme Court of the United States.</p>
+    <p class="ref-item">Sena, S. (2026). <em>SANGRE KV1: Symbolic Acequia Network Graph for Reclamation & Ejido.</em> NM Socialists Research.</p>
+    <p class="ref-item">Rivera, J. A. (1998). <em>Acequia Culture: Water, Land, and Community in the Southwest.</em> University of New Mexico Press.</p>
+    <p class="ref-item">Ebright, M. (1994). <em>Land Grants and Lawsuits in Northern New Mexico.</em> University of New Mexico Press.</p>
+    <p class="ref-item">Correia, D. (2013). <em>Properties of Violence: Law and Land Grant Struggle in Northern New Mexico.</em> University of Georgia Press.</p>
+    <p class="ref-item">GAO. (2004). <em>Treaty of Guadalupe Hidalgo: Findings and Possible Options Regarding Longstanding Community Land Grant Claims in New Mexico.</em> GAO-04-60.</p>
+  </div>
+
+</main>
+
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. 01 · Sena's AI Collective</div>
+  <div class="footer-id">Water Rights Series · SANGRE KV1 · CC BY-NC-SA 4.0 · Free to Share · Santa Fe, NM · 2026</div>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('bib_lang');
+  const lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if(lang==='es') setLang('es',true);
+})();
+function setLang(l, init){
+  document.getElementById('page').className = l==='es' ? 'lang-es' : '';
+  document.getElementById('btnEN').className = 'lt-btn'+(l==='en'?' active':'');
+  document.getElementById('btnES').className = 'lt-btn'+(l==='es'?' active':'');
+  if(!init) localStorage.setItem('bib_lang',l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
