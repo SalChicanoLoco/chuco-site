@@ -116,7 +116,11 @@ export default {
     }));
 
     return new Response(JSON.stringify({ volumes }), {
-      headers: { ...CORS, 'Content-Type': 'application/json' },
+      headers: {
+        ...CORS,
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=120, s-maxage=300',
+      },
     });
   },
 };
