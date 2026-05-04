@@ -1,0 +1,43 @@
+# Sena Colectivo — Wrangler Worker Config Template
+# ─────────────────────────────────────────────────
+# Fill in all REPLACE comments, then:
+#   wrangler secret put AIRTABLE_KEY   (never commit the key)
+#   wrangler deploy
+
+# REPLACE: unique worker name — lowercase, hyphens only
+name            = "your-worker-name"
+main            = "index.js"
+compatibility_date = "2024-09-23"
+
+# REPLACE: your Cloudflare account ID
+# Find it at: https://dash.cloudflare.com → right sidebar → Account ID
+account_id      = "REPLACE_WITH_ACCOUNT_ID"
+
+[vars]
+# REPLACE: Airtable Base ID — from the Airtable API docs for your base
+# Example: appinUNP5LSKBC33H
+AIRTABLE_BASE   = "REPLACE_WITH_BASE_ID"
+
+# REPLACE: Airtable Table ID — from the Airtable API docs
+# Example: tblIjZIDiu41L9IUP
+AIRTABLE_TABLE  = "REPLACE_WITH_TABLE_ID"
+
+# Optional: second table for pipeline/tasks, if separate
+# PIPELINE_TABLE = "REPLACE_WITH_PIPELINE_TABLE_ID"
+
+# ── Secret — set via CLI, NEVER put token in this file ──
+# Run after first deploy:
+#   wrangler secret put AIRTABLE_KEY
+# The token needs scopes: data.records:read, schema.bases:read
+# Create at: https://airtable.com/create/tokens
+
+# ── Routes — optional, uncomment to bind to a custom domain ──
+# [[routes]]
+# pattern = "api.yourdomain.com/*"
+# zone_name = "yourdomain.com"
+
+# ── KV — optional, uncomment to enable caching via KV Namespace ──
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id      = "REPLACE_WITH_KV_NAMESPACE_ID"
+# preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
