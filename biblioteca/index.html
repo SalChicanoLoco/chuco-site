@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Biblioteca · May Day · General Strike · May 2026</title>
+<title>La Biblioteca · Sena's AI Collective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
 :root {
   --earth:  #1a1209;
   --warm:   #2a1f0e;
@@ -18,621 +19,979 @@
   --cream:  #fdf6ea;
   --ink:    #1c1410;
   --border: rgba(194,96,58,0.18);
-  --serif:  'Fraunces', serif;
-  --sans:   'DM Sans', sans-serif;
-  --mono:   'DM Mono', monospace;
+  --serif:  'Fraunces', Georgia, serif;
+  --sans:   'DM Sans', system-ui, sans-serif;
+  --mono:   'DM Mono', 'Courier New', monospace;
+  --feed-w: 380px;
 }
 
 /* ── RESET ── */
-* { margin:0; padding:0; box-sizing:border-box; }
-
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-  background: var(--cream);
-  color: var(--ink);
+  background: var(--earth);
+  color: var(--sand);
   font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+
+/* ── LANGUAGE VISIBILITY ── */
+/* Default: show EN, hide ES */
+.t-es { display: none !important; }
+.t-en { display: inline; }
+/* When lang-es active: show ES, hide EN */
+body.lang-es .t-en { display: none !important; }
+body.lang-es .t-es { display: inline !important; }
 
 /* ── MASTHEAD ── */
 .masthead {
   background: var(--earth);
-  border-bottom: 3px solid var(--terr);
-  padding: 20px 32px;
+  border-bottom: 2px solid var(--terr);
+  padding: 13px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 12px;
+  flex-shrink: 0;
+  z-index: 100;
 }
-
-.masthead-left { display: flex; flex-direction: column; gap: 4px; }
-
-.pub-name {
+.brand-link {
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.brand-name {
   font-family: var(--serif);
   font-size: 22px;
   font-weight: 900;
   color: var(--gold);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.01em;
 }
-
-.pub-meta {
+.brand-sub {
   font-family: var(--mono);
   font-size: 9px;
-  color: rgba(245,234,216,0.45);
-  letter-spacing: 2.5px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  color: rgba(245,234,216,0.28);
 }
-
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 .lang-toggle {
   display: flex;
-  gap: 4px;
+  border: 1px solid rgba(194,96,58,0.35);
+  border-radius: 3px;
+  overflow: hidden;
 }
-
 .lt-btn {
-  padding: 6px 16px;
+  padding: 5px 13px;
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   background: transparent;
-  border: 1px solid rgba(194,96,58,0.3);
+  border: none;
   color: rgba(245,234,216,0.4);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
-.lt-btn:hover { border-color: var(--gold); color: var(--gold); }
-.lt-btn.active {
-  background: var(--terr);
-  border-color: var(--terr);
-  color: var(--cream);
-}
+.lt-btn.active { background: var(--terr); color: var(--cream); }
 
-/* ── COVER BAND ── */
-.cover-band {
-  background: var(--warm);
-  padding: 48px 32px 40px;
-  border-bottom: 1px solid var(--border);
+/* ── APP BODY: two-pane layout ── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
 }
 
-.cover-inner { max-width: 780px; margin: 0 auto; }
+/* ── LEFT FEED PANE ── */
+.feed-pane {
+  width: var(--feed-w);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(194,96,58,0.22);
+  background: var(--earth);
+  overflow: hidden;
+}
 
-.issue-flag {
+/* Series filter chips */
+.filter-bar {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid rgba(194,96,58,0.14);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.f-chip {
+  padding: 4px 11px;
   font-family: var(--mono);
   font-size: 9px;
-  color: var(--terr);
-  letter-spacing: 3px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  border: 1px solid rgba(245,234,216,0.12);
+  background: transparent;
+  color: rgba(245,234,216,0.38);
+  cursor: pointer;
+  border-radius: 20px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.f-chip:hover { border-color: var(--terr); color: rgba(245,234,216,0.75); }
+.f-chip.active { background: var(--terr); border-color: var(--terr); color: var(--cream); }
+
+/* Scrollable card list */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(194,96,58,0.25) transparent;
+}
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.25); border-radius: 2px; }
+
+/* Individual cards */
+.card {
+  padding: 13px 16px 12px;
+  margin: 0 8px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+  user-select: none;
+  outline: none;
+}
+.card:hover { background: rgba(42,31,14,0.7); }
+.card:focus-visible { box-shadow: 0 0 0 2px var(--terr); }
+.card.active {
+  background: rgba(42,31,14,0.9);
+  border-left-color: var(--terr);
+}
+.card-top {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
+  margin-bottom: 5px;
 }
-.issue-flag::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-.cover-headline {
-  font-family: var(--serif);
-  font-size: clamp(36px, 6vw, 60px);
-  font-weight: 900;
-  color: var(--sand);
-  line-height: 1.05;
-  margin-bottom: 20px;
-}
-
-.cover-headline em {
-  color: var(--gold);
-  font-style: italic;
-}
-
-.cover-deck {
-  font-size: 17px;
-  color: rgba(245,234,216,0.65);
-  max-width: 560px;
-  line-height: 1.75;
-  margin-bottom: 24px;
-}
-
-.cover-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.ctag {
-  font-family: var(--mono);
-  font-size: 9px;
-  padding: 4px 12px;
-  border: 1px solid var(--border);
-  color: rgba(245,234,216,0.5);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.ctag.hot { border-color: rgba(194,96,58,0.5); color: var(--terr); }
-
-/* ── BODY ── */
-.body-wrap {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 48px 32px 80px;
-}
-
-/* ── SECTION ── */
-.section { margin-bottom: 52px; }
-
-.section-flag {
+.card-vol-badge {
   font-family: var(--mono);
   font-size: 8px;
-  color: var(--gold);
-  letter-spacing: 3px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  background: rgba(194,96,58,0.18);
+  color: var(--terr);
+  padding: 2px 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.card-series-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,234,216,0.28);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sand);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.card-excerpt {
+  font-size: 12px;
+  color: rgba(245,234,216,0.42);
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.card-date {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(245,234,216,0.2);
+}
+.card-free {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sage);
+  opacity: 0.75;
+}
+
+/* Loading / empty state in feed */
+.feed-state {
+  padding: 32px 20px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,234,216,0.25);
+}
+
+/* Animated loading dots */
+.dots { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+.dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.2;
+  animation: dot-pulse 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot-pulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40%            { opacity: 1;   transform: scale(1.1); }
+}
+
+/* ── RIGHT ARTICLE PANE ── */
+.article-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+  min-width: 0;
+}
+
+/* Empty / select state */
+.article-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: rgba(28,20,16,0.3);
+}
+.article-empty-icon {
+  font-size: 40px;
+  opacity: 0.18;
+}
+.article-empty-text {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(28,20,16,0.35);
+  text-align: center;
+}
+.article-empty-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(28,20,16,0.2);
+  text-align: center;
+}
+
+/* Article pane toolbar */
+.article-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--warm);
+  border-bottom: 1px solid rgba(194,96,58,0.25);
+  flex-shrink: 0;
+}
+.toolbar-left {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
-.section-flag::after {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: rgba(232,168,37,0.3);
+.toolbar-vol {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--terr);
+  flex-shrink: 0;
+}
+.toolbar-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245,234,216,0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-.section-title {
+/* Back button — mobile only by default */
+.back-btn {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(245,234,216,0.2);
+  color: rgba(245,234,216,0.55);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.back-btn:hover { border-color: var(--terr); color: var(--terr); }
+
+/* Open standalone page button */
+.open-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(194,96,58,0.15);
+  border: 1px solid rgba(194,96,58,0.3);
+  color: rgba(245,234,216,0.7);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.open-btn:hover { background: var(--terr); border-color: var(--terr); color: var(--cream); }
+.open-btn svg { flex-shrink: 0; }
+
+/* Article content scroll area */
+.article-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(194,96,58,0.3) transparent;
+}
+.article-scroll::-webkit-scrollbar { width: 5px; }
+.article-scroll::-webkit-scrollbar-track { background: transparent; }
+.article-scroll::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.3); border-radius: 2px; }
+
+/* Loading spinner in article pane */
+.article-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 40px;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(28,20,16,0.3);
+}
+
+/* ── INJECTED ARTICLE CONTENT RESET ── */
+/* Wrap the injected <main> in this div for scoped overrides */
+.article-injected {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.75;
+}
+/* Prevent injected content from breaking pane layout */
+.article-injected * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* Suppress the vol-page masthead & nav — we show our own toolbar */
+.article-injected .mast,
+.article-injected nav,
+.article-injected header:not(.cover-inner header),
+.article-injected footer { display: none !important; }
+/* Links */
+.article-injected a { color: var(--terr); }
+.article-injected a:hover { color: var(--ink); }
+/* Images */
+.article-injected img { height: auto; }
+
+/* ── FALLBACK (no URL or fetch failed) ── */
+.article-fallback {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 0 32px 80px;
+}
+.article-fallback-vol {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terr);
+  margin-bottom: 6px;
+}
+.article-fallback-title {
   font-family: var(--serif);
   font-size: 28px;
   font-weight: 900;
   color: var(--ink);
-  line-height: 1.15;
-  margin-bottom: 6px;
-}
-
-.section-title-es {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--terr);
+  line-height: 1.2;
   margin-bottom: 20px;
 }
-
-hr.section-rule {
-  border: none;
-  border-top: 1px solid var(--border);
+.article-fallback-excerpt {
+  font-size: 16px;
+  color: rgba(28,20,16,0.75);
+  line-height: 1.85;
+  border-left: 3px solid var(--terr);
+  padding-left: 16px;
   margin-bottom: 24px;
 }
-
-/* ── TEXT BLOCKS ── */
-.lang-block { margin-bottom: 20px; }
-
-.lang-label {
+.article-fallback-note {
   font-family: var(--mono);
-  font-size: 8px;
-  color: var(--terr);
-  letter-spacing: 2px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  color: rgba(28,20,16,0.35);
+  padding: 12px 16px;
+  border: 1px dashed rgba(194,96,58,0.3);
+  border-radius: 2px;
 }
 
-.body-text {
-  font-size: 15px;
-  line-height: 1.8;
-  color: #2a1f0e;
-}
-
-.body-text strong { font-weight: 600; color: var(--ink); }
-.body-text em { font-style: italic; color: var(--terr); }
-
-/* ── PULL QUOTE ── */
-.pull-quote {
-  border-left: 4px solid var(--terr);
-  padding: 16px 24px;
-  margin: 28px 0;
-  background: rgba(194,96,58,0.05);
-}
-
-.pq-text {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 600;
-  font-style: italic;
-  color: var(--ink);
-  line-height: 1.4;
-}
-
-.pq-attr {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--terr);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-top: 10px;
-}
-
-/* ── CALLOUT BOX ── */
-.callout {
-  background: var(--earth);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--gold);
-  padding: 24px 28px;
-  margin: 28px 0;
-}
-
-.callout-label {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--gold);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-.callout-text {
-  font-size: 14px;
-  color: var(--sand);
-  line-height: 1.75;
-}
-
-.callout-text strong { color: var(--gold); }
-
-/* ── FACT STRIP ── */
-.fact-strip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 28px 0;
-}
-
-.fact-cell {
-  background: var(--cream);
-  padding: 18px 20px;
-}
-
-.fact-num {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--terr);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.fact-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: rgba(26,18,9,0.5);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  line-height: 1.4;
-}
-
-/* ── TRANSLATION CREDIT ── */
-.translation-credit {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: rgba(26,18,9,0.35);
-  letter-spacing: 1px;
-  margin-top: 12px;
-}
-
-/* ── FOOTER ── */
-.pub-footer {
-  background: var(--earth);
-  border-top: 1px solid var(--border);
-  padding: 24px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.footer-id {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: rgba(245,234,216,0.3);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.footer-org {
-  font-family: var(--serif);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gold);
-}
-
-/* ── LOCALE VISIBILITY ── */
-.en-only { display: block; }
-.es-only { display: none;  }
-body.es .en-only { display: none;  }
-body.es .es-only { display: block; }
-
-/* ── PRINT ── */
-@media print {
-  .masthead, .lang-toggle, .pub-footer { background: #000 !important; }
-  .en-only, .es-only { display: block !important; }
-  body.es .en-only { display: none !important; }
-}
-
-/* ── MOBILE ── */
-@media (max-width: 600px) {
-  .masthead { padding: 16px 20px; }
-  .cover-band { padding: 32px 20px 28px; }
-  .body-wrap { padding: 32px 20px 60px; }
-  .section-title { font-size: 22px; }
-  .pq-text { font-size: 18px; }
+/* ── MOBILE (< 768px) ── */
+@media (max-width: 767px) {
+  /* App body becomes a positioning context */
+  .app-body {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Feed pane occupies full screen */
+  .feed-pane {
+    width: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    z-index: 10;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* Article pane is off-screen right, slides in on top */
+  .article-pane {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* When an article is open, slide article pane into view */
+  body.article-open .article-pane {
+    transform: translateX(0);
+  }
+  /* Show back button on mobile */
+  .back-btn { display: flex; }
+  /* Narrower title in toolbar on mobile */
+  .toolbar-title { max-width: 160px; }
 }
 </style>
 </head>
 <body id="page">
 
-<!-- MASTHEAD -->
-<div class="masthead">
-  <div class="masthead-left">
-    <div class="pub-name">La Biblioteca</div>
-    <div class="pub-meta en-only">Sena's AI Collective · Santa Fe, NM · Special Edition · May 2026</div>
-    <div class="pub-meta es-only">Sena's AI Collective · Santa Fe, NM · Edición Especial · Mayo 2026</div>
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <div class="brand">
+    <a class="brand-link" href="https://docs.senacolectivo.com/" target="_blank" rel="noopener">
+      <span class="brand-name">La Biblioteca</span>
+      <span class="brand-sub">
+        <span class="t-en">Sena's AI Collective</span>
+        <span class="t-es">El Colectivo de IA de Sena</span>
+      </span>
+    </a>
   </div>
-  <div class="lang-toggle">
-    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
-    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
-  </div>
-</div>
-
-<!-- COVER BAND -->
-<div class="cover-band">
-  <div class="cover-inner">
-
-    <div class="issue-flag en-only">
-      Labor Rights · Direct Action · Special Edition · May 1, 2026
-    </div>
-    <div class="issue-flag es-only">
-      Derechos Laborales · Acción Directa · Edición Especial · 1 de Mayo, 2026
-    </div>
-
-    <div class="cover-headline en-only">
-      The Strike Is<br><em>the Argument.</em>
-    </div>
-    <div class="cover-headline es-only">
-      La Huelga Es<br><em>el Argumento.</em>
-    </div>
-
-    <div class="cover-deck en-only">
-      May Day 2026. Workers across the country are walking out. New Mexico Socialists stand with them — because the data has always been clear. The only language power understands is organized refusal.
-    </div>
-    <div class="cover-deck es-only">
-      1 de Mayo 2026. Trabajadores en todo el país están saliendo. Los Socialistas de Nuevo México están con ellos — porque los datos siempre han sido claros. El único idioma que el poder entiende es el rechazo organizado.
-    </div>
-
-    <div class="cover-tags">
-      <span class="ctag hot">May Day 2026</span>
-      <span class="ctag hot">General Strike</span>
-      <span class="ctag">May Day · Santa Fe</span>
-      <span class="ctag">NM Socialists</span>
-      <span class="ctag">Free to Share</span>
-    </div>
-
-  </div>
-</div>
-
-<!-- BODY -->
-<div class="body-wrap">
-
-  <!-- SECTION 01 -->
-  <div class="section">
-    <div class="section-flag en-only">Section 01</div>
-    <div class="section-flag es-only">Sección 01</div>
-
-    <div class="section-title en-only">May Day Is Not a Holiday.<br>It's a History Lesson.</div>
-    <div class="section-title es-only">El Primero de Mayo No Es un Feriado.<br>Es una Lección de Historia.</div>
-
-    <div class="section-title-es en-only">El Primero de Mayo no es un feriado. Es una lección de historia.</div>
-    <div class="section-title-es es-only">May Day is not a holiday. It's a history lesson.</div>
-
-    <hr class="section-rule">
-
-    <div class="lang-block">
-      <div class="body-text en-only">
-        On May 1, 1886, hundreds of thousands of American workers stopped working. They weren't asking for shorter hours — they were <strong>refusing to work more than eight</strong>. Over 300,000 walked out in cities across the country. The eight-hour workday you have today was not given. It was taken. In Chicago, in Pittsburgh, in Milwaukee — workers built it with their bodies, their time, and in some cases, their lives.
-        <br><br>
-        The United States later moved Labor Day to September specifically to separate the holiday from its radical origins. International Workers' Day — May 1st — is celebrated by workers in over 80 countries. It has never stopped being celebrated here either. They just made sure you didn't learn about it in school.
-      </div>
-      <div class="body-text es-only">
-        El 1 de mayo de 1886, cientos de miles de trabajadores estadounidenses dejaron de trabajar. No estaban pidiendo menos horas — estaban <strong>negándose a trabajar más de ocho</strong>. Más de 300,000 salieron en ciudades de todo el país. La jornada laboral de ocho horas que tienes hoy no fue otorgada. Fue tomada. En Chicago, en Pittsburgh, en Milwaukee — los trabajadores la construyeron con sus cuerpos, su tiempo y, en algunos casos, sus vidas.
-        <br><br>
-        Los Estados Unidos trasladaron el Día del Trabajo a septiembre específicamente para separar el feriado de sus orígenes radicales. El Día Internacional de los Trabajadores — el 1 de mayo — se celebra en más de 80 países. Nunca dejó de celebrarse aquí tampoco. Solo se aseguraron de que no lo aprendieras en la escuela.
-      </div>
-    </div>
-
-    <div class="pull-quote">
-      <div class="pq-text en-only">"The eight-hour day was not given. It was taken."</div>
-      <div class="pq-text es-only">"La jornada de ocho horas no fue otorgada. Fue tomada."</div>
-      <div class="pq-attr en-only">Labor History · 1886 · Chicago, IL</div>
-      <div class="pq-attr es-only">Historia Laboral · 1886 · Chicago, IL</div>
-    </div>
-
-    <div class="fact-strip">
-      <div class="fact-cell">
-        <div class="fact-num">300k+</div>
-        <div class="fact-label en-only">Workers walked out<br>May 1, 1886</div>
-        <div class="fact-label es-only">Trabajadores en huelga<br>1 de Mayo, 1886</div>
-      </div>
-      <div class="fact-cell">
-        <div class="fact-num">80+</div>
-        <div class="fact-label en-only">Countries that celebrate<br>May Day today</div>
-        <div class="fact-label es-only">Países que celebran<br>el 1 de Mayo hoy</div>
-      </div>
-      <div class="fact-cell">
-        <div class="fact-num">138</div>
-        <div class="fact-label en-only">Years of organized<br>worker action</div>
-        <div class="fact-label es-only">Años de acción<br>organizada obrera</div>
-      </div>
+  <div class="masthead-right">
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')" aria-pressed="true">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')" aria-pressed="false">ES</button>
     </div>
   </div>
+</header>
 
-  <!-- SECTION 02 -->
-  <div class="section">
-    <div class="section-flag en-only">Section 02</div>
-    <div class="section-flag es-only">Sección 02</div>
+<!-- ── APP BODY ── -->
+<div class="app-body" id="appBody">
 
-    <div class="section-title en-only">What Is a General Strike —<br>and Why Does It Matter Now?</div>
-    <div class="section-title es-only">¿Qué Es una Huelga General —<br>y Por Qué Importa Ahora?</div>
+  <!-- LEFT: feed pane -->
+  <aside class="feed-pane" id="feedPane" aria-label="Volume feed">
 
-    <div class="section-title-es en-only">¿Qué es una huelga general y por qué importa ahora?</div>
-    <div class="section-title-es es-only">What is a general strike and why does it matter now?</div>
+    <!-- Series filter chips -->
+    <div class="filter-bar" id="filterBar" role="list" aria-label="Filter by series">
+      <button class="f-chip active" data-series="all" onclick="filterSeries(this,'all')" role="listitem">
+        <span class="t-en">All</span><span class="t-es">Todos</span>
+      </button>
+      <!-- dynamically added -->
+    </div>
 
-    <hr class="section-rule">
-
-    <div class="lang-block">
-      <div class="body-text en-only">
-        A general strike is not a march. It is not a petition. It is the clearest possible demonstration of economic reality: <strong>the economy runs on labor</strong>, and labor can refuse. When workers across industries, across sectors, across zip codes stop together — production stops. Supply chains stall. Revenue halts. That silence is the argument.
-        <br><br>
-        A targeted strike asks a specific employer to change. A general strike asks a system to reckon with itself. It is organized nonparticipation. It is the withdrawal of consent at scale. Every historical gain workers have — the weekend, the minimum wage, workplace safety standards, the right to organize — came after labor demonstrated that it could, and would, stop.
-        <br><br>
-        The call for a General Strike on May 1, 2026 is not nostalgia. It is a data-driven response to material conditions: stagnant wages against record corporate profits, collapsing housing affordability, eroding public services, and an accelerating concentration of wealth at the top. <em>El socialismo es ciencia, no dogma.</em> The numbers make the argument.
-      </div>
-      <div class="body-text es-only">
-        Una huelga general no es una marcha. No es una petición. Es la demostración más clara posible de la realidad económica: <strong>la economía funciona con trabajo</strong>, y el trabajo puede negarse. Cuando los trabajadores de diferentes industrias, sectores y códigos postales se detienen juntos — la producción se detiene. Las cadenas de suministro se paralizan. Los ingresos se frenan. Ese silencio es el argumento.
-        <br><br>
-        Una huelga dirigida le pide a un empleador específico que cambie. Una huelga general le pide a un sistema que se enfrente a sí mismo. Es no-participación organizada. Es la retirada del consentimiento a escala. Cada ganancia histórica que tienen los trabajadores — el fin de semana, el salario mínimo, las normas de seguridad laboral, el derecho a organizarse — llegó después de que el trabajo demostró que podía, y lo haría, detenerse.
-        <br><br>
-        El llamado a una Huelga General el 1 de Mayo de 2026 no es nostalgia. Es una respuesta basada en datos a las condiciones materiales: salarios estancados frente a ganancias corporativas récord, asequibilidad de vivienda en colapso, servicios públicos erosionados y una concentración acelerada de riqueza en la cima. <em>El socialismo es ciencia, no dogma.</em> Los números hacen el argumento.
+    <!-- Card list -->
+    <div class="card-list" id="cardList" role="list" aria-label="Volumes">
+      <div class="feed-state" id="feedLoading">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <span class="t-en">Loading volumes…</span>
+        <span class="t-es">Cargando volúmenes…</span>
       </div>
     </div>
 
-    <div class="callout">
-      <div class="callout-label en-only">The Logic of the Strike</div>
-      <div class="callout-label es-only">La Lógica de la Huelga</div>
-      <div class="callout-text en-only">
-        Every dollar in profit is the value created by labor minus what labor was paid.
-        That gap — between what workers produce and what workers take home — is not a market outcome.
-        It is a <strong>political outcome</strong>. And political outcomes can be changed through organized political action.
+  </aside>
+
+  <!-- RIGHT: article pane -->
+  <main class="article-pane" id="articlePane" aria-label="Article content" aria-live="polite">
+
+    <!-- Toolbar — shown when article is loaded -->
+    <div class="article-toolbar" id="articleToolbar" hidden>
+      <div class="toolbar-left">
+        <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Back to feed">
+          ← <span class="t-en">Back</span><span class="t-es">Volver</span>
+        </button>
+        <span class="toolbar-vol" id="toolbarVol"></span>
+        <span class="toolbar-title" id="toolbarTitle"></span>
       </div>
-      <div class="callout-text es-only">
-        Cada dólar de ganancia es el valor creado por el trabajo menos lo que se le pagó al trabajo.
-        Esa brecha — entre lo que los trabajadores producen y lo que los trabajadores llevan a casa — no es un resultado del mercado.
-        Es un <strong>resultado político</strong>. Y los resultados políticos se pueden cambiar mediante la acción política organizada.
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION 03 -->
-  <div class="section">
-    <div class="section-flag en-only">Section 03</div>
-    <div class="section-flag es-only">Sección 03</div>
-
-    <div class="section-title en-only">New Mexico Socialists:<br>Why We're in the Streets on Friday</div>
-    <div class="section-title es-only">Socialistas de Nuevo México:<br>Por Qué Estamos en las Calles el Viernes</div>
-
-    <div class="section-title-es en-only">Por qué estamos en las calles el viernes.</div>
-    <div class="section-title-es es-only">Why we're in the streets on Friday.</div>
-
-    <hr class="section-rule">
-
-    <div class="lang-block">
-      <div class="body-text en-only">
-        New Mexico Socialists Inc. is attending May Day in Santa Fe on May 1, 2026 — with the team, with the community, and without apology. We are a research and organizing organization rooted in the land grant, acequia, and labor traditions of Northern New Mexico. May Day is not an abstraction to us. It is a continuation.
-        <br><br>
-        The same forces that stripped 98.4% of the San Miguel del Vado communal land grant through legal manipulation — converting 315,000 acres of shared Genízaro commons into private capital — are the same forces that keep wages below survival in one of the poorest states in the nation. The mechanism changes. The logic does not.
-        <br><br>
-        We do not march because it feels good. We march because presence is data. Because showing up is how communities learn their own size. Because every neighbor who sees us on Friday and thinks <em>"I'm not alone in this"</em> is a neighbor who may pick up a phone, join a meeting, or knock on a door. That is how organizing works. That is the science.
-      </div>
-      <div class="body-text es-only">
-        New Mexico Socialists Inc. estará en el Primero de Mayo en Santa Fe el 1 de mayo de 2026 — con el equipo, con la comunidad y sin disculpas. Somos una organización de investigación y organización arraigada en las tradiciones de mercedes de tierra, acequias y trabajo del Norte de Nuevo México. El Primero de Mayo no es una abstracción para nosotros. Es una continuación.
-        <br><br>
-        Las mismas fuerzas que despojaron el 98.4% de la merced comunal de San Miguel del Vado mediante manipulación legal — convirtiendo 315,000 acres de bienes comunes Genízaros en capital privado — son las mismas fuerzas que mantienen los salarios por debajo de la subsistencia en uno de los estados más pobres de la nación. El mecanismo cambia. La lógica no.
-        <br><br>
-        No marchamos porque se sienta bien. Marchamos porque la presencia es datos. Porque aparecer es cómo las comunidades aprenden su propio tamaño. Porque cada vecino que nos ve el viernes y piensa <em>"no estoy solo en esto"</em> es un vecino que puede levantar un teléfono, unirse a una reunión o tocar una puerta. Así es como funciona la organización. Esa es la ciencia.
+      <div class="toolbar-right">
+        <a class="open-btn" id="openBtn" href="#" target="_blank" rel="noopener" title="Opens in a new tab">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <path d="M1 10L10 1M10 1H4M10 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="t-en">Open standalone ↗</span>
+          <span class="t-es">Abrir página ↗</span>
+        </a>
       </div>
     </div>
 
-    <div class="pull-quote">
-      <div class="pq-text en-only">"We do not march because it feels good. We march because presence is data."</div>
-      <div class="pq-text es-only">"No marchamos porque se sienta bien. Marchamos porque la presencia es datos."</div>
-      <div class="pq-attr en-only">New Mexico Socialists Inc. · May Day 2026</div>
-      <div class="pq-attr es-only">Socialistas de Nuevo México · 1 de Mayo 2026</div>
-    </div>
-  </div>
-
-  <!-- SECTION 04 -->
-  <div class="section">
-    <div class="section-flag en-only">Section 04</div>
-    <div class="section-flag es-only">Sección 04</div>
-
-    <div class="section-title en-only">What You Can Do — Right Now</div>
-    <div class="section-title es-only">Qué Puedes Hacer — Ahora Mismo</div>
-
-    <div class="section-title-es en-only">Qué puedes hacer ahora mismo.</div>
-    <div class="section-title-es es-only">What you can do right now.</div>
-
-    <hr class="section-rule">
-
-    <div class="lang-block">
-      <div class="body-text en-only">
-        You don't have to believe in any particular ideology to understand that <strong>wages have not kept up with productivity for fifty years</strong>. You don't need a party card to look at housing costs in Santa Fe and recognize the math doesn't work for working people. The data is the argument. The science is the organizing.
-        <br><br>
-        If you can be in the streets on May 1 — be there. If you can't — buy from a locally-owned business, talk to a coworker about what they're paid, or simply refuse to pretend things are fine. Solidarity doesn't require a banner. It requires honesty about material reality.
-        <br><br>
-        New Mexico Socialists holds weekly research sessions through <strong>La Biblioteca</strong> — our free bilingual publication on land, water, and labor rights in New Mexico. No dues. No dogma. Just research and community. We want you there.
+    <!-- Empty state (nothing selected) -->
+    <div class="article-empty" id="articleEmpty">
+      <div class="article-empty-icon" aria-hidden="true">◈</div>
+      <div class="article-empty-text">
+        <span class="t-en">Select a volume</span>
+        <span class="t-es">Selecciona un número</span>
       </div>
-      <div class="body-text es-only">
-        No tienes que creer en ninguna ideología particular para entender que <strong>los salarios no han seguido el ritmo de la productividad durante cincuenta años</strong>. No necesitas una credencial de partido para ver los costos de vivienda en Santa Fe y reconocer que los números no funcionan para la gente trabajadora. Los datos son el argumento. La ciencia es la organización.
-        <br><br>
-        Si puedes estar en las calles el 1 de mayo — estate. Si no puedes — compra en un negocio de propiedad local, habla con un compañero de trabajo sobre lo que le pagan, o simplemente niégate a fingir que todo está bien. La solidaridad no requiere una pancarta. Requiere honestidad sobre la realidad material.
-        <br><br>
-        New Mexico Socialists realiza sesiones de investigación semanales a través de <strong>La Biblioteca</strong> — nuestra publicación bilingüe gratuita sobre derechos de tierra, agua y trabajo en Nuevo México. Sin cuotas. Sin dogma. Solo investigación y comunidad. Te queremos ahí.
+      <div class="article-empty-sub">
+        <span class="t-en">Click any card to read inline</span>
+        <span class="t-es">Haz clic en una tarjeta para leer</span>
       </div>
     </div>
 
-    <div class="callout">
-      <div class="callout-label en-only">Partner Infrastructure</div>
-      <div class="callout-label es-only">Infraestructura Aliada</div>
-      <div class="callout-text en-only">
-        <strong>Sites · Publications · Research Support</strong><br>
-        Sena's AI Collective supports partner organizations with static websites, bilingual publications, grant narratives, research workflows, GIS/data support, and practical AI tooling. Revenue from services helps maintain the publication stack and seed-fund community infrastructure.
-      </div>
-      <div class="callout-text es-only">
-        <strong>Sitios · Publicaciones · Apoyo de Investigación</strong><br>
-        Sena's AI Collective apoya a organizaciones aliadas con sitios estáticos, publicaciones bilingües, narrativas para subvenciones, flujos de investigación, apoyo SIG/datos y herramientas prácticas de IA. Los ingresos de servicios ayudan a mantener la infraestructura editorial y financiar infraestructura comunitaria inicial.
-      </div>
+    <!-- Article scroll area — shown when article is loaded -->
+    <div class="article-scroll" id="articleScroll" hidden>
+      <div id="articleContent"></div>
     </div>
 
-    <div class="translation-credit es-only">
-      Traducción · Aria — Sena's AI Collective
-    </div>
+  </main>
 
-  </div>
-
-</div><!-- /body-wrap -->
-
-<!-- FOOTER -->
-<div class="pub-footer">
-  <div class="footer-id en-only">La Biblioteca · Special Edition · May 2026 · CC BY-NC-SA 4.0 · Free to Share</div>
-  <div class="footer-id es-only">La Biblioteca · Edición Especial · Mayo 2026 · CC BY-NC-SA 4.0 · Libre para Compartir</div>
-  <div class="footer-org">New Mexico Socialists · Sena's AI Collective</div>
-</div>
+</div><!-- /app-body -->
 
 <script>
-(function(){
-  var saved = localStorage.getItem('bib_lang');
-  var lang = saved || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
-  setLang(lang, true);
+/* ── CONFIG ── */
+const DATA_URL = '/biblioteca-worker/biblioteca-data.json';
+
+const SERIES_I18N = {
+  'Water Rights':          { en: 'Water Rights',    es: 'Derechos del Agua' },
+  'Land Grant':            { en: 'Land Grant',       es: 'Mercedes de Tierra' },
+  'Community Agriculture': { en: 'Community Ag',     es: 'Ag. Comunitaria' },
+  'Labor Rights':          { en: 'Labor Rights',     es: 'Derechos Laborales' },
+  'Political Education':   { en: 'Political Ed',     es: 'Educación Política' },
+  'Special Edition':       { en: 'Special Edition',  es: 'Edición Especial' },
+};
+
+/* ── STATE ── */
+let volumes      = [];
+let activeSeries = 'all';
+let activeId     = null;
+let lang         = 'en';
+
+/* ── BOOT ── */
+(function init() {
+  // Restore language preference
+  const saved = localStorage.getItem('bib_lang');
+  lang = saved || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
+  applyLang();
+
+  loadData();
+
+  // Handle hash on load and on back/forward
+  window.addEventListener('hashchange', handleHash);
+  window.addEventListener('popstate',   handleHash);
 })();
 
-function setLang(l, init) {
-  document.getElementById('page').className = l === 'es' ? 'es' : '';
-  document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
-  document.getElementById('btnES').className = 'lt-btn' + (l === 'es' ? ' active' : '');
-  if (!init) localStorage.setItem('bib_lang', l);
-  document.documentElement.lang = l;
+/* ── DATA ── */
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    volumes = Array.isArray(data.volumes) ? data.volumes : [];
+    buildFilterChips();
+    renderCards();
+    handleHash(); // open vol from URL hash if present
+  } catch (e) {
+    console.error('La Biblioteca: failed to load data', e);
+    document.getElementById('cardList').innerHTML =
+      '<div class="feed-state">Could not load — try refreshing.</div>';
+  }
 }
+
+/* ── HASH NAVIGATION ── */
+function handleHash() {
+  const hash = window.location.hash; // e.g. "#vol2"
+  if (!hash || !volumes.length) return;
+  const m = hash.match(/^#vol(\d+)$/i);
+  if (m) {
+    const volNum = parseInt(m[1], 10);
+    const v = volumes.find(function(x) { return x.vol === volNum; });
+    if (v && v.id !== activeId) openArticle(v.id);
+  }
+}
+
+/* ── FILTER CHIPS ── */
+function buildFilterChips() {
+  const bar  = document.getElementById('filterBar');
+  // Collect unique series in order of appearance
+  const seen = [];
+  volumes.forEach(function(v) {
+    if (v.series && seen.indexOf(v.series) === -1) seen.push(v.series);
+  });
+  seen.forEach(function(s) {
+    const btn = document.createElement('button');
+    btn.className = 'f-chip';
+    btn.dataset.series = s;
+    btn.setAttribute('role', 'listitem');
+    var labels = SERIES_I18N[s] || { en: s, es: s };
+    btn.innerHTML =
+      '<span class="t-en">' + escHtml(labels.en) + '</span>' +
+      '<span class="t-es">' + escHtml(labels.es) + '</span>';
+    btn.onclick = function() { filterSeries(btn, s); };
+    bar.appendChild(btn);
+  });
+}
+
+function filterSeries(btn, series) {
+  activeSeries = series;
+  document.querySelectorAll('.f-chip').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  renderCards();
+
+  // If active article no longer in filtered set, close it
+  if (activeId && series !== 'all') {
+    var v = volumes.find(function(x) { return x.id === activeId; });
+    if (v && v.series !== series) closeArticle();
+  }
+}
+
+/* ── RENDER CARDS ── */
+function renderCards() {
+  var list = document.getElementById('cardList');
+  var vols = activeSeries === 'all'
+    ? volumes
+    : volumes.filter(function(v) { return v.series === activeSeries; });
+
+  if (!vols.length) {
+    list.innerHTML = '<div class="feed-state">No volumes in this series.</div>';
+    return;
+  }
+
+  list.setAttribute('role', 'list');
+  list.innerHTML = vols.map(function(v) {
+    var title      = (lang === 'es' && v.titleES)   ? v.titleES   : v.titleEN;
+    var excerpt    = (lang === 'es' && v.excerptES) ? v.excerptES : v.excerptEN;
+    var volLabel   = v.vol ? 'Vol ' + padNum(v.vol) : 'Special';
+    var dateStr    = v.date ? fmtDate(v.date) : '';
+    var seriesLbl  = (SERIES_I18N[v.series] || {})[lang] || v.series || '';
+    var isActive   = v.id === activeId ? ' active' : '';
+    var freeLabel  = v.freeToShare
+      ? '<span class="card-free t-en">· Free to Share</span>' +
+        '<span class="card-free t-es">· Libre de compartir</span>'
+      : '';
+    return (
+      '<div class="card' + isActive + '" id="card-' + escId(v.id) + '"' +
+      ' role="listitem button" tabindex="0"' +
+      ' data-id="' + escAttr(v.id) + '"' +
+      ' aria-label="' + escAttr(volLabel + ': ' + title) + '"' +
+      ' aria-pressed="' + (v.id === activeId ? 'true' : 'false') + '">' +
+        '<div class="card-top">' +
+          '<span class="card-vol-badge">' + escHtml(volLabel) + '</span>' +
+          '<span class="card-series-label">' + escHtml(seriesLbl) + '</span>' +
+        '</div>' +
+        '<div class="card-title">' + escHtml(title) + '</div>' +
+        '<div class="card-excerpt">' + escHtml(excerpt) + '</div>' +
+        '<div class="card-foot">' +
+          (dateStr ? '<span class="card-date">' + escHtml(dateStr) + '</span>' : '') +
+          freeLabel +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+
+  // Bind click + keyboard events on each card
+  list.querySelectorAll('.card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      openArticle(card.dataset.id);
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openArticle(card.dataset.id);
+      }
+    });
+  });
+}
+
+/* ── OPEN ARTICLE ── */
+async function openArticle(id) {
+  var v = volumes.find(function(x) { return x.id === id; });
+  if (!v) return;
+
+  // Mark card active
+  activeId = id;
+  document.querySelectorAll('.card').forEach(function(c) {
+    c.classList.remove('active');
+    c.setAttribute('aria-pressed', 'false');
+  });
+  var cardEl = document.getElementById('card-' + escId(id));
+  if (cardEl) {
+    cardEl.classList.add('active');
+    cardEl.setAttribute('aria-pressed', 'true');
+    cardEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  // Update URL hash without reloading
+  if (v.vol) {
+    history.replaceState(null, '', '#vol' + v.vol);
+  }
+
+  // Update toolbar
+  var volLabel = v.vol ? 'Vol. ' + padNum(v.vol) : 'Special';
+  var title    = (lang === 'es' && v.titleES) ? v.titleES : v.titleEN;
+  document.getElementById('toolbarVol').textContent   = volLabel;
+  document.getElementById('toolbarTitle').textContent = title;
+  var openBtn = document.getElementById('openBtn');
+  openBtn.href = v.url || '#';
+
+  // Show toolbar and scroll area; hide empty state
+  document.getElementById('articleToolbar').hidden = false;
+  document.getElementById('articleEmpty').style.display    = 'none';
+  var scrollEl  = document.getElementById('articleScroll');
+  var contentEl = document.getElementById('articleContent');
+  scrollEl.hidden = false;
+  scrollEl.scrollTop = 0;
+
+  // On mobile, slide article pane into view
+  document.body.classList.add('article-open');
+
+  // Show loading state
+  contentEl.innerHTML =
+    '<div class="article-loading">' +
+      '<div class="dots"><span></span><span></span><span></span></div>' +
+      '<span class="t-en">Loading…</span>' +
+      '<span class="t-es">Cargando…</span>' +
+    '</div>';
+  applyLang(); // re-apply so dots label is correct language
+
+  // Fetch and inject article
+  if (v.url) {
+    try {
+      var localPath = urlToLocalPath(v.url);
+      var res = await fetch(localPath);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var html = await res.text();
+      var mainEl = extractMain(html);
+      if (mainEl) {
+        // Wrap in our scoped class for CSS reset
+        contentEl.innerHTML = '<div class="article-injected"></div>';
+        contentEl.firstChild.appendChild(mainEl);
+        // Re-activate any inline scripts from the injected content
+        activateScripts(contentEl);
+      } else {
+        throw new Error('No <main> element found in fetched page');
+      }
+    } catch (err) {
+      console.warn('La Biblioteca: fetch failed, showing fallback', err);
+      showFallback(v, contentEl);
+    }
+  } else {
+    showFallback(v, contentEl);
+  }
+}
+
+/* ── HELPERS: article fetching ── */
+
+// Convert absolute canonical URL → root-relative path for same-origin fetch
+function urlToLocalPath(url) {
+  try {
+    var u = new URL(url);
+    // If it's the same hostname as the current page, use path only
+    // Otherwise still use path (assuming same server serves both canonical + local)
+    return u.pathname; // e.g. /biblioteca/vol2/
+  } catch (e) {
+    return url;
+  }
+}
+
+// Extract the <main> DOM element from an HTML string
+function extractMain(html) {
+  var parser = new DOMParser();
+  var doc    = parser.parseFromString(html, 'text/html');
+  return doc.querySelector('main') || null;
+}
+
+// Re-execute inline <script> tags in injected content
+// (innerHTML assignment does not run scripts; must clone & replace)
+function activateScripts(container) {
+  container.querySelectorAll('script').forEach(function(old) {
+    var neo = document.createElement('script');
+    Array.from(old.attributes).forEach(function(attr) {
+      neo.setAttribute(attr.name, attr.value);
+    });
+    neo.textContent = old.textContent;
+    old.parentNode.replaceChild(neo, old);
+  });
+}
+
+// Show excerpt fallback when no URL or fetch failed
+function showFallback(v, contentEl) {
+  var es      = lang === 'es';
+  var title   = (es && v.titleES)   ? v.titleES   : v.titleEN;
+  var excerpt = (es && v.excerptES) ? v.excerptES : v.excerptEN;
+  var volLabel = v.vol ? 'Vol. ' + padNum(v.vol) : 'Special';
+  contentEl.innerHTML =
+    '<div class="article-fallback">' +
+      '<div class="article-fallback-vol">' + escHtml(volLabel) + '</div>' +
+      '<div class="article-fallback-title">' + escHtml(title) + '</div>' +
+      '<div class="article-fallback-excerpt">' + escHtml(excerpt) + '</div>' +
+      '<div class="article-fallback-note">' +
+        (es ? 'Página completa próximamente' : 'Full page coming soon') +
+      '</div>' +
+    '</div>';
+}
+
+/* ── CLOSE / BACK ── */
+function closeArticle() {
+  activeId = null;
+  history.replaceState(null, '', window.location.pathname);
+  document.querySelectorAll('.card').forEach(function(c) {
+    c.classList.remove('active');
+    c.setAttribute('aria-pressed', 'false');
+  });
+  document.getElementById('articleToolbar').hidden = true;
+  document.getElementById('articleEmpty').style.display   = '';
+  var scrollEl = document.getElementById('articleScroll');
+  scrollEl.hidden = true;
+  document.getElementById('articleContent').innerHTML = '';
+  document.body.classList.remove('article-open');
+}
+
+// Mobile: go back to feed without clearing the article state
+function goBack() {
+  document.body.classList.remove('article-open');
+  // Active card stays highlighted — matches Ground News UX
+}
+
+/* ── LANGUAGE ── */
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('bib_lang', l);
+  applyLang();
+  if (volumes.length) renderCards();
+  // Update toolbar title if an article is open
+  if (activeId) {
+    var v = volumes.find(function(x) { return x.id === activeId; });
+    if (v) {
+      var title = (lang === 'es' && v.titleES) ? v.titleES : v.titleEN;
+      document.getElementById('toolbarTitle').textContent = title;
+    }
+  }
+}
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  if (lang === 'es') {
+    document.body.classList.add('lang-es');
+  } else {
+    document.body.classList.remove('lang-es');
+  }
+  var btnEN = document.getElementById('btnEN');
+  var btnES = document.getElementById('btnES');
+  btnEN.classList.toggle('active', lang === 'en');
+  btnES.classList.toggle('active', lang === 'es');
+  btnEN.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  btnES.setAttribute('aria-pressed', lang === 'es' ? 'true' : 'false');
+}
+
+/* ── UTILS ── */
+function padNum(n) {
+  return String(n).padStart(2, '0');
+}
+
+function fmtDate(d) {
+  try {
+    return new Date(d + 'T12:00:00').toLocaleDateString(
+      lang === 'es' ? 'es-MX' : 'en-US',
+      { month: 'short', year: 'numeric' }
+    );
+  } catch (e) { return d; }
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#39;');
+}
+
+function escAttr(s) { return escHtml(s); }
+
+// Sanitize Airtable record IDs for use as DOM IDs (they're alphanumeric, should be safe)
+function escId(s) {
+  return String(s).replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && activeId) {
+    if (window.innerWidth < 768) {
+      goBack();
+    } else {
+      closeArticle();
+    }
+  }
+});
 </script>
 </body>
 </html>

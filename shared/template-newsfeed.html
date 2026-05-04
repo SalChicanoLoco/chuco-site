@@ -3,27 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Mexico Socialists · News &amp; Analysis</title>
-<meta name="description" content="Research-driven news and analysis from New Mexico Socialists — organizing, labor, land rights, and political education in New Mexico. Bilingual EN/ES.">
+<!-- REPLACE: page title -->
+<title>News Feed · <!-- REPLACE: Publication Name --></title>
+<!-- REPLACE: meta description -->
+<meta name="description" content="News and analysis from <!-- REPLACE: org name -->.">
 <link rel="stylesheet" href="/shared/sena-system.css">
 <style>
-/* ── NMS FEED — page-specific overrides ─────────────────────── */
+/* ── NEWS FEED LAYOUT ─────────────────────────────────────────
+   Two-pane layout: left = article card list, right = article detail.
+   On mobile: stacks to single column, detail pane slides in.
 
-/* Masthead subtitle */
-.mast-sub {
-  font-family:    var(--mono);
-  font-size:      9px;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color:          rgba(245,234,216,.35);
-  margin-top:     3px;
-}
+   Wire to your Cloudflare Worker by replacing the DATA_URL const
+   in the <script> block below.
+   ─────────────────────────────────────────────────────────── */
 
 /* ── FILTER BAR ── */
 .filter-bar {
   background:    var(--earth);
   border-bottom: 1px solid var(--border);
-  padding:       12px 28px;
+  padding:       12px 24px;
   display:       flex;
   gap:           8px;
   flex-wrap:     wrap;
@@ -37,7 +35,6 @@
   text-transform: uppercase;
   color:          rgba(245,234,216,.3);
   margin-right:   8px;
-  flex-shrink:    0;
 }
 
 .filter-btn {
@@ -47,79 +44,75 @@
   letter-spacing: .1em;
   text-transform: uppercase;
   background:     transparent;
-  border:         1px solid rgba(192,57,43,.25);
+  border:         1px solid rgba(194,96,58,.25);
   color:          rgba(245,234,216,.4);
   cursor:         pointer;
   border-radius:  2px;
   transition:     all .15s;
-  white-space:    nowrap;
 }
 .filter-btn:hover  { border-color: var(--terr); color: var(--terr); }
 .filter-btn.active { background: var(--terr); border-color: var(--terr); color: var(--cream); }
 
 /* ── TWO-PANE SHELL ── */
 .feed-shell {
-  display:    flex;
-  min-height: calc(100vh - 148px);
+  display: flex;
+  min-height: calc(100vh - 140px); /* subtract masthead + filter bar */
 }
 
-/* ── LEFT PANE ── */
+/* ── LEFT PANE — article list ── */
 .feed-list {
-  width:        360px;
-  flex-shrink:  0;
-  border-right: 1px solid var(--border);
-  overflow-y:   auto;
-  background:   var(--cream);
+  width:          360px;
+  flex-shrink:    0;
+  border-right:   1px solid var(--border);
+  overflow-y:     auto;
+  background:     var(--cream);
 }
 
 /* ── ARTICLE CARD ── */
 .article-card {
-  padding:       18px 20px 16px;
+  padding:       20px 20px 18px;
   border-bottom: 1px solid var(--border);
   cursor:        pointer;
   transition:    background .12s;
+  position:      relative;
 }
-.article-card:hover    { background: rgba(192,57,43,.04); }
-.article-card.selected {
-  background:    rgba(192,57,43,.07);
-  border-left:   3px solid var(--terr);
-  padding-left:  17px;
-}
+.article-card:hover     { background: rgba(194,96,58,.04); }
+.article-card.selected  { background: rgba(194,96,58,.08); border-left: 3px solid var(--terr); padding-left: 17px; }
 
 .article-card-series {
   font-family:    var(--mono);
   font-size:      8px;
-  letter-spacing: .14em;
+  letter-spacing: .15em;
   text-transform: uppercase;
   color:          var(--terr);
-  margin-bottom:  5px;
+  margin-bottom:  6px;
 }
 
 .article-card-title {
   font-family:   var(--serif);
-  font-size:     15px;
+  font-size:     16px;
   font-weight:   700;
   color:         var(--ink);
   line-height:   1.3;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .article-card-lede {
-  font-size:         12.5px;
-  color:             #5a4a3a;
-  line-height:       1.65;
-  display:           -webkit-box;
+  font-size:   13px;
+  color:       #5a4a3a;
+  line-height: 1.65;
+  display:     -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow:          hidden;
+  overflow:    hidden;
 }
 
 .article-card-meta {
-  margin-top:      9px;
-  display:         flex;
-  align-items:     center;
+  margin-top:     10px;
+  display:        flex;
+  align-items:    center;
   justify-content: space-between;
-  gap:             6px;
+  gap:            8px;
 }
 
 .article-card-date {
@@ -130,6 +123,12 @@
   text-transform: uppercase;
 }
 
+.article-card-tags {
+  display: flex;
+  gap:     4px;
+  flex-wrap: wrap;
+}
+
 .card-tag {
   font-family:    var(--mono);
   font-size:      7px;
@@ -137,28 +136,29 @@
   text-transform: uppercase;
   padding:        2px 7px;
   border:         1px solid var(--border);
-  color:          rgba(26,18,9,.4);
+  color:          rgba(26,18,9,.45);
 }
-.card-tag.hot { border-color: rgba(192,57,43,.4); color: var(--terr); }
+.card-tag.hot { border-color: rgba(194,96,58,.4); color: var(--terr); }
 
+/* Loading/empty states in list */
 .feed-state {
-  padding:        52px 24px;
-  text-align:     center;
-  font-family:    var(--mono);
-  font-size:      9px;
+  padding:     48px 24px;
+  text-align:  center;
+  font-family: var(--mono);
+  font-size:   10px;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color:          rgba(26,18,9,.3);
-  line-height:    2;
+  color:       rgba(26,18,9,.3);
 }
 
-/* ── RIGHT PANE ── */
+/* ── RIGHT PANE — article detail ── */
 .feed-detail {
-  flex:       1;
+  flex: 1;
   overflow-y: auto;
   background: var(--cream);
 }
 
+/* Empty / placeholder state */
 .detail-placeholder {
   display:         flex;
   flex-direction:  column;
@@ -166,30 +166,31 @@
   justify-content: center;
   height:          100%;
   min-height:      400px;
-  gap:             14px;
-  color:           rgba(26,18,9,.18);
+  gap:             16px;
+  color:           rgba(26,18,9,.2);
 }
 .detail-placeholder-icon {
-  font-size: 36px;
+  font-size:   32px;
+  opacity:     .3;
 }
 .detail-placeholder-text {
   font-family:    var(--mono);
-  font-size:      9px;
+  font-size:      10px;
   letter-spacing: .15em;
   text-transform: uppercase;
 }
 
-/* ── DETAIL CONTENT ── */
+/* ── ARTICLE DETAIL CONTENT ── */
 .detail-cover {
   background:    var(--warm);
-  padding:       40px 40px 32px;
+  padding:       40px 36px 32px;
   border-bottom: 2px solid var(--border);
 }
 
 .detail-vol-id {
   font-family:    var(--mono);
   font-size:      9px;
-  letter-spacing: .14em;
+  letter-spacing: .15em;
   text-transform: uppercase;
   color:          var(--terr);
   margin-bottom:  10px;
@@ -197,7 +198,7 @@
 
 .detail-h1 {
   font-family:   var(--serif);
-  font-size:     clamp(22px, 3vw, 32px);
+  font-size:     clamp(24px, 3.5vw, 36px);
   font-weight:   900;
   color:         var(--sand);
   line-height:   1.15;
@@ -205,33 +206,42 @@
 }
 .detail-h1 em { color: var(--gold); font-style: italic; }
 
+.detail-sub {
+  font-family:   var(--serif);
+  font-size:     16px;
+  font-weight:   300;
+  color:         rgba(245,234,216,.5);
+  margin-bottom: 20px;
+  line-height:   1.4;
+}
+
 .detail-lede {
-  font-size:    14.5px;
+  font-size:    14px;
   color:        rgba(245,234,216,.65);
   line-height:  1.8;
   border-left:  3px solid var(--terr);
   padding-left: 14px;
   max-width:    560px;
-  margin-bottom: 20px;
 }
 
 .detail-tags {
-  display:  flex;
-  flex-wrap: wrap;
-  gap:      6px;
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        6px;
+  margin-top: 20px;
 }
 
 .detail-body {
-  max-width: 660px;
+  max-width: 680px;
   margin:    0 auto;
-  padding:   36px 40px 64px;
+  padding:   36px 36px 64px;
 }
 
 .detail-body .body-text { color: #3a2c1e; }
 
-.detail-read-more {
+.detail-link-out {
   display:         inline-block;
-  margin-top:      28px;
+  margin-top:      24px;
   padding:         10px 22px;
   background:      var(--terr);
   color:           var(--cream);
@@ -243,34 +253,44 @@
   border-radius:   2px;
   transition:      background .15s;
 }
-.detail-read-more:hover { background: #8b1a1a; }
+.detail-link-out:hover { background: #a8472a; }
 
-/* ── MOBILE ── */
+/* ── MOBILE: stack panes ── */
 @media (max-width: 720px) {
-  .feed-shell     { flex-direction: column; }
-  .feed-list      { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 48vh; overflow-y: auto; }
-  .feed-detail    { min-height: 52vh; }
-  .detail-cover   { padding: 28px 20px 24px; }
-  .detail-body    { padding: 28px 20px 48px; }
-  .filter-bar     { padding: 10px 16px; gap: 6px; }
+  .feed-shell {
+    flex-direction: column;
+  }
+
+  .feed-list {
+    width:     100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  .feed-detail {
+    min-height: 50vh;
+  }
+
+  .detail-cover { padding: 28px 20px 24px; }
+  .detail-body  { padding: 28px 20px 48px; }
+
+  .filter-bar { padding: 10px 16px; }
 }
 </style>
 </head>
+<!-- REPLACE: add theme-nms for NM Socialists, keep plain for La Biblioteca feed -->
 <body id="page" class="theme-nms">
 
 <!-- ── MASTHEAD ──────────────────────────────────────────────── -->
+<!-- REPLACE: brand name, back-link href, back-link text -->
 <nav class="mast">
-  <div>
-    <a class="mast-brand" href="https://newmexicosocialists.org" target="_blank" rel="noopener">New Mexico Socialists</a>
-    <div class="mast-sub">
-      <span class="en-inline">El socialismo es ciencia, no dogma. · Santa Fe, NM</span>
-      <span class="es-inline">El socialismo es ciencia, no dogma. · Santa Fe, NM</span>
-    </div>
-  </div>
+  <a class="mast-brand" href="/"><!-- REPLACE: Publication Name --></a>
   <div class="mast-right">
+    <!-- REPLACE: or remove back-link if this is the root page -->
     <a class="back-link" href="/">
-      ← <span class="en-inline">Sena's AI Collective</span>
-      <span class="es-inline">Colectivo de IA de Sena</span>
+      ← <span class="en-inline">Home</span><span class="es-inline">Inicio</span>
     </a>
     <div class="lang-toggle">
       <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
@@ -280,12 +300,14 @@
 </nav>
 
 <!-- ── FILTER BAR ─────────────────────────────────────────────── -->
+<!-- REPLACE: category/series filter buttons to match your data -->
 <div class="filter-bar">
   <span class="filter-label en-inline">Filter</span>
   <span class="filter-label es-inline">Filtrar</span>
   <button class="filter-btn active" data-filter="all" onclick="applyFilter('all', this)">
     <span class="en-inline">All</span><span class="es-inline">Todo</span>
   </button>
+  <!-- REPLACE: add/remove categories matching your Airtable Series field values -->
   <button class="filter-btn" data-filter="Organizing" onclick="applyFilter('Organizing', this)">
     <span class="en-inline">Organizing</span><span class="es-inline">Organización</span>
   </button>
@@ -293,7 +315,7 @@
     <span class="en-inline">Labor</span><span class="es-inline">Trabajo</span>
   </button>
   <button class="filter-btn" data-filter="Land Rights" onclick="applyFilter('Land Rights', this)">
-    <span class="en-inline">Land Rights</span><span class="es-inline">Tierra</span>
+    <span class="en-inline">Land Rights</span><span class="es-inline">Derechos de Tierra</span>
   </button>
   <button class="filter-btn" data-filter="Housing" onclick="applyFilter('Housing', this)">
     <span class="en-inline">Housing</span><span class="es-inline">Vivienda</span>
@@ -302,24 +324,24 @@
     <span class="en-inline">Education</span><span class="es-inline">Educación</span>
   </button>
   <button class="filter-btn" data-filter="Special Edition" onclick="applyFilter('Special Edition', this)">
-    <span class="en-inline">Special</span><span class="es-inline">Especial</span>
+    <span class="en-inline">Special Edition</span><span class="es-inline">Edición Especial</span>
   </button>
 </div>
 
 <!-- ── TWO-PANE FEED ─────────────────────────────────────────── -->
 <div class="feed-shell">
 
-  <!-- Left: article list -->
+  <!-- LEFT PANE: article list -->
   <div class="feed-list" id="feedList">
     <div class="feed-state" id="feedState">
-      <span class="en-inline">Loading…</span>
-      <span class="es-inline">Cargando…</span>
+      <span class="en-inline">Loading articles…</span>
+      <span class="es-inline">Cargando artículos…</span>
     </div>
   </div>
 
-  <!-- Right: article detail -->
+  <!-- RIGHT PANE: article detail -->
   <div class="feed-detail" id="feedDetail">
-    <div class="detail-placeholder" id="detailPlaceholder">
+    <div class="detail-placeholder">
       <div class="detail-placeholder-icon">◈</div>
       <div class="detail-placeholder-text">
         <span class="en-inline">Select an article</span>
@@ -331,59 +353,72 @@
 </div>
 
 <!-- ── FOOTER ────────────────────────────────────────────────── -->
+<!-- REPLACE: footer brand and meta -->
 <footer class="pub-footer">
-  <div class="footer-brand">
-    <span class="en-inline">New Mexico Socialists</span>
-    <span class="es-inline">Socialistas de Nuevo México</span>
-  </div>
+  <div class="footer-brand"><!-- REPLACE: Publication · Org Name --></div>
   <div class="footer-id en">
-    EIN 41-5210879 · Santa Fe, NM ·
-    <a href="https://newmexicosocialists.org" target="_blank" rel="noopener">newmexicosocialists.org ↗</a>
+    <!-- REPLACE: EIN, license, etc. -->
+    <!-- REPLACE: org name -->&nbsp;·&nbsp;CC BY-NC-SA 4.0&nbsp;·&nbsp;Free to Share
   </div>
   <div class="footer-id es">
-    EIN 41-5210879 · Santa Fe, NM ·
-    <a href="https://newmexicosocialists.org" target="_blank" rel="noopener">newmexicosocialists.org ↗</a>
+    <!-- REPLACE: org name -->&nbsp;·&nbsp;CC BY-NC-SA 4.0&nbsp;·&nbsp;Libre de Compartir
   </div>
 </footer>
 
 <!-- ── SCRIPTS ───────────────────────────────────────────────── -->
 <script>
-/*
-  Data source: Biblioteca Worker (proxies Airtable).
-  Swap DATA_URL to an NMS-specific worker endpoint when that worker exists.
-  Expected shape: { volumes: [ { id, vol, titleEN, titleES, series, excerptEN,
-                                  excerptES, url, date, tags, freeToShare } ] }
-*/
-const DATA_URL = '/biblioteca-worker/biblioteca-data.json';
+/* ──────────────────────────────────────────────────────────────
+   NEWS FEED CONTROLLER
+   ──────────────────────────────────────────────────────────────
+   REPLACE: DATA_URL with your Cloudflare Worker endpoint.
+   Expected response shape:
+   {
+     "volumes": [
+       {
+         "id":        "recXXX",
+         "vol":       1,
+         "titleEN":   "Title in English",
+         "titleES":   "Título en español",
+         "series":    "Land Grant Series",
+         "excerptEN": "Short excerpt...",
+         "excerptES": "Extracto corto...",
+         "url":       "https://github.com/.../vol1/",
+         "date":      "2026-01-15",
+         "tags":      "Land Grant, Genízaro",
+         "freeToShare": true
+       }
+     ]
+   }
+   ────────────────────────────────────────────────────────────── */
+const DATA_URL = '/biblioteca-worker/biblioteca-data.json'; /* REPLACE */
 
 let allArticles  = [];
 let activeFilter = 'all';
 let activeLang   = 'en';
-let selectedIdx  = -1;
 
-/* ── FETCH ── */
+/* ── Fetch data ── */
 async function loadFeed() {
   try {
     const res  = await fetch(DATA_URL);
     const data = await res.json();
-    /* Accept either { volumes } or { articles } shape */
-    allArticles = ([...(data.volumes || data.articles || [])]).reverse();
+    allArticles = (data.volumes || data.articles || []).reverse(); /* newest first */
     renderList(allArticles);
-    if (allArticles.length > 0) selectArticle(0);
+    /* Auto-select first */
+    if (allArticles.length > 0) renderDetail(allArticles[0]);
   } catch (err) {
     document.getElementById('feedState').innerHTML =
       '<span class="en-inline">Could not load articles.</span>' +
       '<span class="es-inline">No se pudieron cargar los artículos.</span>';
-    console.error('NMS feed error:', err);
+    console.error('Feed load error:', err);
   }
 }
 
-/* ── RENDER LIST ── */
+/* ── Render article card list ── */
 function renderList(articles) {
   const list = document.getElementById('feedList');
-  if (!articles.length) {
-    list.innerHTML =
-      '<div class="feed-state"><span class="en-inline">No articles found.</span>' +
+  if (articles.length === 0) {
+    list.innerHTML = '<div class="feed-state">' +
+      '<span class="en-inline">No articles found.</span>' +
       '<span class="es-inline">No se encontraron artículos.</span></div>';
     return;
   }
@@ -391,72 +426,77 @@ function renderList(articles) {
   list.innerHTML = articles.map((a, i) => {
     const title = activeLang === 'es' ? (a.titleES || a.titleEN) : a.titleEN;
     const lede  = activeLang === 'es' ? (a.excerptES || a.excerptEN) : a.excerptEN;
-    const tags  = parseTags(a.tags);
-    const date  = formatDate(a.date);
-    const isSelected = i === 0 && selectedIdx === -1 ? ' selected' : (i === selectedIdx ? ' selected' : '');
-    return `
-      <div class="article-card${isSelected}" data-idx="${i}" onclick="selectArticle(${i})">
-        <div class="article-card-series">${a.series || ''}</div>
-        <div class="article-card-title">${title}</div>
-        <div class="article-card-lede">${lede}</div>
-        <div class="article-card-meta">
-          <span class="article-card-date">${date}</span>
-          <div>${tags.slice(0,2).map((t,ti) => `<span class="card-tag${ti===0?' hot':''}">${t}</span>`).join(' ')}</div>
+    const tags  = Array.isArray(a.tags) ? a.tags : (a.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+    const date  = a.date ? new Date(a.date).toLocaleDateString(activeLang === 'es' ? 'es-MX' : 'en-US', { month: 'short', year: 'numeric' }) : '';
+
+    return `<div class="article-card${i === 0 ? ' selected' : ''}"
+                 data-index="${i}"
+                 onclick="selectArticle(${i})">
+      <div class="article-card-series">${a.series || ''}</div>
+      <div class="article-card-title">${title}</div>
+      <div class="article-card-lede">${lede}</div>
+      <div class="article-card-meta">
+        <span class="article-card-date">${date}</span>
+        <div class="article-card-tags">
+          ${tags.slice(0, 2).map((t, ti) => `<span class="card-tag${ti === 0 ? ' hot' : ''}">${t}</span>`).join('')}
         </div>
-      </div>`;
+      </div>
+    </div>`;
   }).join('');
 }
 
-/* ── SELECT & RENDER DETAIL ── */
-function selectArticle(idx) {
-  selectedIdx = idx;
+/* ── Select and render detail ── */
+function selectArticle(index) {
+  /* Update selected card */
   document.querySelectorAll('.article-card').forEach(c => c.classList.remove('selected'));
-  const card = document.querySelector(`[data-idx="${idx}"]`);
+  const card = document.querySelector(`[data-index="${index}"]`);
   if (card) card.classList.add('selected');
-  renderDetail(allArticles[idx]);
+
+  renderDetail(allArticles[index]);
+
+  /* On mobile, scroll detail pane into view */
   if (window.innerWidth <= 720) {
     document.getElementById('feedDetail').scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-/* ── RENDER DETAIL ── */
-function renderDetail(a) {
-  if (!a) return;
-  const isEs    = activeLang === 'es';
-  const title   = isEs ? (a.titleES || a.titleEN) : a.titleEN;
-  const lede    = isEs ? (a.excerptES || a.excerptEN) : a.excerptEN;
-  const tags    = parseTags(a.tags);
-  const volStr  = a.vol ? `Vol. ${String(a.vol).padStart(2,'0')}` : '';
-  const dateStr = formatDate(a.date, isEs);
-  const readLbl = isEs ? 'Leer artículo completo →' : 'Read full article →';
-  const freeLbl = isEs ? 'Libre de compartir' : 'Free to Share';
+/* ── Render article detail ── */
+function renderDetail(article) {
+  if (!article) return;
 
-  const metaLine = [volStr, a.series, dateStr].filter(Boolean).join(' · ');
+  const title  = activeLang === 'es' ? (article.titleES || article.titleEN) : article.titleEN;
+  const lede   = activeLang === 'es' ? (article.excerptES || article.excerptEN) : article.excerptEN;
+  const tags   = Array.isArray(article.tags) ? article.tags : (article.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+  const volStr = article.vol ? `Vol. ${String(article.vol).padStart(2, '0')}` : '';
+  const dateStr = article.date ? new Date(article.date).toLocaleDateString(activeLang === 'es' ? 'es-MX' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+  const readLabel = activeLang === 'es' ? 'Leer artículo completo →' : 'Read full article →';
+  const freeLabel = activeLang === 'es' ? 'Libre de compartir' : 'Free to Share';
 
   document.getElementById('feedDetail').innerHTML = `
     <div class="detail-cover">
-      <div class="detail-vol-id">${metaLine}</div>
+      <div class="detail-vol-id">${[volStr, article.series, dateStr].filter(Boolean).join(' · ')}</div>
       <h2 class="detail-h1">${title}</h2>
       <div class="detail-lede">${lede}</div>
       <div class="detail-tags">
-        ${tags.map((t,i) => `<span class="ctag${i<2?' hot':''}">${t}</span>`).join('')}
-        ${a.freeToShare ? `<span class="ctag">${freeLbl}</span>` : ''}
+        ${tags.map((t, i) => `<span class="ctag${i < 2 ? ' hot' : ''}">${t}</span>`).join('')}
+        ${article.freeToShare ? `<span class="ctag">${freeLabel}</span>` : ''}
       </div>
     </div>
     <div class="detail-body">
       <p class="body-text">${lede}</p>
-      ${a.url
-        ? `<a class="detail-read-more" href="${a.url}" target="_blank" rel="noopener">${readLbl}</a>`
+      ${article.url
+        ? `<a class="detail-link-out" href="${article.url}" target="_blank" rel="noopener">${readLabel}</a>`
         : ''}
-    </div>`;
+    </div>
+  `;
 }
 
-/* ── FILTER ── */
+/* ── Filter ── */
 function applyFilter(filter, btn) {
   activeFilter = filter;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  selectedIdx = 0;
 
   const filtered = filter === 'all'
     ? allArticles
@@ -465,7 +505,7 @@ function applyFilter(filter, btn) {
   if (filtered.length > 0) renderDetail(filtered[0]);
 }
 
-/* ── BILINGUAL TOGGLE ── */
+/* ── Bilingual toggle ── */
 (function () {
   const saved = localStorage.getItem('bib_lang');
   const lang  = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
@@ -474,8 +514,8 @@ function applyFilter(filter, btn) {
 
 function setLang(l, init) {
   activeLang = l;
+  /* Update body class — preserve theme-nms if present */
   const body = document.getElementById('page');
-  /* Preserve theme-nms class while toggling lang-es */
   body.className = body.className.replace(/\blang-es\b/, '').trim();
   if (l === 'es') body.className += ' lang-es';
   document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
@@ -487,28 +527,13 @@ function setLang(l, init) {
   if (allArticles.length > 0) {
     const filtered = activeFilter === 'all'
       ? allArticles
-      : allArticles.filter(a => (a.series||'').toLowerCase().includes(activeFilter.toLowerCase()));
+      : allArticles.filter(a => (a.series || '').toLowerCase().includes(activeFilter.toLowerCase()));
     renderList(filtered);
-    if (selectedIdx >= 0) renderDetail(filtered[selectedIdx] || filtered[0]);
+    renderDetail(filtered[0]);
   }
 }
 
-/* ── HELPERS ── */
-function parseTags(raw) {
-  if (!raw) return [];
-  return Array.isArray(raw) ? raw : raw.split(',').map(t => t.trim()).filter(Boolean);
-}
-
-function formatDate(raw, isEs = false) {
-  if (!raw) return '';
-  try {
-    return new Date(raw).toLocaleDateString(isEs ? 'es-MX' : 'en-US', {
-      month: 'short', year: 'numeric'
-    });
-  } catch { return raw; }
-}
-
-/* ── BOOT ── */
+/* ── Boot ── */
 loadFeed();
 </script>
 </body>
