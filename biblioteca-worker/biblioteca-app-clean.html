@@ -166,7 +166,10 @@ body.lang-es .en { display:none; } body.lang-es .es { display:block; }
 </head>
 <body id="page">
 
-<script>const DATA_URL = 'https://docs.senacolectivo.com/biblioteca-worker/biblioteca-data.json';</script>
+<script>
+const WORKER_URL = 'https://biblioteca-api.YOUR-SUBDOMAIN.workers.dev';
+const DATA_URL = `${WORKER_URL}/volumes`;
+</script>
 
 <header class="masthead">
   <div class="brand">
