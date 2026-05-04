@@ -3,30 +3,508 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sena Colectivo</title>
+  <title>Sena's AI Collective · Santa Fe, NM</title>
+  <meta name="description" content="Sena's AI Collective — community research, AI systems, and civic infrastructure rooted in land grant history, water rights, food sovereignty, and labor organizing in Northern New Mexico." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f8f4ef; color: #1f1a14; }
-    main { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; }
-    h1, h2 { margin-bottom: 12px; }
-    p { line-height: 1.6; }
-    .card { border: 1px solid #d8c9b8; background: #fffdf9; padding: 20px; margin: 20px 0; }
-    .cta a { display: inline-block; margin-right: 16px; margin-top: 8px; }
+    :root {
+      --earth:  #1a1209;
+      --warm:   #2a1f0e;
+      --sand:   #f5ead8;
+      --terr:   #c2603a;
+      --gold:   #e8a825;
+      --sage:   #6b8f5e;
+      --sky:    #4a7fa5;
+      --cream:  #fdf6ea;
+      --ink:    #1c1410;
+      --border: rgba(194,96,58,0.18);
+      --serif:  'Fraunces', serif;
+      --sans:   'DM Sans', sans-serif;
+      --mono:   'DM Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--earth);
+      color: var(--sand);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── MASTHEAD ── */
+    .masthead {
+      background: var(--earth);
+      border-bottom: 2px solid var(--terr);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: baseline; gap: 10px; }
+    .brand-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.35);
+    }
+    .lang-toggle {
+      display: flex;
+      border: 1px solid rgba(194,96,58,0.35);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .lt-btn {
+      padding: 5px 13px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: none;
+      color: rgba(245,234,216,0.4);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lt-btn.active { background: var(--terr); color: var(--cream); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--warm);
+      border-bottom: 2px solid var(--border);
+      padding: 72px 32px 64px;
+    }
+    .hero-inner { max-width: 760px; margin: 0 auto; }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terr);
+      margin-bottom: 20px;
+    }
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      color: var(--sand);
+      line-height: 1.08;
+      margin-bottom: 12px;
+    }
+    .hero-h1 em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-family: var(--serif);
+      font-size: clamp(17px, 2.5vw, 22px);
+      font-weight: 300;
+      color: rgba(245,234,216,0.55);
+      margin-bottom: 36px;
+      line-height: 1.4;
+    }
+    .hero-body {
+      font-size: 16px;
+      color: rgba(245,234,216,0.75);
+      line-height: 1.8;
+      max-width: 640px;
+    }
+    .hero-cta {
+      margin-top: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 12px 26px;
+      background: var(--terr);
+      color: var(--cream);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #a8472a; }
+    .btn-secondary {
+      display: inline-block;
+      padding: 12px 26px;
+      border: 1px solid rgba(232,168,37,0.4);
+      color: var(--gold);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--sand); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 64px 32px; border-bottom: 1px solid var(--border); }
+    .section-inner { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terr);
+      margin-bottom: 24px;
+    }
+    .section-h2 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 900;
+      color: var(--sand);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-body {
+      font-size: 15px;
+      color: rgba(245,234,216,0.65);
+      line-height: 1.85;
+      max-width: 640px;
+    }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .card {
+      background: var(--warm);
+      border: 1px solid rgba(245,234,216,0.07);
+      border-top: 2px solid var(--terr);
+      border-radius: 2px;
+      padding: 24px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      border-color: var(--gold);
+      border-top-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    }
+    .card-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--terr);
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--sand);
+      line-height: 1.25;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: rgba(245,234,216,0.5);
+      line-height: 1.7;
+    }
+    .card-arrow {
+      margin-top: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.25);
+      padding-top: 8px;
+      border-top: 1px solid rgba(245,234,216,0.06);
+    }
+    .card:hover .card-arrow { color: var(--gold); }
+
+    /* ── FOCUS LIST ── */
+    .focus-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .focus-item {
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(245,234,216,0.07);
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .focus-num {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: rgba(194,96,58,0.6);
+      width: 28px;
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+    .focus-content {}
+    .focus-title {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--sand);
+      margin-bottom: 4px;
+    }
+    .focus-desc {
+      font-size: 13px;
+      color: rgba(245,234,216,0.45);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 32px;
+      background: var(--earth);
+    }
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(245,234,216,0.3);
+    }
+    .footer-meta {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.2);
+      text-align: right;
+    }
+
+    /* ── EN/ES TOGGLE ── */
+    .en { display: inline; }
+    .es { display: none; }
+    .en-block { display: block; }
+    .es-block { display: none; }
+    body.lang-es .en { display: none; }
+    body.lang-es .es { display: inline; }
+    body.lang-es .en-block { display: none; }
+    body.lang-es .es-block { display: block; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .masthead { padding: 14px 16px; }
+      .hero { padding: 48px 16px 44px; }
+      .section { padding: 48px 16px; }
+      footer { padding: 32px 16px; }
+      .footer-inner { flex-direction: column; gap: 8px; }
+      .footer-meta { text-align: left; }
+    }
   </style>
 </head>
-<body>
-  <main>
-    <h1>Sena Colectivo Services</h1>
-    <p>Sena Colectivo supports community organizations, small businesses, and civic projects with practical AI systems, research workflows, technical services, and grants-as-a-service support.</p>
+<body id="page">
 
-    <section id="services" class="card">
-      <h2>Build Services + Civic Research Infrastructure</h2>
-      <p>Sena Colectivo builds practical AI systems, research workflows, publication infrastructure, and grant-ready technical narratives for community organizations, small businesses, and civic projects. La Biblioteca is our public research publication. New Mexico Socialists is a partner civic project; service revenue helps maintain the sites, publications, and seed-fund the next build phase.</p>
-      <div class="cta">
-        <a href="/biblioteca/">La Biblioteca</a>
-        <a href="/">Services / Consulting</a>
-        <a href="https://newmexicosocialists.org">New Mexico Socialists</a>
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <div class="brand">
+    <span class="brand-name">Sena's AI Collective</span>
+    <span class="brand-sub">Santa Fe, NM</span>
+  </div>
+  <div class="lang-toggle">
+    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow en">Community Research &amp; AI Infrastructure · Northern New Mexico</div>
+    <div class="hero-eyebrow es">Investigación Comunitaria e Infraestructura de IA · Norte de Nuevo México</div>
+    <h1 class="hero-h1">
+      <span class="en">Land, Water,<br /><em>and the Work</em><br />of the Commons</span>
+      <span class="es">Tierra, Agua,<br /><em>y el Trabajo</em><br />de los Bienes Comunes</span>
+    </h1>
+    <div class="hero-sub">
+      <span class="en">Sena's AI Collective builds practical AI systems and civic research infrastructure rooted in land grant history, water rights, food sovereignty, and labor organizing.</span>
+      <span class="es">El Colectivo de IA de Sena construye sistemas de IA y infraestructura de investigación cívica enraizados en la historia de las mercedes, los derechos del agua, la soberanía alimentaria y la organización laboral.</span>
+    </div>
+    <div class="hero-body en-block">
+      We work with community organizations, small businesses, and civic projects across New Mexico — producing research, building technical systems, and making the work publicly available.
+    </div>
+    <div class="hero-body es-block">
+      Trabajamos con organizaciones comunitarias, pequeñas empresas y proyectos cívicos en todo Nuevo México — produciendo investigación, construyendo sistemas técnicos y poniendo el trabajo a disposición del público.
+    </div>
+    <div class="hero-cta">
+      <a class="btn-primary" href="/biblioteca/">
+        <span class="en">La Biblioteca →</span>
+        <span class="es">La Biblioteca →</span>
+      </a>
+      <a class="btn-secondary" href="https://newmexicosocialists.org" target="_blank" rel="noopener">
+        <span class="en">NM Socialists ↗</span>
+        <span class="es">NM Socialistas ↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS & PROJECTS ── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label en">Tools &amp; Projects</div>
+    <div class="section-label es">Herramientas y Proyectos</div>
+    <h2 class="section-h2">
+      <span class="en">Everything we've built, open to use.</span>
+      <span class="es">Todo lo que hemos construido, abierto para usar.</span>
+    </h2>
+    <div class="section-body">
+      <span class="en">Research publications, greenhouse design calculators, community suite tools — built in public, free to share.</span>
+      <span class="es">Publicaciones de investigación, calculadoras de diseño de invernaderos, herramientas de suite comunitaria — construidas en público, libres de compartir.</span>
+    </div>
+
+    <div class="card-grid">
+      <a class="card" href="/biblioteca/">
+        <div class="card-label en">Research Publication</div>
+        <div class="card-label es">Publicación de Investigación</div>
+        <div class="card-title">La Biblioteca</div>
+        <div class="card-desc en">Six volumes of deep research on land grants, water rights, labor organizing, food sovereignty, and political education in Northern New Mexico.</div>
+        <div class="card-desc es">Seis volúmenes de investigación profunda sobre mercedes de tierra, derechos del agua, organización laboral, soberanía alimentaria y educación política en el Norte de Nuevo México.</div>
+        <div class="card-arrow en">Read the archive →</div>
+        <div class="card-arrow es">Leer el archivo →</div>
+      </a>
+
+      <a class="card" href="/commons-greenhouse-calculator-secure/">
+        <div class="card-label en">Design Calculator</div>
+        <div class="card-label es">Calculadora de Diseño</div>
+        <div class="card-title">
+          <span class="en">Commons Greenhouse Calculator</span>
+          <span class="es">Calculadora de Invernadero Comunitario</span>
+        </div>
+        <div class="card-desc en">Passive solar, aquaponics, earth thermal, and compute waste-heat sizing for the CGS-C1 build system. Designed for Northern NM at 6,900 ft.</div>
+        <div class="card-desc es">Dimensionamiento solar pasivo, acuaponía, calor terrestre y calor residual de cómputo para el sistema de construcción CGS-C1. Diseñado para el norte de NM a 2,100 m.</div>
+        <div class="card-arrow en">Open calculator →</div>
+        <div class="card-arrow es">Abrir calculadora →</div>
+      </a>
+
+      <a class="card" href="/cgs-community-suite/">
+        <div class="card-label en">Community Suite</div>
+        <div class="card-label es">Suite Comunitaria</div>
+        <div class="card-title">CGS Community Suite</div>
+        <div class="card-desc en">Organizing tools, resource tracking, and civic infrastructure for community greenhouse and land projects.</div>
+        <div class="card-desc es">Herramientas de organización, seguimiento de recursos e infraestructura cívica para proyectos de invernadero comunitario y tierra.</div>
+        <div class="card-arrow en">Open suite →</div>
+        <div class="card-arrow es">Abrir suite →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESEARCH FOCUS ── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label en">Research Focus</div>
+    <div class="section-label es">Enfoque de Investigación</div>
+    <h2 class="section-h2">
+      <span class="en">What we study and why it matters.</span>
+      <span class="es">Qué estudiamos y por qué importa.</span>
+    </h2>
+
+    <div class="focus-list">
+      <div class="focus-item">
+        <div class="focus-num">01</div>
+        <div class="focus-content">
+          <div class="focus-title en">Water Rights &amp; Acequia Systems</div>
+          <div class="focus-title es">Derechos del Agua y Sistemas de Acequias</div>
+          <div class="focus-desc en">Four hundred years of shared water governance in Northern New Mexico — how the Pueblo Water Doctrine stripped communal rights, and the communities reclaiming them.</div>
+          <div class="focus-desc es">Cuatrocientos años de gobernanza compartida del agua en el norte de Nuevo México — cómo la Doctrina del Agua Pueblo despojó los derechos comunales, y las comunidades que los reclaman.</div>
+        </div>
       </div>
-    </section>
-  </main>
+
+      <div class="focus-item">
+        <div class="focus-num">02</div>
+        <div class="focus-content">
+          <div class="focus-title en">Land Grant History &amp; Dispossession</div>
+          <div class="focus-title es">Historia de Mercedes y Despojo</div>
+          <div class="focus-desc en">The Santa Fe Ring, US v. Sandoval, and the legal architecture that transferred 315,000 acres of Genízaro communal land in a single 1897 ruling — and the active reclamation today.</div>
+          <div class="focus-desc es">El Anillo de Santa Fe, US v. Sandoval, y la arquitectura legal que transfirió 315,000 acres de tierra comunal Genízara en una sola resolución de 1897 — y la reclamación activa hoy.</div>
+        </div>
+      </div>
+
+      <div class="focus-item">
+        <div class="focus-num">03</div>
+        <div class="focus-content">
+          <div class="focus-title en">Food Sovereignty &amp; Community Agriculture</div>
+          <div class="focus-title es">Soberanía Alimentaria y Agricultura Comunitaria</div>
+          <div class="focus-desc en">The MILPA greenhouse system — passive solar, aquaponics, earth thermal — built for high-desert resilience and community self-sufficiency at scale.</div>
+          <div class="focus-desc es">El sistema de invernadero MILPA — solar pasivo, acuaponía, calor terrestre — construido para la resiliencia del desierto alto y la autosuficiencia comunitaria a escala.</div>
+        </div>
+      </div>
+
+      <div class="focus-item">
+        <div class="focus-num">04</div>
+        <div class="focus-content">
+          <div class="focus-title en">Labor Rights &amp; Political Education</div>
+          <div class="focus-title es">Derechos Laborales y Educación Política</div>
+          <div class="focus-desc en">Wage suppression, ICE enforcement, general strikes, and the organizing infrastructure of working-class New Mexico — documented and made accessible.</div>
+          <div class="focus-desc es">Supresión salarial, aplicación de ICE, huelgas generales y la infraestructura organizativa de la clase trabajadora de Nuevo México — documentada y puesta a disposición.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Sena's AI Collective</div>
+    <div class="footer-meta">Santa Fe, NM · Tierra o Muerte · <a href="https://newmexicosocialists.org" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">newmexicosocialists.org ↗</a></div>
+  </div>
+</footer>
+
+<script>
+  let lang = 'en';
+
+  (function init() {
+    const saved = localStorage.getItem('sena_lang');
+    lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+    applyLang();
+  })();
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('sena_lang', l);
+    applyLang();
+  }
+
+  function applyLang() {
+    document.getElementById('page').className = lang === 'es' ? 'lang-es' : '';
+    document.getElementById('btnEN').className = 'lt-btn' + (lang === 'en' ? ' active' : '');
+    document.getElementById('btnES').className = 'lt-btn' + (lang === 'es' ? ' active' : '');
+    document.documentElement.lang = lang;
+  }
+</script>
 </body>
 </html>

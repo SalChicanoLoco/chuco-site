@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- REPLACE: page title → "Vol. XX — Article Title · La Biblioteca" -->
+<title>Vol. XX — Article Title · La Biblioteca</title>
+<!-- REPLACE: meta description -->
+<meta name="description" content="Article description for search engines and social sharing.">
+<link rel="stylesheet" href="/shared/sena-system.css">
+<!-- REPLACE: Remove the style block below if no page-specific overrides are needed -->
+<style>
+  /* Page-specific overrides go here */
+</style>
+</head>
+<!-- REPLACE: add theme-nms class if this is an NM Socialists page -->
+<body id="page">
+
+<!-- ── MASTHEAD ──────────────────────────────────────────────── -->
+<!-- REPLACE: update href and brand name for the site this lives on -->
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca/">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── COVER ─────────────────────────────────────────────────── -->
+<div class="cover">
+  <div class="cover-inner">
+
+    <!-- REPLACE: volume/series/date line -->
+    <div class="vol-id">Vol. XX · <!-- Series Name --> · <!-- Month Year --></div>
+
+    <!-- REPLACE: EN title — use <em> for italic gold accent word -->
+    <h1 class="cover-h1 en">The <em>Title</em><br>Goes Here</h1>
+    <!-- REPLACE: ES title -->
+    <h1 class="cover-h1 es">El <em>Título</em><br>Va Aquí</h1>
+
+    <!-- REPLACE: EN subtitle -->
+    <div class="cover-sub en">The subtitle or series name in English</div>
+    <!-- REPLACE: ES subtitle -->
+    <div class="cover-sub es">El subtítulo o nombre de la serie en español</div>
+
+    <!-- REPLACE: EN lede — 1-2 sentences. The hook. -->
+    <p class="cover-lede en">This is the lede paragraph. One or two compelling sentences that pull the reader into the article. This is the argument in miniature.</p>
+    <!-- REPLACE: ES lede -->
+    <p class="cover-lede es">Este es el párrafo inicial. Una o dos oraciones convincentes que atraen al lector al artículo. Este es el argumento en miniatura.</p>
+
+    <!-- REPLACE: tags — use "hot" class for the 1-2 primary tags -->
+    <div class="cover-tags">
+      <span class="ctag hot">Primary Tag</span>
+      <span class="ctag hot">Secondary Tag</span>
+      <span class="ctag">Supporting Tag</span>
+      <span class="ctag">Series Name</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ARTICLE BODY ──────────────────────────────────────────── -->
+<main class="pub-body">
+
+  <!-- ── SECTION 01 ── -->
+  <div class="section">
+    <!-- REPLACE: section label -->
+    <div class="section-label en">Section 01</div>
+    <div class="section-label es">Sección 01</div>
+
+    <!-- REPLACE: section heading -->
+    <h2 class="section-h2 en">Section One Heading in English</h2>
+    <h2 class="section-h2 es">El Encabezado de la Sección Uno en Español</h2>
+
+    <!-- REPLACE: body paragraphs — duplicate as needed -->
+    <p class="body-text en">
+      Body text in English. Use <strong>bold</strong> for emphasis and <em>italics</em> for terms or titles. Keep paragraphs to 3–5 sentences. Add a new &lt;p&gt; tag for each paragraph.
+    </p>
+    <p class="body-text en">
+      Second paragraph. Keep the argument moving forward. Each paragraph should earn its place.
+    </p>
+    <p class="body-text es">
+      Texto del cuerpo en español. Usa <strong>negrita</strong> para énfasis y <em>cursiva</em> para términos o títulos. Mantén los párrafos de 3 a 5 oraciones.
+    </p>
+    <p class="body-text es">
+      Segundo párrafo. Mantén el argumento avanzando. Cada párrafo debe ganarse su lugar.
+    </p>
+
+    <!-- Optional: pull quote -->
+    <div class="pq">
+      <!-- REPLACE: quote text -->
+      <div class="pq-text en">"Pull quote text goes here — a sentence or two that stands alone."</div>
+      <div class="pq-text es">"El texto de la cita destacada va aquí — una o dos oraciones que se sostienen solas."</div>
+      <!-- REPLACE: attribution -->
+      <div class="pq-attr en">Attribution · Source · Year</div>
+      <div class="pq-attr es">Atribución · Fuente · Año</div>
+    </div>
+
+    <!-- Optional: stat boxes — duplicate .stat-box as needed, max ~4 per row -->
+    <div class="stat-row">
+      <div class="stat-box">
+        <!-- REPLACE: number/figure -->
+        <div class="stat-num">315,000</div>
+        <!-- REPLACE: label -->
+        <div class="stat-label en">Stat label in English</div>
+        <div class="stat-label es">Etiqueta de estadística en español</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">98.4%</div>
+        <div class="stat-label en">Second stat label</div>
+        <div class="stat-label es">Segunda etiqueta de estadística</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1897</div>
+        <div class="stat-label en">Third stat label</div>
+        <div class="stat-label es">Tercera etiqueta de estadística</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 02 ── -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+
+    <h2 class="section-h2 en">Section Two Heading</h2>
+    <h2 class="section-h2 es">Encabezado de la Sección Dos</h2>
+
+    <!-- Optional: sub-heading -->
+    <h3 class="section-h3 en">Sub-heading in English</h3>
+    <h3 class="section-h3 es">Subencabezado en español</h3>
+
+    <p class="body-text en">Body text for section two.</p>
+    <p class="body-text es">Texto del cuerpo para la sección dos.</p>
+
+    <!-- Optional: bullet list -->
+    <ul class="pub-ul">
+      <li class="en"><strong>Item One:</strong> Description of the first item in the list.</li>
+      <li class="es"><strong>Elemento Uno:</strong> Descripción del primer elemento de la lista.</li>
+      <li class="en"><strong>Item Two:</strong> Description of the second item in the list.</li>
+      <li class="es"><strong>Elemento Dos:</strong> Descripción del segundo elemento de la lista.</li>
+      <li class="en"><strong>Item Three:</strong> Description of the third item in the list.</li>
+      <li class="es"><strong>Elemento Tres:</strong> Descripción del tercer elemento de la lista.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 03 ── (duplicate and rename as needed) ── -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+
+    <h2 class="section-h2 en">Section Three Heading</h2>
+    <h2 class="section-h2 es">Encabezado de la Sección Tres</h2>
+
+    <p class="body-text en">Body text for section three.</p>
+    <p class="body-text es">Texto del cuerpo para la sección tres.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── REFERENCES ── -->
+  <div class="refs">
+    <div class="refs-title en">References / Fuentes</div>
+    <div class="refs-title es">Fuentes / References</div>
+    <!-- REPLACE: add one .ref-item per source, Chicago / MLA format -->
+    <p class="ref-item">Author, A. (Year). <em>Title of Work.</em> Publisher.</p>
+    <p class="ref-item">Author, B. &amp; Author, C. (Year). "Article Title." <em>Journal Name</em>, Vol(Issue), pp–pp.</p>
+    <p class="ref-item"><em>Case Name</em> (Year), Citation.</p>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<!-- REPLACE: update brand and ID line for this volume -->
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. XX · Sena's AI Collective</div>
+  <div class="footer-id en">New Mexico Socialists Inc. · EIN 41-5210879 · CC BY-NC-SA 4.0 · Free to Share</div>
+  <div class="footer-id es">Socialistas de NM · EIN 41-5210879 · CC BY-NC-SA 4.0 · Libre de Compartir</div>
+</footer>
+
+<!-- ── BILINGUAL TOGGLE SCRIPT ────────────────────────────────── -->
+<script>
+(function () {
+  const saved = localStorage.getItem('bib_lang');
+  const lang  = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if (lang === 'es') setLang('es', true);
+})();
+
+function setLang(l, init) {
+  document.getElementById('page').className = l === 'es' ? 'lang-es' : '';
+  document.getElementById('btnEN').className = 'lt-btn' + (l === 'en' ? ' active' : '');
+  document.getElementById('btnES').className = 'lt-btn' + (l === 'es' ? ' active' : '');
+  if (!init) localStorage.setItem('bib_lang', l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
