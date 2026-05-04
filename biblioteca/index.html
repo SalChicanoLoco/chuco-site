@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La Biblioteca · Sena's AI Collective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
 :root {
   --earth:  #1a1209;
   --warm:   #2a1f0e;
@@ -18,14 +19,15 @@
   --cream:  #fdf6ea;
   --ink:    #1c1410;
   --border: rgba(194,96,58,0.18);
-  --serif:  'Fraunces', serif;
-  --sans:   'DM Sans', sans-serif;
-  --mono:   'DM Mono', monospace;
+  --serif:  'Fraunces', Georgia, serif;
+  --sans:   'DM Sans', system-ui, sans-serif;
+  --mono:   'DM Mono', 'Courier New', monospace;
   --feed-w: 380px;
 }
 
+/* ── RESET ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { height: 100%; }
+html, body { height: 100%; }
 body {
   background: var(--earth);
   color: var(--sand);
@@ -34,9 +36,16 @@ body {
   line-height: 1.6;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
 }
+
+/* ── LANGUAGE VISIBILITY ── */
+/* Default: show EN, hide ES */
+.t-es { display: none !important; }
+.t-en { display: inline; }
+/* When lang-es active: show ES, hide EN */
+body.lang-es .t-en { display: none !important; }
+body.lang-es .t-es { display: inline !important; }
 
 /* ── MASTHEAD ── */
 .masthead {
@@ -50,14 +59,31 @@ body {
   flex-shrink: 0;
   z-index: 100;
 }
-.brand { display: flex; align-items: baseline; gap: 10px; }
-.brand-link { text-decoration: none; display: flex; align-items: baseline; gap: 10px; }
-.brand-name { font-family: var(--serif); font-size: 22px; font-weight: 900; color: var(--gold); }
-.brand-sub {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; color: rgba(245,234,216,0.3);
+.brand-link {
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
-.masthead-right { display: flex; align-items: center; gap: 14px; }
+.brand-name {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245,234,216,0.28);
+}
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 .lang-toggle {
   display: flex;
   border: 1px solid rgba(194,96,58,0.35);
@@ -66,15 +92,19 @@ body {
 }
 .lt-btn {
   padding: 5px 13px;
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: transparent; border: none;
-  color: rgba(245,234,216,0.4); cursor: pointer;
-  transition: all 0.15s;
+  background: transparent;
+  border: none;
+  color: rgba(245,234,216,0.4);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 .lt-btn.active { background: var(--terr); color: var(--cream); }
 
-/* ── TWO-PANE LAYOUT ── */
+/* ── APP BODY: two-pane layout ── */
 .app-body {
   display: flex;
   flex: 1;
@@ -93,7 +123,7 @@ body {
   overflow: hidden;
 }
 
-/* series filter chips */
+/* Series filter chips */
 .filter-bar {
   padding: 12px 14px 10px;
   border-bottom: 1px solid rgba(194,96,58,0.14);
@@ -104,20 +134,22 @@ body {
 }
 .f-chip {
   padding: 4px 11px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   border: 1px solid rgba(245,234,216,0.12);
   background: transparent;
   color: rgba(245,234,216,0.38);
   cursor: pointer;
   border-radius: 20px;
-  transition: all 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
   white-space: nowrap;
 }
 .f-chip:hover { border-color: var(--terr); color: rgba(245,234,216,0.75); }
 .f-chip.active { background: var(--terr); border-color: var(--terr); color: var(--cream); }
 
-/* scrollable card list */
+/* Scrollable card list */
 .card-list {
   flex: 1;
   overflow-y: auto;
@@ -129,7 +161,7 @@ body {
 .card-list::-webkit-scrollbar-track { background: transparent; }
 .card-list::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.25); border-radius: 2px; }
 
-/* individual cards */
+/* Individual cards */
 .card {
   padding: 13px 16px 12px;
   margin: 0 8px 4px;
@@ -138,13 +170,14 @@ body {
   border-left: 3px solid transparent;
   transition: background 0.12s, border-color 0.12s;
   user-select: none;
+  outline: none;
 }
 .card:hover { background: rgba(42,31,14,0.7); }
+.card:focus-visible { box-shadow: 0 0 0 2px var(--terr); }
 .card.active {
   background: rgba(42,31,14,0.9);
   border-left-color: var(--terr);
 }
-
 .card-top {
   display: flex;
   align-items: center;
@@ -152,7 +185,9 @@ body {
   margin-bottom: 5px;
 }
 .card-vol-badge {
-  font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   background: rgba(194,96,58,0.18);
   color: var(--terr);
@@ -161,20 +196,27 @@ body {
   flex-shrink: 0;
 }
 .card-series-label {
-  font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(245,234,216,0.3);
+  color: rgba(245,234,216,0.28);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .card-title {
-  font-family: var(--serif); font-size: 14px; font-weight: 600;
-  color: var(--sand); line-height: 1.3;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sand);
+  line-height: 1.3;
   margin-bottom: 4px;
 }
 .card-excerpt {
-  font-size: 12px; color: rgba(245,234,216,0.42); line-height: 1.5;
+  font-size: 12px;
+  color: rgba(245,234,216,0.42);
+  line-height: 1.5;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -186,31 +228,45 @@ body {
   margin-top: 6px;
 }
 .card-date {
-  font-family: var(--mono); font-size: 9px; color: rgba(245,234,216,0.2);
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(245,234,216,0.2);
 }
 .card-free {
-  font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--sage); opacity: 0.75;
+  color: var(--sage);
+  opacity: 0.75;
 }
 
-/* empty / loading states */
+/* Loading / empty state in feed */
 .feed-state {
-  padding: 32px 20px; text-align: center;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: rgba(245,234,216,0.25);
+  padding: 32px 20px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,234,216,0.25);
 }
+
+/* Animated loading dots */
 .dots { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
 .dots span {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--gold); opacity: 0.2;
-  animation: pulse 1.4s ease-in-out infinite;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.2;
+  animation: dot-pulse 1.4s ease-in-out infinite;
 }
 .dots span:nth-child(2) { animation-delay: 0.2s; }
 .dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes pulse {
-  0%,80%,100% { opacity: 0.2; transform: scale(0.8); }
-  40%          { opacity: 1;   transform: scale(1.1); }
+@keyframes dot-pulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40%            { opacity: 1;   transform: scale(1.1); }
 }
 
 /* ── RIGHT ARTICLE PANE ── */
@@ -219,10 +275,11 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #f0e8d4;
+  background: var(--cream);
+  min-width: 0;
 }
 
-/* empty state (nothing selected) */
+/* Empty / select state */
 .article-empty {
   flex: 1;
   display: flex;
@@ -235,22 +292,26 @@ body {
 }
 .article-empty-icon {
   font-size: 40px;
-  opacity: 0.2;
+  opacity: 0.18;
 }
 .article-empty-text {
-  font-family: var(--serif); font-size: 18px; font-weight: 300;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 300;
   font-style: italic;
   color: rgba(28,20,16,0.35);
   text-align: center;
 }
 .article-empty-sub {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(28,20,16,0.2);
   text-align: center;
 }
 
-/* article pane toolbar */
+/* Article pane toolbar */
 .article-toolbar {
   display: flex;
   align-items: center;
@@ -261,52 +322,79 @@ body {
   border-bottom: 1px solid rgba(194,96,58,0.25);
   flex-shrink: 0;
 }
-.toolbar-left { display: flex; align-items: center; gap: 10px; }
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
 .toolbar-vol {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; color: var(--terr);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--terr);
+  flex-shrink: 0;
 }
 .toolbar-title {
-  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
   color: rgba(245,234,216,0.7);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.toolbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
 
-/* back button — mobile only */
+/* Back button — mobile only by default */
 .back-btn {
   display: none;
-  align-items: center; gap: 5px;
+  align-items: center;
+  gap: 5px;
   padding: 5px 12px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: transparent; border: 1px solid rgba(245,234,216,0.2);
+  background: transparent;
+  border: 1px solid rgba(245,234,216,0.2);
   color: rgba(245,234,216,0.55);
-  cursor: pointer; border-radius: 2px;
-  transition: all 0.15s;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.15s, color 0.15s;
   white-space: nowrap;
 }
 .back-btn:hover { border-color: var(--terr); color: var(--terr); }
 
+/* Open standalone page button */
 .open-btn {
   display: flex;
-  align-items: center; gap: 5px;
+  align-items: center;
+  gap: 5px;
   padding: 5px 12px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   background: rgba(194,96,58,0.15);
   border: 1px solid rgba(194,96,58,0.3);
   color: rgba(245,234,216,0.7);
   text-decoration: none;
-  cursor: pointer; border-radius: 2px;
-  transition: all 0.15s;
+  border-radius: 2px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   white-space: nowrap;
+  cursor: pointer;
 }
 .open-btn:hover { background: var(--terr); border-color: var(--terr); color: var(--cream); }
 .open-btn svg { flex-shrink: 0; }
 
-/* article content area */
+/* Article content scroll area */
 .article-scroll {
   flex: 1;
   overflow-y: auto;
@@ -317,66 +405,103 @@ body {
 .article-scroll::-webkit-scrollbar-track { background: transparent; }
 .article-scroll::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.3); border-radius: 2px; }
 
+/* Loading spinner in article pane */
 .article-loading {
-  display: flex; align-items: center; justify-content: center;
-  padding: 60px 40px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: rgba(28,20,16,0.3);
-  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 40px;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(28,20,16,0.3);
 }
 
-/* injected <main> content reset */
+/* ── INJECTED ARTICLE CONTENT RESET ── */
+/* Wrap the injected <main> in this div for scoped overrides */
 .article-injected {
-  background: #f0e8d4;
+  background: var(--cream);
   color: var(--ink);
   font-family: var(--sans);
   line-height: 1.75;
 }
-/* override any fixed heights or overflow the vol pages set */
-.article-injected * { max-width: 100%; }
+/* Prevent injected content from breaking pane layout */
+.article-injected * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* Suppress the vol-page masthead & nav — we show our own toolbar */
+.article-injected .mast,
+.article-injected nav,
+.article-injected header:not(.cover-inner header),
+.article-injected footer { display: none !important; }
+/* Links */
 .article-injected a { color: var(--terr); }
 .article-injected a:hover { color: var(--ink); }
+/* Images */
+.article-injected img { height: auto; }
 
-/* fallback excerpt display */
+/* ── FALLBACK (no URL or fetch failed) ── */
 .article-fallback {
   max-width: 640px;
   margin: 48px auto;
   padding: 0 32px 80px;
 }
 .article-fallback-vol {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--terr); margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terr);
+  margin-bottom: 6px;
 }
 .article-fallback-title {
-  font-family: var(--serif); font-size: 28px; font-weight: 900;
-  color: var(--ink); line-height: 1.2; margin-bottom: 20px;
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 .article-fallback-excerpt {
-  font-size: 16px; color: rgba(28,20,16,0.75);
+  font-size: 16px;
+  color: rgba(28,20,16,0.75);
   line-height: 1.85;
   border-left: 3px solid var(--terr);
   padding-left: 16px;
   margin-bottom: 24px;
 }
 .article-fallback-note {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(28,20,16,0.35);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(28,20,16,0.35);
   padding: 12px 16px;
   border: 1px dashed rgba(194,96,58,0.3);
   border-radius: 2px;
 }
 
-/* ── MOBILE ── */
+/* ── MOBILE (< 768px) ── */
 @media (max-width: 767px) {
+  /* App body becomes a positioning context */
+  .app-body {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Feed pane occupies full screen */
   .feed-pane {
     width: 100%;
-    flex-shrink: 0;
     position: absolute;
     top: 0; left: 0;
     height: 100%;
     z-index: 10;
-    transition: transform 0.28s ease;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  /* Article pane is off-screen right, slides in on top */
   .article-pane {
     position: absolute;
     top: 0; left: 0;
@@ -384,15 +509,16 @@ body {
     height: 100%;
     z-index: 20;
     transform: translateX(100%);
-    transition: transform 0.28s ease;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .app-body {
-    position: relative;
-    overflow: hidden;
+  /* When an article is open, slide article pane into view */
+  body.article-open .article-pane {
+    transform: translateX(0);
   }
-  body.article-open .article-pane { transform: translateX(0); }
+  /* Show back button on mobile */
   .back-btn { display: flex; }
-  .toolbar-title { max-width: 180px; }
+  /* Narrower title in toolbar on mobile */
+  .toolbar-title { max-width: 160px; }
 }
 </style>
 </head>
@@ -403,94 +529,104 @@ body {
   <div class="brand">
     <a class="brand-link" href="https://docs.senacolectivo.com/" target="_blank" rel="noopener">
       <span class="brand-name">La Biblioteca</span>
+      <span class="brand-sub">
+        <span class="t-en">Sena's AI Collective</span>
+        <span class="t-es">El Colectivo de IA de Sena</span>
+      </span>
     </a>
-    <span class="brand-sub en">Sena's AI Collective</span>
-    <span class="brand-sub es">El Colectivo de IA de Sena</span>
   </div>
   <div class="masthead-right">
-    <div class="lang-toggle">
-      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
-      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')" aria-pressed="true">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')" aria-pressed="false">ES</button>
     </div>
   </div>
 </header>
 
-<!-- ── APP BODY: two panes ── -->
+<!-- ── APP BODY ── -->
 <div class="app-body" id="appBody">
 
   <!-- LEFT: feed pane -->
-  <div class="feed-pane" id="feedPane">
+  <aside class="feed-pane" id="feedPane" aria-label="Volume feed">
 
-    <!-- series filter chips -->
-    <div class="filter-bar" id="filterBar">
-      <button class="f-chip active" data-series="all" onclick="filterSeries(this,'all')">
-        <span class="en">All</span><span class="es">Todos</span>
+    <!-- Series filter chips -->
+    <div class="filter-bar" id="filterBar" role="list" aria-label="Filter by series">
+      <button class="f-chip active" data-series="all" onclick="filterSeries(this,'all')" role="listitem">
+        <span class="t-en">All</span><span class="t-es">Todos</span>
       </button>
-      <!-- dynamically added chips go here -->
+      <!-- dynamically added -->
     </div>
 
-    <!-- scrollable card list -->
-    <div class="card-list" id="cardList">
-      <div class="feed-state">
+    <!-- Card list -->
+    <div class="card-list" id="cardList" role="list" aria-label="Volumes">
+      <div class="feed-state" id="feedLoading">
         <div class="dots"><span></span><span></span><span></span></div>
-        <span class="en">Loading volumes…</span>
-        <span class="es">Cargando…</span>
+        <span class="t-en">Loading volumes…</span>
+        <span class="t-es">Cargando volúmenes…</span>
       </div>
     </div>
 
-  </div><!-- /feed-pane -->
+  </aside>
 
   <!-- RIGHT: article pane -->
-  <div class="article-pane" id="articlePane">
+  <main class="article-pane" id="articlePane" aria-label="Article content" aria-live="polite">
 
-    <!-- toolbar — hidden until an article loads -->
-    <div class="article-toolbar" id="articleToolbar" style="display:none">
+    <!-- Toolbar — shown when article is loaded -->
+    <div class="article-toolbar" id="articleToolbar" hidden>
       <div class="toolbar-left">
-        <button class="back-btn" id="backBtn" onclick="goBack()">← <span class="en">Back</span><span class="es">Volver</span></button>
+        <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Back to feed">
+          ← <span class="t-en">Back</span><span class="t-es">Volver</span>
+        </button>
         <span class="toolbar-vol" id="toolbarVol"></span>
         <span class="toolbar-title" id="toolbarTitle"></span>
       </div>
       <div class="toolbar-right">
-        <a class="open-btn" id="openBtn" href="#" target="_blank" rel="noopener">
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a class="open-btn" id="openBtn" href="#" target="_blank" rel="noopener" title="Opens in a new tab">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
             <path d="M1 10L10 1M10 1H4M10 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span class="en">Open standalone page</span>
-          <span class="es">Abrir página completa</span>
+          <span class="t-en">Open standalone ↗</span>
+          <span class="t-es">Abrir página ↗</span>
         </a>
       </div>
     </div>
 
-    <!-- empty state -->
+    <!-- Empty state (nothing selected) -->
     <div class="article-empty" id="articleEmpty">
-      <div class="article-empty-icon">◈</div>
-      <div class="article-empty-text en">Select a volume</div>
-      <div class="article-empty-text es">Selecciona un número</div>
-      <div class="article-empty-sub en">Click any card to read inline</div>
-      <div class="article-empty-sub es">Haz clic en una tarjeta para leer</div>
+      <div class="article-empty-icon" aria-hidden="true">◈</div>
+      <div class="article-empty-text">
+        <span class="t-en">Select a volume</span>
+        <span class="t-es">Selecciona un número</span>
+      </div>
+      <div class="article-empty-sub">
+        <span class="t-en">Click any card to read inline</span>
+        <span class="t-es">Haz clic en una tarjeta para leer</span>
+      </div>
     </div>
 
-    <!-- article content scroll area -->
-    <div class="article-scroll" id="articleScroll" style="display:none">
+    <!-- Article scroll area — shown when article is loaded -->
+    <div class="article-scroll" id="articleScroll" hidden>
       <div id="articleContent"></div>
     </div>
 
-  </div><!-- /article-pane -->
+  </main>
 
 </div><!-- /app-body -->
 
 <script>
+/* ── CONFIG ── */
 const DATA_URL = '/biblioteca-worker/biblioteca-data.json';
 
-const SERIES_LABELS = {
-  'Water Rights':          { en: 'Water Rights',       es: 'Derechos del Agua' },
-  'Land Grant':            { en: 'Land Grant',          es: 'Mercedes de Tierra' },
-  'Community Agriculture': { en: 'Community Ag',        es: 'Agricultura Comunitaria' },
-  'Labor Rights':          { en: 'Labor Rights',        es: 'Derechos Laborales' },
-  'Political Education':   { en: 'Political Ed',        es: 'Educación Política' },
-  'Special Edition':       { en: 'Special Edition',     es: 'Edición Especial' },
+const SERIES_I18N = {
+  'Water Rights':          { en: 'Water Rights',    es: 'Derechos del Agua' },
+  'Land Grant':            { en: 'Land Grant',       es: 'Mercedes de Tierra' },
+  'Community Agriculture': { en: 'Community Ag',     es: 'Ag. Comunitaria' },
+  'Labor Rights':          { en: 'Labor Rights',     es: 'Derechos Laborales' },
+  'Political Education':   { en: 'Political Ed',     es: 'Educación Política' },
+  'Special Edition':       { en: 'Special Edition',  es: 'Edición Especial' },
 };
 
+/* ── STATE ── */
 let volumes      = [];
 let activeSeries = 'all';
 let activeId     = null;
@@ -498,171 +634,212 @@ let lang         = 'en';
 
 /* ── BOOT ── */
 (function init() {
+  // Restore language preference
   const saved = localStorage.getItem('bib_lang');
-  lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  lang = saved || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
   applyLang();
+
   loadData();
 
-  // hash navigation
+  // Handle hash on load and on back/forward
   window.addEventListener('hashchange', handleHash);
+  window.addEventListener('popstate',   handleHash);
 })();
 
+/* ── DATA ── */
 async function loadData() {
   try {
     const res = await fetch(DATA_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    volumes = data.volumes || [];
+    volumes = Array.isArray(data.volumes) ? data.volumes : [];
     buildFilterChips();
     renderCards();
-    handleHash(); // open article if hash present on load
+    handleHash(); // open vol from URL hash if present
   } catch (e) {
+    console.error('La Biblioteca: failed to load data', e);
     document.getElementById('cardList').innerHTML =
-      `<div class="feed-state">Could not load — try refreshing.</div>`;
-    console.error(e);
+      '<div class="feed-state">Could not load — try refreshing.</div>';
   }
 }
 
 /* ── HASH NAVIGATION ── */
 function handleHash() {
-  const hash = location.hash; // e.g. #vol2
+  const hash = window.location.hash; // e.g. "#vol2"
   if (!hash || !volumes.length) return;
   const m = hash.match(/^#vol(\d+)$/i);
   if (m) {
     const volNum = parseInt(m[1], 10);
-    const v = volumes.find(x => x.vol === volNum);
-    if (v) openArticle(v.id);
+    const v = volumes.find(function(x) { return x.vol === volNum; });
+    if (v && v.id !== activeId) openArticle(v.id);
   }
 }
 
-/* ── SERIES FILTER CHIPS ── */
+/* ── FILTER CHIPS ── */
 function buildFilterChips() {
   const bar  = document.getElementById('filterBar');
-  const seen = [...new Set(volumes.map(v => v.series).filter(Boolean))];
-  seen.forEach(s => {
+  // Collect unique series in order of appearance
+  const seen = [];
+  volumes.forEach(function(v) {
+    if (v.series && seen.indexOf(v.series) === -1) seen.push(v.series);
+  });
+  seen.forEach(function(s) {
     const btn = document.createElement('button');
     btn.className = 'f-chip';
     btn.dataset.series = s;
-    const labels = SERIES_LABELS[s] || { en: s, es: s };
-    btn.innerHTML = `<span class="en">${labels.en}</span><span class="es">${labels.es}</span>`;
-    btn.onclick = () => filterSeries(btn, s);
+    btn.setAttribute('role', 'listitem');
+    var labels = SERIES_I18N[s] || { en: s, es: s };
+    btn.innerHTML =
+      '<span class="t-en">' + escHtml(labels.en) + '</span>' +
+      '<span class="t-es">' + escHtml(labels.es) + '</span>';
+    btn.onclick = function() { filterSeries(btn, s); };
     bar.appendChild(btn);
   });
 }
 
 function filterSeries(btn, series) {
   activeSeries = series;
-  document.querySelectorAll('.f-chip').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.f-chip').forEach(function(b) {
+    b.classList.remove('active');
+  });
   btn.classList.add('active');
   renderCards();
-  // if active article is not in filtered set, close it
-  if (activeId) {
-    const v = volumes.find(x => x.id === activeId);
-    if (v && series !== 'all' && v.series !== series) {
-      closeArticle();
-    }
+
+  // If active article no longer in filtered set, close it
+  if (activeId && series !== 'all') {
+    var v = volumes.find(function(x) { return x.id === activeId; });
+    if (v && v.series !== series) closeArticle();
   }
 }
 
 /* ── RENDER CARDS ── */
 function renderCards() {
-  const list = document.getElementById('cardList');
-  const vols = activeSeries === 'all'
+  var list = document.getElementById('cardList');
+  var vols = activeSeries === 'all'
     ? volumes
-    : volumes.filter(v => v.series === activeSeries);
+    : volumes.filter(function(v) { return v.series === activeSeries; });
 
   if (!vols.length) {
-    list.innerHTML = `<div class="feed-state">No volumes found.</div>`;
+    list.innerHTML = '<div class="feed-state">No volumes in this series.</div>';
     return;
   }
 
-  list.innerHTML = vols.map(v => {
-    const title   = lang === 'es' && v.titleES   ? v.titleES   : v.titleEN;
-    const excerpt = lang === 'es' && v.excerptES ? v.excerptES : v.excerptEN;
-    const volNum  = v.vol ? `Vol ${String(v.vol).padStart(2,'0')}` : 'Special';
-    const dateStr = v.date ? fmtDate(v.date) : '';
-    const isActive = v.id === activeId ? ' active' : '';
-    const seriesLbl = SERIES_LABELS[v.series]?.[lang] || v.series || '';
-    return `
-      <div class="card${isActive}" id="card-${v.id}"
-           onclick="openArticle('${v.id}')"
-           role="button" tabindex="0"
-           onkeydown="if(event.key==='Enter'||event.key===' ')openArticle('${v.id}')">
-        <div class="card-top">
-          <span class="card-vol-badge">${volNum}</span>
-          <span class="card-series-label">${seriesLbl}</span>
-        </div>
-        <div class="card-title">${title}</div>
-        <div class="card-excerpt">${excerpt}</div>
-        <div class="card-foot">
-          ${dateStr ? `<span class="card-date">${dateStr}</span>` : ''}
-          ${v.freeToShare ? `<span class="card-free en">· Free to Share</span><span class="card-free es">· Libre de compartir</span>` : ''}
-        </div>
-      </div>`;
+  list.setAttribute('role', 'list');
+  list.innerHTML = vols.map(function(v) {
+    var title      = (lang === 'es' && v.titleES)   ? v.titleES   : v.titleEN;
+    var excerpt    = (lang === 'es' && v.excerptES) ? v.excerptES : v.excerptEN;
+    var volLabel   = v.vol ? 'Vol ' + padNum(v.vol) : 'Special';
+    var dateStr    = v.date ? fmtDate(v.date) : '';
+    var seriesLbl  = (SERIES_I18N[v.series] || {})[lang] || v.series || '';
+    var isActive   = v.id === activeId ? ' active' : '';
+    var freeLabel  = v.freeToShare
+      ? '<span class="card-free t-en">· Free to Share</span>' +
+        '<span class="card-free t-es">· Libre de compartir</span>'
+      : '';
+    return (
+      '<div class="card' + isActive + '" id="card-' + escId(v.id) + '"' +
+      ' role="listitem button" tabindex="0"' +
+      ' data-id="' + escAttr(v.id) + '"' +
+      ' aria-label="' + escAttr(volLabel + ': ' + title) + '"' +
+      ' aria-pressed="' + (v.id === activeId ? 'true' : 'false') + '">' +
+        '<div class="card-top">' +
+          '<span class="card-vol-badge">' + escHtml(volLabel) + '</span>' +
+          '<span class="card-series-label">' + escHtml(seriesLbl) + '</span>' +
+        '</div>' +
+        '<div class="card-title">' + escHtml(title) + '</div>' +
+        '<div class="card-excerpt">' + escHtml(excerpt) + '</div>' +
+        '<div class="card-foot">' +
+          (dateStr ? '<span class="card-date">' + escHtml(dateStr) + '</span>' : '') +
+          freeLabel +
+        '</div>' +
+      '</div>'
+    );
   }).join('');
+
+  // Bind click + keyboard events on each card
+  list.querySelectorAll('.card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      openArticle(card.dataset.id);
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openArticle(card.dataset.id);
+      }
+    });
+  });
 }
 
 /* ── OPEN ARTICLE ── */
 async function openArticle(id) {
-  const v = volumes.find(x => x.id === id);
+  var v = volumes.find(function(x) { return x.id === id; });
   if (!v) return;
 
-  // Mark active card
+  // Mark card active
   activeId = id;
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  const cardEl = document.getElementById('card-' + id);
+  document.querySelectorAll('.card').forEach(function(c) {
+    c.classList.remove('active');
+    c.setAttribute('aria-pressed', 'false');
+  });
+  var cardEl = document.getElementById('card-' + escId(id));
   if (cardEl) {
     cardEl.classList.add('active');
+    cardEl.setAttribute('aria-pressed', 'true');
     cardEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
-  // Update hash without reloading
-  if (v.vol) history.replaceState(null, '', '#vol' + v.vol);
+  // Update URL hash without reloading
+  if (v.vol) {
+    history.replaceState(null, '', '#vol' + v.vol);
+  }
 
-  // Show toolbar
-  const volNum = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
-  const title  = lang === 'es' && v.titleES ? v.titleES : v.titleEN;
-  document.getElementById('toolbarVol').textContent   = volNum;
+  // Update toolbar
+  var volLabel = v.vol ? 'Vol. ' + padNum(v.vol) : 'Special';
+  var title    = (lang === 'es' && v.titleES) ? v.titleES : v.titleEN;
+  document.getElementById('toolbarVol').textContent   = volLabel;
   document.getElementById('toolbarTitle').textContent = title;
-  const openBtn = document.getElementById('openBtn');
+  var openBtn = document.getElementById('openBtn');
   openBtn.href = v.url || '#';
-  document.getElementById('articleToolbar').style.display = '';
 
-  // Hide empty state, show scroll area
-  document.getElementById('articleEmpty').style.display  = 'none';
-  const scrollEl   = document.getElementById('articleScroll');
-  const contentEl  = document.getElementById('articleContent');
-  scrollEl.style.display = '';
+  // Show toolbar and scroll area; hide empty state
+  document.getElementById('articleToolbar').hidden = false;
+  document.getElementById('articleEmpty').style.display    = 'none';
+  var scrollEl  = document.getElementById('articleScroll');
+  var contentEl = document.getElementById('articleContent');
+  scrollEl.hidden = false;
   scrollEl.scrollTop = 0;
 
-  // Mobile: slide to article pane
+  // On mobile, slide article pane into view
   document.body.classList.add('article-open');
 
-  // Show loading indicator
-  contentEl.innerHTML = `
-    <div class="article-loading">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <span class="en">Loading…</span><span class="es">Cargando…</span>
-    </div>`;
+  // Show loading state
+  contentEl.innerHTML =
+    '<div class="article-loading">' +
+      '<div class="dots"><span></span><span></span><span></span></div>' +
+      '<span class="t-en">Loading…</span>' +
+      '<span class="t-es">Cargando…</span>' +
+    '</div>';
+  applyLang(); // re-apply so dots label is correct language
 
   // Fetch and inject article
   if (v.url) {
     try {
-      // Build local path from canonical URL for same-origin fetch
-      const localPath = urlToLocalPath(v.url);
-      const res = await fetch(localPath);
+      var localPath = urlToLocalPath(v.url);
+      var res = await fetch(localPath);
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const html = await res.text();
-      const mainHtml = extractMain(html);
-      if (mainHtml) {
-        contentEl.innerHTML = `<div class="article-injected">${mainHtml}</div>`;
-        // Re-run any inline scripts from the injected content
+      var html = await res.text();
+      var mainEl = extractMain(html);
+      if (mainEl) {
+        // Wrap in our scoped class for CSS reset
+        contentEl.innerHTML = '<div class="article-injected"></div>';
+        contentEl.firstChild.appendChild(mainEl);
+        // Re-activate any inline scripts from the injected content
         activateScripts(contentEl);
       } else {
-        throw new Error('No <main> found');
+        throw new Error('No <main> element found in fetched page');
       }
     } catch (err) {
-      console.warn('fetch failed, showing fallback:', err);
+      console.warn('La Biblioteca: fetch failed, showing fallback', err);
       showFallback(v, contentEl);
     }
   } else {
@@ -670,67 +847,77 @@ async function openArticle(id) {
   }
 }
 
-/* Convert absolute canonical URL to a root-relative local path */
+/* ── HELPERS: article fetching ── */
+
+// Convert absolute canonical URL → root-relative path for same-origin fetch
 function urlToLocalPath(url) {
   try {
-    const u = new URL(url);
+    var u = new URL(url);
+    // If it's the same hostname as the current page, use path only
+    // Otherwise still use path (assuming same server serves both canonical + local)
     return u.pathname; // e.g. /biblioteca/vol2/
-  } catch {
+  } catch (e) {
     return url;
   }
 }
 
-/* Extract innerHTML of <main> from raw HTML string */
+// Extract the <main> DOM element from an HTML string
 function extractMain(html) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const main = doc.querySelector('main');
-  return main ? main.outerHTML : null;
+  var parser = new DOMParser();
+  var doc    = parser.parseFromString(html, 'text/html');
+  return doc.querySelector('main') || null;
 }
 
-/* Re-run inline scripts inside injected content */
+// Re-execute inline <script> tags in injected content
+// (innerHTML assignment does not run scripts; must clone & replace)
 function activateScripts(container) {
-  container.querySelectorAll('script').forEach(oldScript => {
-    const newScript = document.createElement('script');
-    [...oldScript.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
-    newScript.textContent = oldScript.textContent;
-    oldScript.parentNode.replaceChild(newScript, oldScript);
+  container.querySelectorAll('script').forEach(function(old) {
+    var neo = document.createElement('script');
+    Array.from(old.attributes).forEach(function(attr) {
+      neo.setAttribute(attr.name, attr.value);
+    });
+    neo.textContent = old.textContent;
+    old.parentNode.replaceChild(neo, old);
   });
 }
 
-/* Fallback: show excerpt if no URL or fetch failed */
+// Show excerpt fallback when no URL or fetch failed
 function showFallback(v, contentEl) {
-  const es       = lang === 'es';
-  const title    = es && v.titleES   ? v.titleES   : v.titleEN;
-  const excerpt  = es && v.excerptES ? v.excerptES : v.excerptEN;
-  const volNum   = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
-  contentEl.innerHTML = `
-    <div class="article-fallback">
-      <div class="article-fallback-vol">${volNum}</div>
-      <div class="article-fallback-title">${title}</div>
-      <div class="article-fallback-excerpt">${excerpt}</div>
-      <div class="article-fallback-note">
-        ${es ? 'Página completa próximamente' : 'Full page coming soon'}
-      </div>
-    </div>`;
+  var es      = lang === 'es';
+  var title   = (es && v.titleES)   ? v.titleES   : v.titleEN;
+  var excerpt = (es && v.excerptES) ? v.excerptES : v.excerptEN;
+  var volLabel = v.vol ? 'Vol. ' + padNum(v.vol) : 'Special';
+  contentEl.innerHTML =
+    '<div class="article-fallback">' +
+      '<div class="article-fallback-vol">' + escHtml(volLabel) + '</div>' +
+      '<div class="article-fallback-title">' + escHtml(title) + '</div>' +
+      '<div class="article-fallback-excerpt">' + escHtml(excerpt) + '</div>' +
+      '<div class="article-fallback-note">' +
+        (es ? 'Página completa próximamente' : 'Full page coming soon') +
+      '</div>' +
+    '</div>';
 }
 
-/* ── CLOSE / BACK (mobile) ── */
+/* ── CLOSE / BACK ── */
 function closeArticle() {
   activeId = null;
-  history.replaceState(null, '', location.pathname);
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  document.getElementById('articleToolbar').style.display = 'none';
+  history.replaceState(null, '', window.location.pathname);
+  document.querySelectorAll('.card').forEach(function(c) {
+    c.classList.remove('active');
+    c.setAttribute('aria-pressed', 'false');
+  });
+  document.getElementById('articleToolbar').hidden = true;
   document.getElementById('articleEmpty').style.display   = '';
-  document.getElementById('articleScroll').style.display  = 'none';
-  document.getElementById('articleContent').innerHTML      = '';
+  var scrollEl = document.getElementById('articleScroll');
+  scrollEl.hidden = true;
+  document.getElementById('articleContent').innerHTML = '';
   document.body.classList.remove('article-open');
 }
 
+// Mobile: go back to feed without clearing the article state
 function goBack() {
-  // On mobile: slide back to feed pane
   document.body.classList.remove('article-open');
-  // Keep activeId so the card stays highlighted — UX matches Ground News
+  // Active card stays highlighted — matches Ground News UX
 }
 
 /* ── LANGUAGE ── */
@@ -739,11 +926,11 @@ function setLang(l) {
   localStorage.setItem('bib_lang', l);
   applyLang();
   if (volumes.length) renderCards();
-  // Re-render toolbar title in new language
+  // Update toolbar title if an article is open
   if (activeId) {
-    const v = volumes.find(x => x.id === activeId);
+    var v = volumes.find(function(x) { return x.id === activeId; });
     if (v) {
-      const title = lang === 'es' && v.titleES ? v.titleES : v.titleEN;
+      var title = (lang === 'es' && v.titleES) ? v.titleES : v.titleEN;
       document.getElementById('toolbarTitle').textContent = title;
     }
   }
@@ -751,26 +938,58 @@ function setLang(l) {
 
 function applyLang() {
   document.documentElement.lang = lang;
-  document.getElementById('page').className = lang === 'es' ? 'lang-es' : '';
-  document.getElementById('btnEN').className = 'lt-btn' + (lang === 'en' ? ' active' : '');
-  document.getElementById('btnES').className = 'lt-btn' + (lang === 'es' ? ' active' : '');
+  if (lang === 'es') {
+    document.body.classList.add('lang-es');
+  } else {
+    document.body.classList.remove('lang-es');
+  }
+  var btnEN = document.getElementById('btnEN');
+  var btnES = document.getElementById('btnES');
+  btnEN.classList.toggle('active', lang === 'en');
+  btnES.classList.toggle('active', lang === 'es');
+  btnEN.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  btnES.setAttribute('aria-pressed', lang === 'es' ? 'true' : 'false');
 }
 
 /* ── UTILS ── */
+function padNum(n) {
+  return String(n).padStart(2, '0');
+}
+
 function fmtDate(d) {
   try {
     return new Date(d + 'T12:00:00').toLocaleDateString(
       lang === 'es' ? 'es-MX' : 'en-US',
       { month: 'short', year: 'numeric' }
     );
-  } catch { return d; }
+  } catch (e) { return d; }
 }
 
-/* Escape key closes article on desktop, goes back on mobile */
-document.addEventListener('keydown', e => {
+function escHtml(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#39;');
+}
+
+function escAttr(s) { return escHtml(s); }
+
+// Sanitize Airtable record IDs for use as DOM IDs (they're alphanumeric, should be safe)
+function escId(s) {
+  return String(s).replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && activeId) {
-    if (window.innerWidth < 768) goBack();
-    else closeArticle();
+    if (window.innerWidth < 768) {
+      goBack();
+    } else {
+      closeArticle();
+    }
   }
 });
 </script>
