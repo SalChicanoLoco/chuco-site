@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol. 04 — San Miguel del Vado · La Biblioteca</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--earth:#1a1209;--warm:#2a1f0e;--sand:#f5ead8;--terr:#c2603a;--gold:#e8a825;--sage:#6b8f5e;--sky:#4a7fa5;--cream:#fdf6ea;--ink:#1c1410;--border:rgba(194,96,58,0.18);--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.mast{background:var(--earth);border-bottom:3px solid var(--terr);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mast-brand{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.mast-right{display:flex;align-items:center;gap:16px}
+.back-link{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.45);text-decoration:none}
+.back-link:hover{color:var(--terr)}
+.lang-toggle{display:flex;border:1px solid rgba(194,96,58,.35);border-radius:3px;overflow:hidden}
+.lt-btn{padding:5px 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:rgba(245,234,216,.4);cursor:pointer;transition:all .15s}
+.lt-btn.active{background:var(--terr);color:var(--cream)}
+.cover{background:var(--warm);padding:56px 32px 48px;border-bottom:2px solid var(--border)}
+.cover-inner{max-width:720px;margin:0 auto}
+.vol-id{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.cover-series{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.35);margin-bottom:20px}
+.cover-h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--sand);line-height:1.1;margin-bottom:8px}
+.cover-h1 em{color:var(--gold);font-style:italic}
+.cover-sub{font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);font-weight:300;color:rgba(245,234,216,.55);margin-bottom:24px;line-height:1.3}
+.cover-lede{font-size:15px;color:rgba(245,234,216,.65);max-width:580px;line-height:1.8;border-left:3px solid var(--terr);padding-left:16px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.ctag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(194,96,58,.3);color:rgba(245,234,216,.45)}
+.ctag.hot{border-color:var(--terr);color:var(--terr)}
+.pub-body{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.section{margin-bottom:48px}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.section-h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:16px}
+.section-h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:24px 0 12px}
+.body-text{color:#3a2c1e;font-size:15.5px;line-height:1.8;margin-bottom:14px}
+.body-text strong{color:var(--ink);font-weight:600}
+.body-text em{font-style:italic}
+.pq{border-left:4px solid var(--gold);padding:16px 20px;margin:28px 0;background:rgba(232,168,37,.05)}
+.pq-text{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;font-style:italic}
+.pq-attr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--terr);margin-top:8px}
+.pub-ul{margin:12px 0 16px 20px}
+.pub-ul li{color:#3a2c1e;font-size:15px;line-height:1.75;margin-bottom:8px}
+.pub-ul li strong{color:var(--ink);font-weight:600}
+.pub-ul li em{font-style:italic}
+.stat-row{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat-box{flex:1;min-width:140px;background:white;border:1px solid var(--border);border-top:3px solid var(--terr);padding:16px}
+.stat-num{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--terr)}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-top:4px}
+.timeline{margin:24px 0}
+.tl-item{display:flex;gap:20px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-date{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--terr);min-width:80px;padding-top:3px;flex-shrink:0}
+.tl-node{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-bottom:6px}
+.tl-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.tl-body{font-size:14px;color:#3a2c1e;line-height:1.7}
+.tl-body-es{font-size:13px;color:#6a5a4a;font-style:italic;line-height:1.6;margin-top:6px}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.refs{background:white;border:1px solid var(--border);padding:24px;margin-top:48px}
+.refs-title{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--terr);margin-bottom:16px}
+.ref-item{font-size:13px;color:#5a4a3a;line-height:1.6;margin-bottom:8px;padding-left:20px;text-indent:-20px}
+.pub-footer{background:var(--earth);border-top:2px solid var(--warm);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold)}
+.footer-id{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,234,216,.25)}
+.en{display:block}.es{display:none}
+body.lang-es .en{display:none}body.lang-es .es{display:block}
+.en-inline{display:inline}.es-inline{display:none}
+body.lang-es .en-inline{display:none}body.lang-es .es-inline{display:inline}
+@media(max-width:640px){.cover,.mast,.pub-body,.pub-footer{padding-left:20px;padding-right:20px}.cover{padding-top:36px;padding-bottom:32px}}
+</style>
+</head>
+<body id="page">
+
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca/">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="vol-id">Vol. 04 · Land Grant Series · April 2026</div>
+    <div class="cover-series">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <h1 class="cover-h1 en">San Miguel del Vado:<br><em>315,000 Acres</em></h1>
+    <h1 class="cover-h1 es">San Miguel del Vado:<br><em>315,000 Acres</em></h1>
+    <div class="cover-sub en">And the Architecture of Dispossession</div>
+    <div class="cover-sub es">Y la Arquitectura del Despojo</div>
+    <p class="cover-lede en">US v. Sandoval (1897) stripped 98.4% of the Genízaro communal land grant in a single ruling. The legal mechanism, $775M in displaced equity, and the active reclamation today.</p>
+    <p class="cover-lede es">US v. Sandoval (1897) despojó el 98.4% de la merced comunal Genízara en una sola resolución. El mecanismo legal, $775M en capital desplazado, y la reclamación activa hoy.</p>
+    <div class="cover-tags">
+      <span class="ctag hot">Land Grant</span>
+      <span class="ctag hot">Genízaro</span>
+      <span class="ctag">US v. Sandoval</span>
+      <span class="ctag">Dispossession</span>
+      <span class="ctag">SMDVLG</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+  </div>
+</div>
+
+<main class="pub-body">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label en">Section 01</div>
+    <div class="section-label es">Sección 01</div>
+    <h2 class="section-h2 en">The Architecture — Six Layers of Dispossession</h2>
+    <h2 class="section-h2 es">La Arquitectura — Seis Capas del Despojo</h2>
+
+    <p class="body-text en">The theft of San Miguel del Vado was not a crime. It was an architecture. It was built in layers over a century — each layer legal, each layer documented, each layer designed to transfer wealth from a Genízaro communal system to private and federal hands. Understanding the architecture is the first step to dismantling it.</p>
+    <p class="body-text es">El despojo de San Miguel del Vado no fue un crimen. Fue una arquitectura. Se construyó en capas a lo largo de un siglo — cada capa legal, cada capa documentada, cada capa diseñada para transferir riqueza de un sistema comunal Genízaro a manos privadas y federales. Entender la arquitectura es el primer paso para desmantelarla.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">315k</div>
+        <div class="stat-label en">Acres — original grant (1794)</div>
+        <div class="stat-label es">Acres — merced original (1794)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5k</div>
+        <div class="stat-label en">Acres — after Sandoval (1897)</div>
+        <div class="stat-label es">Acres — después de Sandoval (1897)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">98.4%</div>
+        <div class="stat-label en">Stripped in one ruling</div>
+        <div class="stat-label es">Despojado en un solo fallo</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$775M</div>
+        <div class="stat-label en">Estimated displaced equity</div>
+        <div class="stat-label es">Equidad desplazada estimada</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2: TIMELINE -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+    <h2 class="section-h2 en">The Timeline — Layer by Layer</h2>
+    <h2 class="section-h2 es">La Cronología — Capa por Capa</h2>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-date">1794</div>
+        <div>
+          <div class="tl-node">Layer A · The Sovereign Dream</div>
+          <div class="tl-title en">The Founding — Genízaro Buffer Families</div>
+          <div class="tl-title es">La Fundación — Familias de Escudo Genízaras</div>
+          <p class="tl-body en">The San Miguel del Vado (Bado) land grant is established. Ransomed Indigenous families — Genízaros, detribalized Native Americans from Plains tribes — are settled at the eastern frontier as a military buffer against Comanche and Apache raids. The grant is communal: each family holds a <em>suerte</em> (share), the community holds the <em>ejido</em> (commons). The entire grant spans approximately 315,300 acres.</p>
+          <p class="tl-body-es">La merced de tierra de San Miguel del Vado se establece. Familias indígenas rescatadas — Genízaros — son asentadas como escudo militar. La merced es comunal: ~315,300 acres.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1848</div>
+        <div>
+          <div class="tl-node">Layer A2 · The Legal Threshold</div>
+          <div class="tl-title en">Treaty of Guadalupe Hidalgo — The Promise Broken</div>
+          <div class="tl-title es">Tratado de Guadalupe Hidalgo — La Promesa Rota</div>
+          <p class="tl-body en">The U.S.–Mexico War ends. New Mexico transfers to the United States. Article VIII and Article X of the Treaty of Guadalupe Hidalgo promise to honor existing land grants. Article X is deleted before ratification. What remains is a documentation bottleneck: communities that governed by custom and oral history must now produce written deeds in a foreign legal system, in a foreign language, to lawyers who are paid by the page.</p>
+          <p class="tl-body-es">El Tratado de Guadalupe Hidalgo promete respetar las mercedes de tierra. El Artículo X es eliminado antes de la ratificación. Las comunidades deben producir escrituras en un sistema legal extranjero.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1860s–1912</div>
+        <div>
+          <div class="tl-node">Core Enabler · The Santa Fe Ring</div>
+          <div class="tl-title en">The Syndicate — Catron, Elkins, and the Ring</div>
+          <div class="tl-title es">El Sindicato — Catron, Elkins y el Anillo</div>
+          <p class="tl-body en">The Santa Fe Ring — an informal network of lawyers and politicians including Thomas B. Catron and Stephen B. Elkins — systematically acquires land grant titles through legal manipulation, survey fraud, and fee extraction. Catron alone accumulates millions of acres. The Ring's tool is the legal system itself: file suit, demand documentation, bill for services, accept land as payment when cash runs out.</p>
+          <p class="tl-body-es">El Anillo de Santa Fe — Catron, Elkins y aliados — acumula millones de acres mediante manipulación legal, fraude catastral y extracción de honorarios.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1870s–1890s</div>
+        <div>
+          <div class="tl-node">Technical Execution · The Seed of Deceit</div>
+          <div class="tl-title en">Survey Fraud — Anton Chico Overlaps</div>
+          <div class="tl-title es">Fraude Catastral — Superposiciones de Anton Chico</div>
+          <p class="tl-body en">Fraudulent surveys create overlapping claims between the San Miguel del Vado grant and neighboring grants including Anton Chico. These manufactured boundary disputes give Ring lawyers standing to enter the adjudication process — and bill for decades of "clarification" work. The disputes are not accidental. They are engineered.</p>
+          <p class="tl-body-es">Catastros fraudulentos crean reclamaciones superpuestas con mercedes vecinas como Anton Chico. Los conflictos de límites son diseñados para dar acceso a los abogados del Anillo al proceso de adjudicación.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1891–1904</div>
+        <div>
+          <div class="tl-node">Layer B · The Bottleneck</div>
+          <div class="tl-title en">Court of Private Land Claims — Fees as Barriers</div>
+          <div class="tl-title es">Tribunal de Reclamaciones de Tierras Privadas — Honorarios como Barreras</div>
+          <p class="tl-body en">Congress creates the Court of Private Land Claims (CPLC) to adjudicate New Mexico land grants. The CPLC requires documentary proof of title in a system designed for English-language deeds. Survey fees, legal fees, translation costs — each step bleeds the herederos. Families that cannot pay forfeit their claims. Ring lawyers collect land as payment. The process is a tollbooth on the road to justice that most cannot afford to travel.</p>
+          <p class="tl-body-es">El Tribunal de Reclamaciones de Tierras Privadas requiere prueba documental. Los honorarios de catastro y abogados sangran a los herederos. Los abogados del Anillo cobran tierras como pago.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1897-05-24</div>
+        <div>
+          <div class="tl-node">Layer B · The Theft</div>
+          <div class="tl-title en">United States v. Sandoval — The Legal Scalpel</div>
+          <div class="tl-title es">Estados Unidos v. Sandoval — El Bisturí Legal</div>
+          <p class="tl-body en"><em>United States v. Sandoval</em>, 167 U.S. 278. The Supreme Court rules that the unallotted communal lands of the San Miguel del Vado grant — the <em>ejido</em> — were held "in trust by the sovereign" under Mexican law, and therefore pass automatically to the United States government as successor sovereign. The communal lands are declared U.S. public domain. In a single ruling, 310,300 acres are stripped. The grant that was 315,300 acres becomes 5,000 acres of individual private plots. Herederos become employees on their own land.</p>
+          <p class="tl-body-es">La Corte Suprema declara que las tierras comunales de SMDVLG son dominio público de EE.UU. 310,300 acres despojados en una sola resolución. Los herederos se convierten en empleados en su propia tierra.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">1930s–1940s</div>
+        <div>
+          <div class="tl-node">Layer C · The Pivot</div>
+          <div class="tl-title en">Depression-Era Foreclosures — USFS Acquisition</div>
+          <div class="tl-title es">Ejecuciones Hipotecarias de la Gran Depresión — Adquisición del USFS</div>
+          <p class="tl-body en">The Great Depression drives tax defaults and debt across Northern New Mexico. Federal agencies — primarily the U.S. Forest Service — acquire foreclosed land, framing the acquisitions as conservation and "land reform." Title vests in the federal government. Traditional communal access ends. The ejido is now "national forest." Families who have gathered wood, grazed livestock, and maintained acequias on the land for 150 years are now trespassers.</p>
+          <p class="tl-body-es">La Gran Depresión genera incumplimientos fiscales. El USFS adquiere tierras ejecutadas bajo la bandera de conservación. El ejido se convierte en "bosque nacional." Las familias son ahora intrusos.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2026</div>
+        <div>
+          <div class="tl-node">Layer D · The Now</div>
+          <div class="tl-title en">The Familyocracy — Modern Institutional Continuity</div>
+          <div class="tl-title es">La Familiocracia — Continuidad Institucional Moderna</div>
+          <p class="tl-body en">The Ring's bottlenecks evolved into contemporary political structures. Planning commissions, redevelopment authorities, probate courts — the same families that controlled the adjudication process in the 1890s control the administrative processes today. The Catron firm continues in modern fiduciary and probate practice. The "tri-cultural trope" — Spanish, Indian, Anglo — serves as public relations cover for a power structure that erased Genízaro/Mestizo reality while legitimizing elite continuity.</p>
+          <p class="tl-body-es">Los cuellos de botella del Anillo evolucionaron en estructuras políticas contemporáneas. Comisiones de planificación, autoridades de redesarrollo, tribunales de sucesiones — el control permanece.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+    <h2 class="section-h2 en">The Mechanism — How Sandoval Worked</h2>
+    <h2 class="section-h2 es">El Mecanismo — Cómo Funcionó Sandoval</h2>
+
+    <p class="body-text en">The legal theory in <em>Sandoval</em> was elegant and devastating. Under Spanish and Mexican land law, communal ejido lands were held by the community — but the court ruled that they were held "in trust" by the sovereign (first Spain, then Mexico). When the United States became the successor sovereign in 1848, it inherited that trust. The communal lands, therefore, automatically became U.S. public domain — not through condemnation, not through purchase, not through any process that would require compensation. Just: sovereign succession.</p>
+    <p class="body-text es">La teoría legal en <em>Sandoval</em> fue elegante y devastadora. El tribunal dictaminó que las tierras comunales del ejido eran mantenidas "en fideicomiso" por el soberano. Cuando EE.UU. se convirtió en soberano sucesor en 1848, heredó ese fideicomiso. Las tierras comunales se convirtieron automáticamente en dominio público de EE.UU. — sin indemnización.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"They didn't steal the land. They changed the definition of ownership. The theft was taxonomic."</div>
+      <div class="pq-text es">"No robaron la tierra. Cambiaron la definición de propiedad. El robo fue taxonómico."</div>
+      <div class="pq-attr">SANGRE KV1 · Layer B Analysis · NM Socialists Research · 2026</div>
+    </div>
+
+    <p class="body-text en">The implications cascade forward. Because the land was not "taken" (no taking = no Fifth Amendment compensation), the herederos have no legal claim to payment. Because the land became public domain rather than private property, it cannot be purchased back — only lobbied for. Because the transfer happened by judicial ruling rather than legislation, it cannot be repealed by a future Congress changing its mind. The architecture was built to last.</p>
+    <p class="body-text es">Las implicaciones se extienden hacia adelante. Porque la tierra no fue "tomada" (sin toma = sin compensación de la Quinta Enmienda), los herederos no tienen reclamación legal de pago. La arquitectura fue construida para durar.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label en">Section 04</div>
+    <div class="section-label es">Sección 04</div>
+    <h2 class="section-h2 en">The Numbers — $775 Million in Displaced Equity</h2>
+    <h2 class="section-h2 es">Los Números — $775 Millones en Equidad Desplazada</h2>
+
+    <p class="body-text en">The GAO 2004 audit documented the land grant losses. The math is straightforward: 310,300 acres lost × $2,500 per acre (conservative rural Northern NM land value) = <strong>$775,750,000</strong> in estimated displaced community equity. This is not a historical figure. This is a present-tense valuation of land currently held by the federal government, state government, and private luxury developers — land that was stripped without compensation from a Genízaro community that built it.</p>
+    <p class="body-text es">310,300 acres perdidos × $2,500 por acre (valor conservador de tierra rural del norte de NM) = <strong>$775,750,000</strong> en equidad comunitaria desplazada estimada. Esta es una valuación en tiempo presente de tierra actualmente en manos del gobierno federal, estatal y desarrolladores privados de lujo.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">310k</div>
+        <div class="stat-label en">Acres stripped — 1897</div>
+        <div class="stat-label es">Acres despojados — 1897</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">×$2,500</div>
+        <div class="stat-label en">Per acre conservative estimate</div>
+        <div class="stat-label es">Por acre estimado conservador</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$775M</div>
+        <div class="stat-label en">Displaced equity — today's value</div>
+        <div class="stat-label es">Equidad desplazada — valor actual</div>
+      </div>
+    </div>
+
+    <p class="body-text en">Luxury developers are not creating value on this land. They are standing on nearly $800 million of displaced community equity and calling it "real estate." We are not asking for charity. We are asking for the balance.</p>
+    <p class="body-text es">Los desarrolladores de lujo no están creando valor en esta tierra. Están parados sobre casi $800 millones de equidad comunitaria desplazada. No estamos pidiendo caridad. Estamos pidiendo el balance.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-label en">Section 05</div>
+    <div class="section-label es">Sección 05</div>
+    <h2 class="section-h2 en">The Active Reclamation — Today</h2>
+    <h2 class="section-h2 es">La Reclamación Activa — Hoy</h2>
+
+    <p class="body-text en">The San Miguel del Vado Land Grant community is active. The SMDVLG board has issued formal memoranda asserting territorial sovereignty. The community has organized against illegal search and seizure. The SANGRE KV1 research framework is building the data infrastructure — GIS, legal analysis, historical documentation — to support the reclamation claim at every level: legislative, legal, and public.</p>
+    <p class="body-text es">La comunidad de la Merced de San Miguel del Vado está activa. La junta de SMDVLG ha emitido memorandos formales afirmando soberanía territorial. El marco de investigación SANGRE KV1 está construyendo la infraestructura de datos para apoyar la reclamación.</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>Legislative Path:</strong> The GAO 2004 report identified viable options for congressional action. The report was filed and forgotten. The community is building the case to resurrect it.</li>
+      <li class="es"><strong>Camino Legislativo:</strong> El informe GAO 2004 identificó opciones viables para acción del Congreso. El informe fue archivado y olvidado. La comunidad está construyendo el caso para resucitarlo.</li>
+      <li class="en"><strong>Cooperative Land Bank:</strong> The NM Socialist Fund model — pool community resources to acquire title to land within the original grant territory through the open market, returning it to communal ownership via Community Land Trust structure.</li>
+      <li class="es"><strong>Banco Cooperativo de Tierras:</strong> El modelo del Fondo Socialista de NM — reunir recursos comunitarios para adquirir título de tierras dentro del territorio original de la merced mediante el mercado abierto.</li>
+      <li class="en"><strong>Acequia Governance:</strong> Restore Mayordomía governance over remaining water rights. Resist state and federal attempts to commodify acequia water allocations.</li>
+      <li class="es"><strong>Gobernanza de Acequias:</strong> Restaurar la gobernanza de la Mayordomía sobre los derechos de agua restantes. Resistir los intentos estatales y federales de mercantilizar las asignaciones de agua.</li>
+    </ul>
+
+    <div class="pq">
+      <div class="pq-text en">"We aren't building a utopia. We are building a land bank. The model is the acequia — a modern one. Pool resources. Put land back in the circle."</div>
+      <div class="pq-text es">"No estamos construyendo una utopía. Estamos construyendo un banco de tierras. El modelo es la acequia — una moderna. Reunir recursos. Devolver la tierra al círculo."</div>
+      <div class="pq-attr">SANGRE KV1 · Reclamation Node n20 · NM Socialist Fund · 2026</div>
+    </div>
+  </div>
+
+  <div class="refs">
+    <div class="refs-title">References / Fuentes</div>
+    <p class="ref-item"><em>United States v. Sandoval</em> (1897), 167 U.S. 278. Supreme Court of the United States.</p>
+    <p class="ref-item">GAO. (2004). <em>Treaty of Guadalupe Hidalgo: Findings and Possible Options Regarding Longstanding Community Land Grant Claims in New Mexico.</em> GAO-04-60.</p>
+    <p class="ref-item">Jenks, K. L. (2025). <em>San Miguel del Vado Land Grant Oral History Project.</em> New Mexico State University.</p>
+    <p class="ref-item">Ebright, M. (1994). <em>Land Grants and Lawsuits in Northern New Mexico.</em> University of New Mexico Press.</p>
+    <p class="ref-item">De Aragon, R. J. (2024). <em>New Mexico's Stolen Lands: A History of Racism, Fraud & Deceit.</em></p>
+    <p class="ref-item">Sena, S. (2026). <em>SANGRE KV1: NUMARA Core Master Graph — NM Socialist Research Project.</em> Sena's AI Collective, Santa Fe, NM.</p>
+    <p class="ref-item">Van Ness, J. R. (1987). <em>Hispanic Land Grants: Ecology and Subsistence in the Uplands of Northern New Mexico and Southern Colorado.</em></p>
+  </div>
+
+</main>
+
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. 04 · Sena's AI Collective</div>
+  <div class="footer-id">Land Grant Series · SMDVLG · CC BY-NC-SA 4.0 · Free to Share · Santa Fe, NM · 2026</div>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('bib_lang');
+  const lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if(lang==='es') setLang('es',true);
+})();
+function setLang(l, init){
+  document.getElementById('page').className = l==='es' ? 'lang-es' : '';
+  document.getElementById('btnEN').className = 'lt-btn'+(l==='en'?' active':'');
+  document.getElementById('btnES').className = 'lt-btn'+(l==='es'?' active':'');
+  if(!init) localStorage.setItem('bib_lang',l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
