@@ -21,367 +21,758 @@
   --serif:  'Fraunces', serif;
   --sans:   'DM Sans', sans-serif;
   --mono:   'DM Mono', monospace;
-  --panel-w: 420px;
+  --feed-w: 380px;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; overflow:hidden; }
-body { background:var(--earth); color:var(--sand); font-family:var(--sans); font-size:15px; line-height:1.6; display:flex; flex-direction:column; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
+body {
+  background: var(--earth);
+  color: var(--sand);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
 
 /* ── MASTHEAD ── */
 .masthead {
-  background:var(--earth);
-  border-bottom:2px solid var(--terr);
-  padding:14px 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-shrink:0;
-  z-index:10;
+  background: var(--earth);
+  border-bottom: 2px solid var(--terr);
+  padding: 13px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 100;
 }
-.brand { display:flex; align-items:baseline; gap:10px; }
-.brand-name { font-family:var(--serif); font-size:22px; font-weight:900; color:var(--gold); }
-.brand-sub { font-family:var(--mono); font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,234,216,0.35); }
-.lang-toggle { display:flex; border:1px solid rgba(194,96,58,0.35); border-radius:3px; overflow:hidden; }
-.lt-btn { padding:5px 13px; font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; background:transparent; border:none; color:rgba(245,234,216,0.4); cursor:pointer; transition:all 0.15s; }
-.lt-btn.active { background:var(--terr); color:var(--cream); }
-
-/* ── BODY LAYOUT: feed | panel ── */
-.app-body { display:flex; flex:1; overflow:hidden; }
-
-/* ── FEED ── */
-.feed {
-  flex:1;
-  overflow-y:auto;
-  padding:20px 24px 40px;
-  transition:margin-right 0.3s ease;
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-link { text-decoration: none; display: flex; align-items: baseline; gap: 10px; }
+.brand-name { font-family: var(--serif); font-size: 22px; font-weight: 900; color: var(--gold); }
+.brand-sub {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(245,234,216,0.3);
 }
-.feed.panel-open { margin-right:var(--panel-w); }
+.masthead-right { display: flex; align-items: center; gap: 14px; }
+.lang-toggle {
+  display: flex;
+  border: 1px solid rgba(194,96,58,0.35);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.lt-btn {
+  padding: 5px 13px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent; border: none;
+  color: rgba(245,234,216,0.4); cursor: pointer;
+  transition: all 0.15s;
+}
+.lt-btn.active { background: var(--terr); color: var(--cream); }
 
-/* ── FILTER BAR ── */
-.filter-bar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:20px; }
-.filter-label { font-family:var(--mono); font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,234,216,0.3); }
-.f-btn { padding:4px 12px; font-family:var(--mono); font-size:9px; letter-spacing:0.08em; text-transform:uppercase; border:1px solid rgba(245,234,216,0.12); background:transparent; color:rgba(245,234,216,0.4); cursor:pointer; border-radius:2px; transition:all 0.15s; }
-.f-btn:hover { border-color:var(--terr); color:var(--terr); }
-.f-btn.active { background:var(--terr); border-color:var(--terr); color:var(--cream); }
+/* ── TWO-PANE LAYOUT ── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
 
-/* ── CARDS GRID ── */
-.cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:14px; }
+/* ── LEFT FEED PANE ── */
+.feed-pane {
+  width: var(--feed-w);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(194,96,58,0.22);
+  background: var(--earth);
+  overflow: hidden;
+}
 
+/* series filter chips */
+.filter-bar {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid rgba(194,96,58,0.14);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.f-chip {
+  padding: 4px 11px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(245,234,216,0.12);
+  background: transparent;
+  color: rgba(245,234,216,0.38);
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.f-chip:hover { border-color: var(--terr); color: rgba(245,234,216,0.75); }
+.f-chip.active { background: var(--terr); border-color: var(--terr); color: var(--cream); }
+
+/* scrollable card list */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(194,96,58,0.25) transparent;
+}
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.25); border-radius: 2px; }
+
+/* individual cards */
 .card {
-  background:var(--warm);
-  border:1px solid rgba(245,234,216,0.07);
-  border-top:2px solid var(--terr);
-  border-radius:2px;
-  padding:20px 18px 16px;
-  cursor:pointer;
-  transition:border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  user-select:none;
+  padding: 13px 16px 12px;
+  margin: 0 8px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+  user-select: none;
 }
-.card:hover { border-color:var(--gold); border-top-color:var(--gold); transform:translateY(-2px); box-shadow:0 6px 24px rgba(0,0,0,0.25); }
-.card.active { border-color:var(--gold); border-top-color:var(--gold); background:#332510; }
-
-.card-meta { display:flex; align-items:center; justify-content:space-between; }
-.card-vol { font-family:var(--mono); font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,234,216,0.3); }
-.card-series { font-family:var(--mono); font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--terr); }
-.card-title { font-family:var(--serif); font-size:16px; font-weight:600; color:var(--sand); line-height:1.3; }
-.card-excerpt { font-size:12px; color:rgba(245,234,216,0.45); line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-.card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
-.card-date { font-family:var(--mono); font-size:9px; color:rgba(245,234,216,0.2); }
-.free-badge { font-family:var(--mono); font-size:8px; letter-spacing:0.08em; text-transform:uppercase; color:var(--sage); border:1px solid rgba(107,143,94,0.35); padding:2px 7px; border-radius:2px; }
-
-/* ── DETAIL PANEL ── */
-.panel {
-  position:fixed;
-  top:0; right:0;
-  width:var(--panel-w);
-  height:100%;
-  background:#221608;
-  border-left:2px solid var(--terr);
-  display:flex;
-  flex-direction:column;
-  transform:translateX(100%);
-  transition:transform 0.3s ease;
-  z-index:20;
-  overflow:hidden;
+.card:hover { background: rgba(42,31,14,0.7); }
+.card.active {
+  background: rgba(42,31,14,0.9);
+  border-left-color: var(--terr);
 }
-.panel.open { transform:translateX(0); }
 
-.panel-header {
-  padding:16px 20px 14px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-  flex-shrink:0;
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
 }
-.panel-vol { font-family:var(--mono); font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:var(--terr); margin-bottom:6px; }
-.panel-title { font-family:var(--serif); font-size:20px; font-weight:700; color:var(--sand); line-height:1.25; }
-.panel-close { background:transparent; border:1px solid rgba(245,234,216,0.15); color:rgba(245,234,216,0.4); width:30px; height:30px; border-radius:2px; cursor:pointer; font-size:16px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
-.panel-close:hover { border-color:var(--terr); color:var(--terr); }
+.card-vol-badge {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(194,96,58,0.18);
+  color: var(--terr);
+  padding: 2px 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.card-series-label {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,234,216,0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-title {
+  font-family: var(--serif); font-size: 14px; font-weight: 600;
+  color: var(--sand); line-height: 1.3;
+  margin-bottom: 4px;
+}
+.card-excerpt {
+  font-size: 12px; color: rgba(245,234,216,0.42); line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.card-date {
+  font-family: var(--mono); font-size: 9px; color: rgba(245,234,216,0.2);
+}
+.card-free {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sage); opacity: 0.75;
+}
 
-.panel-body { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
+/* empty / loading states */
+.feed-state {
+  padding: 32px 20px; text-align: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(245,234,216,0.25);
+}
+.dots { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+.dots span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); opacity: 0.2;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse {
+  0%,80%,100% { opacity: 0.2; transform: scale(0.8); }
+  40%          { opacity: 1;   transform: scale(1.1); }
+}
 
-.panel-series-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.p-series { font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--sky); background:rgba(74,127,165,0.1); border:1px solid rgba(74,127,165,0.2); padding:3px 9px; border-radius:2px; }
-.p-free { font-family:var(--mono); font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--sage); border:1px solid rgba(107,143,94,0.3); padding:3px 9px; border-radius:2px; }
-.p-date { font-family:var(--mono); font-size:9px; color:rgba(245,234,216,0.25); }
+/* ── RIGHT ARTICLE PANE ── */
+.article-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f0e8d4;
+}
 
-.panel-excerpt { font-size:14px; color:rgba(245,234,216,0.75); line-height:1.8; border-left:2px solid var(--terr); padding-left:14px; }
+/* empty state (nothing selected) */
+.article-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: rgba(28,20,16,0.3);
+}
+.article-empty-icon {
+  font-size: 40px;
+  opacity: 0.2;
+}
+.article-empty-text {
+  font-family: var(--serif); font-size: 18px; font-weight: 300;
+  font-style: italic;
+  color: rgba(28,20,16,0.35);
+  text-align: center;
+}
+.article-empty-sub {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(28,20,16,0.2);
+  text-align: center;
+}
 
-.panel-tags { display:flex; flex-wrap:wrap; gap:6px; }
-.p-tag { font-family:var(--mono); font-size:9px; letter-spacing:0.06em; color:rgba(245,234,216,0.3); border:1px solid rgba(245,234,216,0.1); padding:3px 8px; border-radius:2px; }
+/* article pane toolbar */
+.article-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--warm);
+  border-bottom: 1px solid rgba(194,96,58,0.25);
+  flex-shrink: 0;
+}
+.toolbar-left { display: flex; align-items: center; gap: 10px; }
+.toolbar-vol {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--terr);
+}
+.toolbar-title {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  color: rgba(245,234,216,0.7);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 400px;
+}
+.toolbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
-.panel-actions { margin-top:auto; padding-top:16px; border-top:1px solid var(--border); }
-.read-btn { display:block; width:100%; padding:12px; background:var(--terr); border:none; color:var(--cream); font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; text-align:center; text-decoration:none; cursor:pointer; border-radius:2px; transition:background 0.15s; }
-.read-btn:hover { background:#a8472a; }
-.read-btn.disabled { background:rgba(245,234,216,0.08); color:rgba(245,234,216,0.25); cursor:default; pointer-events:none; }
+/* back button — mobile only */
+.back-btn {
+  display: none;
+  align-items: center; gap: 5px;
+  padding: 5px 12px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent; border: 1px solid rgba(245,234,216,0.2);
+  color: rgba(245,234,216,0.55);
+  cursor: pointer; border-radius: 2px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.back-btn:hover { border-color: var(--terr); color: var(--terr); }
 
-/* ── STATES ── */
-.state { padding:40px 24px; text-align:center; }
-.state-dots { display:flex; gap:6px; justify-content:center; margin-bottom:10px; }
-.state-dots span { width:7px; height:7px; border-radius:50%; background:var(--gold); opacity:0.2; animation:ld 1.4s ease-in-out infinite; }
-.state-dots span:nth-child(2){animation-delay:.2s} .state-dots span:nth-child(3){animation-delay:.4s}
-@keyframes ld{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1.1)}}
-.state-text { font-family:var(--mono); font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,234,216,0.3); }
+.open-btn {
+  display: flex;
+  align-items: center; gap: 5px;
+  padding: 5px 12px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(194,96,58,0.15);
+  border: 1px solid rgba(194,96,58,0.3);
+  color: rgba(245,234,216,0.7);
+  text-decoration: none;
+  cursor: pointer; border-radius: 2px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.open-btn:hover { background: var(--terr); border-color: var(--terr); color: var(--cream); }
+.open-btn svg { flex-shrink: 0; }
 
-/* ── EN/ES ── */
-.en { display:block; } .es { display:none; }
-body.lang-es .en { display:none; } body.lang-es .es { display:block; }
+/* article content area */
+.article-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(194,96,58,0.3) transparent;
+}
+.article-scroll::-webkit-scrollbar { width: 5px; }
+.article-scroll::-webkit-scrollbar-track { background: transparent; }
+.article-scroll::-webkit-scrollbar-thumb { background: rgba(194,96,58,0.3); border-radius: 2px; }
+
+.article-loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 40px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(28,20,16,0.3);
+  gap: 10px;
+}
+
+/* injected <main> content reset */
+.article-injected {
+  background: #f0e8d4;
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.75;
+}
+/* override any fixed heights or overflow the vol pages set */
+.article-injected * { max-width: 100%; }
+.article-injected a { color: var(--terr); }
+.article-injected a:hover { color: var(--ink); }
+
+/* fallback excerpt display */
+.article-fallback {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 0 32px 80px;
+}
+.article-fallback-vol {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--terr); margin-bottom: 6px;
+}
+.article-fallback-title {
+  font-family: var(--serif); font-size: 28px; font-weight: 900;
+  color: var(--ink); line-height: 1.2; margin-bottom: 20px;
+}
+.article-fallback-excerpt {
+  font-size: 16px; color: rgba(28,20,16,0.75);
+  line-height: 1.85;
+  border-left: 3px solid var(--terr);
+  padding-left: 16px;
+  margin-bottom: 24px;
+}
+.article-fallback-note {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(28,20,16,0.35);
+  padding: 12px 16px;
+  border: 1px dashed rgba(194,96,58,0.3);
+  border-radius: 2px;
+}
 
 /* ── MOBILE ── */
-@media(max-width:700px){
-  :root { --panel-w: 100vw; }
-  .feed.panel-open { margin-right:0; }
-  .panel { width:100vw; }
-  .cards { grid-template-columns:1fr; }
-  .masthead { padding:12px 16px; }
-  .feed { padding:16px 16px 40px; }
+@media (max-width: 767px) {
+  .feed-pane {
+    width: 100%;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    z-index: 10;
+    transition: transform 0.28s ease;
+  }
+  .article-pane {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    transform: translateX(100%);
+    transition: transform 0.28s ease;
+  }
+  .app-body {
+    position: relative;
+    overflow: hidden;
+  }
+  body.article-open .article-pane { transform: translateX(0); }
+  .back-btn { display: flex; }
+  .toolbar-title { max-width: 180px; }
 }
 </style>
 </head>
 <body id="page">
 
-<script>const DATA_URL = '/biblioteca-worker/biblioteca-data.json';</script>
-
+<!-- ── MASTHEAD ── -->
 <header class="masthead">
   <div class="brand">
-    <span class="brand-name">La Biblioteca</span>
-    <span class="brand-sub">Sena's AI Collective</span>
+    <a class="brand-link" href="https://docs.senacolectivo.com/" target="_blank" rel="noopener">
+      <span class="brand-name">La Biblioteca</span>
+    </a>
+    <span class="brand-sub en">Sena's AI Collective</span>
+    <span class="brand-sub es">El Colectivo de IA de Sena</span>
   </div>
-  <div class="lang-toggle">
-    <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
-    <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+  <div class="masthead-right">
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
   </div>
 </header>
 
-<div class="app-body">
+<!-- ── APP BODY: two panes ── -->
+<div class="app-body" id="appBody">
 
-  <!-- ── FEED ── -->
-  <div class="feed" id="feed">
+  <!-- LEFT: feed pane -->
+  <div class="feed-pane" id="feedPane">
+
+    <!-- series filter chips -->
     <div class="filter-bar" id="filterBar">
-      <span class="filter-label en">Series:</span>
-      <span class="filter-label es">Serie:</span>
-      <button class="f-btn active" data-series="all">
+      <button class="f-chip active" data-series="all" onclick="filterSeries(this,'all')">
         <span class="en">All</span><span class="es">Todos</span>
       </button>
+      <!-- dynamically added chips go here -->
     </div>
-    <div class="cards" id="cards">
-      <div class="state">
-        <div class="state-dots"><span></span><span></span><span></span></div>
-        <div class="state-text en">Loading volumes…</div>
-        <div class="state-text es">Cargando…</div>
+
+    <!-- scrollable card list -->
+    <div class="card-list" id="cardList">
+      <div class="feed-state">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <span class="en">Loading volumes…</span>
+        <span class="es">Cargando…</span>
       </div>
     </div>
-  </div>
 
-  <!-- ── DETAIL PANEL ── -->
-  <aside class="panel" id="panel" role="dialog" aria-modal="true">
-    <div class="panel-header">
-      <div>
-        <div class="panel-vol" id="pVol"></div>
-        <div class="panel-title" id="pTitle"></div>
+  </div><!-- /feed-pane -->
+
+  <!-- RIGHT: article pane -->
+  <div class="article-pane" id="articlePane">
+
+    <!-- toolbar — hidden until an article loads -->
+    <div class="article-toolbar" id="articleToolbar" style="display:none">
+      <div class="toolbar-left">
+        <button class="back-btn" id="backBtn" onclick="goBack()">← <span class="en">Back</span><span class="es">Volver</span></button>
+        <span class="toolbar-vol" id="toolbarVol"></span>
+        <span class="toolbar-title" id="toolbarTitle"></span>
       </div>
-      <button class="panel-close" onclick="closePanel()" aria-label="Close">✕</button>
+      <div class="toolbar-right">
+        <a class="open-btn" id="openBtn" href="#" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 10L10 1M10 1H4M10 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="en">Open standalone page</span>
+          <span class="es">Abrir página completa</span>
+        </a>
+      </div>
     </div>
-    <div class="panel-body">
-      <div class="panel-series-row" id="pMeta"></div>
-      <div class="panel-excerpt" id="pExcerpt"></div>
-      <div class="panel-tags" id="pTags"></div>
-      <div class="panel-actions" id="pActions"></div>
-    </div>
-  </aside>
 
-</div>
+    <!-- empty state -->
+    <div class="article-empty" id="articleEmpty">
+      <div class="article-empty-icon">◈</div>
+      <div class="article-empty-text en">Select a volume</div>
+      <div class="article-empty-text es">Selecciona un número</div>
+      <div class="article-empty-sub en">Click any card to read inline</div>
+      <div class="article-empty-sub es">Haz clic en una tarjeta para leer</div>
+    </div>
+
+    <!-- article content scroll area -->
+    <div class="article-scroll" id="articleScroll" style="display:none">
+      <div id="articleContent"></div>
+    </div>
+
+  </div><!-- /article-pane -->
+
+</div><!-- /app-body -->
 
 <script>
+const DATA_URL = '/biblioteca-worker/biblioteca-data.json';
+
 const SERIES_LABELS = {
-  'Water Rights':          { en:'Water Rights',        es:'Derechos del Agua' },
-  'Land Grant':            { en:'Land Grant',          es:'Mercedes de Tierra' },
-  'Labor Rights':          { en:'Labor Rights',        es:'Derechos Laborales' },
-  'Community Agriculture': { en:'Agriculture',         es:'Agricultura Comunitaria' },
-  'Political Education':   { en:'Political Ed',        es:'Educación Política' },
-  'Special Edition':       { en:'Special Edition',     es:'Edición Especial' },
+  'Water Rights':          { en: 'Water Rights',       es: 'Derechos del Agua' },
+  'Land Grant':            { en: 'Land Grant',          es: 'Mercedes de Tierra' },
+  'Community Agriculture': { en: 'Community Ag',        es: 'Agricultura Comunitaria' },
+  'Labor Rights':          { en: 'Labor Rights',        es: 'Derechos Laborales' },
+  'Political Education':   { en: 'Political Ed',        es: 'Educación Política' },
+  'Special Edition':       { en: 'Special Edition',     es: 'Edición Especial' },
 };
 
-let volumes     = [];
+let volumes      = [];
 let activeSeries = 'all';
 let activeId     = null;
 let lang         = 'en';
 
-/* ── INIT ── */
+/* ── BOOT ── */
 (function init() {
   const saved = localStorage.getItem('bib_lang');
   lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
-  applyLang(true);
+  applyLang();
   loadData();
+
+  // hash navigation
+  window.addEventListener('hashchange', handleHash);
 })();
 
 async function loadData() {
   try {
     const res = await fetch(DATA_URL);
-    if (!res.ok) throw new Error(res.status);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     volumes = data.volumes || [];
-    buildFilters();
+    buildFilterChips();
     renderCards();
-  } catch(e) {
-    document.getElementById('cards').innerHTML =
-      `<div class="state"><div class="state-text">Could not load — try refreshing.</div></div>`;
+    handleHash(); // open article if hash present on load
+  } catch (e) {
+    document.getElementById('cardList').innerHTML =
+      `<div class="feed-state">Could not load — try refreshing.</div>`;
     console.error(e);
   }
 }
 
-/* ── FILTERS ── */
-function buildFilters() {
+/* ── HASH NAVIGATION ── */
+function handleHash() {
+  const hash = location.hash; // e.g. #vol2
+  if (!hash || !volumes.length) return;
+  const m = hash.match(/^#vol(\d+)$/i);
+  if (m) {
+    const volNum = parseInt(m[1], 10);
+    const v = volumes.find(x => x.vol === volNum);
+    if (v) openArticle(v.id);
+  }
+}
+
+/* ── SERIES FILTER CHIPS ── */
+function buildFilterChips() {
   const bar  = document.getElementById('filterBar');
   const seen = [...new Set(volumes.map(v => v.series).filter(Boolean))];
   seen.forEach(s => {
     const btn = document.createElement('button');
-    btn.className = 'f-btn';
+    btn.className = 'f-chip';
     btn.dataset.series = s;
-    const labels = SERIES_LABELS[s] || { en:s, es:s };
+    const labels = SERIES_LABELS[s] || { en: s, es: s };
     btn.innerHTML = `<span class="en">${labels.en}</span><span class="es">${labels.es}</span>`;
-    btn.onclick = () => filter(btn, s);
+    btn.onclick = () => filterSeries(btn, s);
     bar.appendChild(btn);
   });
 }
 
-function filter(btn, series) {
+function filterSeries(btn, series) {
   activeSeries = series;
-  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.f-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  closePanel();
   renderCards();
+  // if active article is not in filtered set, close it
+  if (activeId) {
+    const v = volumes.find(x => x.id === activeId);
+    if (v && series !== 'all' && v.series !== series) {
+      closeArticle();
+    }
+  }
 }
 
-/* ── CARDS ── */
+/* ── RENDER CARDS ── */
 function renderCards() {
-  const grid = document.getElementById('cards');
-  const vols = activeSeries === 'all' ? volumes : volumes.filter(v => v.series === activeSeries);
+  const list = document.getElementById('cardList');
+  const vols = activeSeries === 'all'
+    ? volumes
+    : volumes.filter(v => v.series === activeSeries);
 
   if (!vols.length) {
-    grid.innerHTML = `<div class="state"><div class="state-text">No volumes found.</div></div>`;
+    list.innerHTML = `<div class="feed-state">No volumes found.</div>`;
     return;
   }
 
-  grid.innerHTML = vols.map(v => {
+  list.innerHTML = vols.map(v => {
     const title   = lang === 'es' && v.titleES   ? v.titleES   : v.titleEN;
     const excerpt = lang === 'es' && v.excerptES ? v.excerptES : v.excerptEN;
-    const volNum  = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
+    const volNum  = v.vol ? `Vol ${String(v.vol).padStart(2,'0')}` : 'Special';
     const dateStr = v.date ? fmtDate(v.date) : '';
     const isActive = v.id === activeId ? ' active' : '';
+    const seriesLbl = SERIES_LABELS[v.series]?.[lang] || v.series || '';
     return `
-      <div class="card${isActive}" onclick="openPanel('${v.id}')" role="button" tabindex="0">
-        <div class="card-meta">
-          <span class="card-vol">${volNum}</span>
-          <span class="card-series">${v.series || ''}</span>
+      <div class="card${isActive}" id="card-${v.id}"
+           onclick="openArticle('${v.id}')"
+           role="button" tabindex="0"
+           onkeydown="if(event.key==='Enter'||event.key===' ')openArticle('${v.id}')">
+        <div class="card-top">
+          <span class="card-vol-badge">${volNum}</span>
+          <span class="card-series-label">${seriesLbl}</span>
         </div>
         <div class="card-title">${title}</div>
         <div class="card-excerpt">${excerpt}</div>
-        <div class="card-footer">
-          <span class="card-date">${dateStr}</span>
-          ${v.freeToShare ? `<span class="free-badge">Free</span>` : ''}
+        <div class="card-foot">
+          ${dateStr ? `<span class="card-date">${dateStr}</span>` : ''}
+          ${v.freeToShare ? `<span class="card-free en">· Free to Share</span><span class="card-free es">· Libre de compartir</span>` : ''}
         </div>
       </div>`;
   }).join('');
 }
 
-/* ── PANEL ── */
-function openPanel(id) {
+/* ── OPEN ARTICLE ── */
+async function openArticle(id) {
   const v = volumes.find(x => x.id === id);
   if (!v) return;
+
+  // Mark active card
   activeId = id;
-
-  const es      = lang === 'es';
-  const title   = es && v.titleES   ? v.titleES   : v.titleEN;
-  const excerpt = es && v.excerptES ? v.excerptES : v.excerptEN;
-  const volNum  = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
-  const seriesLabel = SERIES_LABELS[v.series]?.[lang] || v.series;
-
-  document.getElementById('pVol').textContent   = volNum;
-  document.getElementById('pTitle').textContent = title;
-
-  const meta = document.getElementById('pMeta');
-  meta.innerHTML = [
-    v.series   ? `<span class="p-series">${seriesLabel}</span>` : '',
-    v.freeToShare ? `<span class="p-free">${es ? 'Libre de compartir' : 'Free to Share'}</span>` : '',
-    v.date     ? `<span class="p-date">${fmtDate(v.date)}</span>` : '',
-  ].join('');
-
-  document.getElementById('pExcerpt').textContent = excerpt;
-
-  const tags = document.getElementById('pTags');
-  tags.innerHTML = v.tags
-    ? v.tags.split(',').map(t => `<span class="p-tag">${t.trim()}</span>`).join('')
-    : '';
-
-  const readLabel = es ? 'Leer el número completo' : 'Read Full Issue';
-  document.getElementById('pActions').innerHTML = v.url
-    ? `<a class="read-btn" href="${v.url}" target="_blank" rel="noopener">${readLabel} →</a>`
-    : `<span class="read-btn disabled">${es ? 'Página completa próximamente' : 'Full page coming soon'}</span>`;
-
-  document.getElementById('panel').classList.add('open');
-  document.getElementById('feed').classList.add('panel-open');
-
-  // Highlight active card
   document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  event?.currentTarget?.classList.add('active');
+  const cardEl = document.getElementById('card-' + id);
+  if (cardEl) {
+    cardEl.classList.add('active');
+    cardEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  // Update hash without reloading
+  if (v.vol) history.replaceState(null, '', '#vol' + v.vol);
+
+  // Show toolbar
+  const volNum = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
+  const title  = lang === 'es' && v.titleES ? v.titleES : v.titleEN;
+  document.getElementById('toolbarVol').textContent   = volNum;
+  document.getElementById('toolbarTitle').textContent = title;
+  const openBtn = document.getElementById('openBtn');
+  openBtn.href = v.url || '#';
+  document.getElementById('articleToolbar').style.display = '';
+
+  // Hide empty state, show scroll area
+  document.getElementById('articleEmpty').style.display  = 'none';
+  const scrollEl   = document.getElementById('articleScroll');
+  const contentEl  = document.getElementById('articleContent');
+  scrollEl.style.display = '';
+  scrollEl.scrollTop = 0;
+
+  // Mobile: slide to article pane
+  document.body.classList.add('article-open');
+
+  // Show loading indicator
+  contentEl.innerHTML = `
+    <div class="article-loading">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <span class="en">Loading…</span><span class="es">Cargando…</span>
+    </div>`;
+
+  // Fetch and inject article
+  if (v.url) {
+    try {
+      // Build local path from canonical URL for same-origin fetch
+      const localPath = urlToLocalPath(v.url);
+      const res = await fetch(localPath);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const html = await res.text();
+      const mainHtml = extractMain(html);
+      if (mainHtml) {
+        contentEl.innerHTML = `<div class="article-injected">${mainHtml}</div>`;
+        // Re-run any inline scripts from the injected content
+        activateScripts(contentEl);
+      } else {
+        throw new Error('No <main> found');
+      }
+    } catch (err) {
+      console.warn('fetch failed, showing fallback:', err);
+      showFallback(v, contentEl);
+    }
+  } else {
+    showFallback(v, contentEl);
+  }
 }
 
-function closePanel() {
+/* Convert absolute canonical URL to a root-relative local path */
+function urlToLocalPath(url) {
+  try {
+    const u = new URL(url);
+    return u.pathname; // e.g. /biblioteca/vol2/
+  } catch {
+    return url;
+  }
+}
+
+/* Extract innerHTML of <main> from raw HTML string */
+function extractMain(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const main = doc.querySelector('main');
+  return main ? main.outerHTML : null;
+}
+
+/* Re-run inline scripts inside injected content */
+function activateScripts(container) {
+  container.querySelectorAll('script').forEach(oldScript => {
+    const newScript = document.createElement('script');
+    [...oldScript.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
+    newScript.textContent = oldScript.textContent;
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
+
+/* Fallback: show excerpt if no URL or fetch failed */
+function showFallback(v, contentEl) {
+  const es       = lang === 'es';
+  const title    = es && v.titleES   ? v.titleES   : v.titleEN;
+  const excerpt  = es && v.excerptES ? v.excerptES : v.excerptEN;
+  const volNum   = v.vol ? `Vol. ${String(v.vol).padStart(2,'0')}` : 'Special';
+  contentEl.innerHTML = `
+    <div class="article-fallback">
+      <div class="article-fallback-vol">${volNum}</div>
+      <div class="article-fallback-title">${title}</div>
+      <div class="article-fallback-excerpt">${excerpt}</div>
+      <div class="article-fallback-note">
+        ${es ? 'Página completa próximamente' : 'Full page coming soon'}
+      </div>
+    </div>`;
+}
+
+/* ── CLOSE / BACK (mobile) ── */
+function closeArticle() {
   activeId = null;
-  document.getElementById('panel').classList.remove('open');
-  document.getElementById('feed').classList.remove('panel-open');
+  history.replaceState(null, '', location.pathname);
   document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+  document.getElementById('articleToolbar').style.display = 'none';
+  document.getElementById('articleEmpty').style.display   = '';
+  document.getElementById('articleScroll').style.display  = 'none';
+  document.getElementById('articleContent').innerHTML      = '';
+  document.body.classList.remove('article-open');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+function goBack() {
+  // On mobile: slide back to feed pane
+  document.body.classList.remove('article-open');
+  // Keep activeId so the card stays highlighted — UX matches Ground News
+}
 
 /* ── LANGUAGE ── */
 function setLang(l) {
   lang = l;
   localStorage.setItem('bib_lang', l);
-  applyLang(false);
+  applyLang();
   if (volumes.length) renderCards();
-  if (activeId) openPanel(activeId);
+  // Re-render toolbar title in new language
+  if (activeId) {
+    const v = volumes.find(x => x.id === activeId);
+    if (v) {
+      const title = lang === 'es' && v.titleES ? v.titleES : v.titleEN;
+      document.getElementById('toolbarTitle').textContent = title;
+    }
+  }
 }
 
-function applyLang(init) {
+function applyLang() {
+  document.documentElement.lang = lang;
   document.getElementById('page').className = lang === 'es' ? 'lang-es' : '';
   document.getElementById('btnEN').className = 'lt-btn' + (lang === 'en' ? ' active' : '');
   document.getElementById('btnES').className = 'lt-btn' + (lang === 'es' ? ' active' : '');
-  document.documentElement.lang = lang;
 }
 
+/* ── UTILS ── */
 function fmtDate(d) {
-  try { return new Date(d).toLocaleDateString('en-US', {month:'short', year:'numeric'}); }
-  catch { return d; }
+  try {
+    return new Date(d + 'T12:00:00').toLocaleDateString(
+      lang === 'es' ? 'es-MX' : 'en-US',
+      { month: 'short', year: 'numeric' }
+    );
+  } catch { return d; }
 }
+
+/* Escape key closes article on desktop, goes back on mobile */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && activeId) {
+    if (window.innerWidth < 768) goBack();
+    else closeArticle();
+  }
+});
 </script>
 </body>
 </html>
