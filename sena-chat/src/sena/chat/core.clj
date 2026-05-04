@@ -3,6 +3,7 @@
             [sena.chat.api     :as api]
             [sena.chat.voices  :as voices]
             [sena.chat.session :as session]
+            [sena.chat.quetzal :as quetzal]
             [clojure.string    :as str])
   (:gen-class))
 
@@ -23,6 +24,7 @@
   (println "║   Sena Chat  ·  Clojure × Claude     ║")
   (println "╚══════════════════════════════════════╝")
   (println "  /voice <aria|nova|vex|grant>  — switch persona")
+  (println "  /quetzal                       — show Quetzal Core contract")
   (println "  /quit                          — exit")
   (println))
 
@@ -56,6 +58,12 @@
     (cond
       (= "/quit" line)
       [false gs]
+
+      (= "/quetzal" line)
+      (do
+        (doseq [line (quetzal/status-lines)]
+          (println line))
+        [true gs])
 
       (str/starts-with? line "/voice ")
       (let [v (-> line (subs 7) str/trim str/lower-case keyword)]
