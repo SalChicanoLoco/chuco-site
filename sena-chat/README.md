@@ -16,6 +16,28 @@ Export your Anthropic API key before running:
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
+
+## API readiness check
+
+Before running a live chat session, use the repo-level dry-run check:
+
+```bash
+make chat-check
+```
+
+Then set your key and optionally override the default model:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+export ANTHROPIC_MODEL=claude-sonnet-4-6   # optional; this is the default
+```
+
+To spend one tiny request and prove the key/model work before entering the REPL:
+
+```bash
+make chat-live
+```
+
 ## Run
 
 ```bash

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol. 05 — Build MILPA · La Biblioteca</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--earth:#1a1209;--warm:#2a1f0e;--sand:#f5ead8;--terr:#c2603a;--gold:#e8a825;--sage:#6b8f5e;--sky:#4a7fa5;--cream:#fdf6ea;--ink:#1c1410;--border:rgba(194,96,58,0.18);--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.mast{background:var(--earth);border-bottom:3px solid var(--terr);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mast-brand{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.mast-right{display:flex;align-items:center;gap:16px}
+.back-link{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.45);text-decoration:none}
+.back-link:hover{color:var(--terr)}
+.lang-toggle{display:flex;border:1px solid rgba(194,96,58,.35);border-radius:3px;overflow:hidden}
+.lt-btn{padding:5px 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:rgba(245,234,216,.4);cursor:pointer;transition:all .15s}
+.lt-btn.active{background:var(--terr);color:var(--cream)}
+.cover{background:var(--warm);padding:56px 32px 48px;border-bottom:2px solid var(--border)}
+.cover-inner{max-width:720px;margin:0 auto}
+.vol-id{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.cover-series{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.35);margin-bottom:20px}
+.cover-h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--sand);line-height:1.1;margin-bottom:8px}
+.cover-h1 em{color:var(--gold);font-style:italic}
+.cover-sub{font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);font-weight:300;color:rgba(245,234,216,.55);margin-bottom:24px;line-height:1.3}
+.cover-lede{font-size:15px;color:rgba(245,234,216,.65);max-width:580px;line-height:1.8;border-left:3px solid var(--terr);padding-left:16px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.ctag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(194,96,58,.3);color:rgba(245,234,216,.45)}
+.ctag.hot{border-color:var(--sage);color:var(--sage)}
+.tier-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.tier-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(245,234,216,.2);color:rgba(245,234,216,.5)}
+.tier-badge.t1{border-color:var(--sage);color:var(--sage)}
+.pub-body{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.section{margin-bottom:48px}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.section-h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:16px}
+.section-h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:24px 0 12px}
+.body-text{color:#3a2c1e;font-size:15.5px;line-height:1.8;margin-bottom:14px}
+.body-text strong{color:var(--ink);font-weight:600}
+.body-text em{font-style:italic}
+.pq{border-left:4px solid var(--sage);padding:16px 20px;margin:28px 0;background:rgba(107,143,94,.06)}
+.pq-text{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;font-style:italic}
+.pq-attr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-top:8px}
+.pub-ul{margin:12px 0 16px 20px}
+.pub-ul li{color:#3a2c1e;font-size:15px;line-height:1.75;margin-bottom:8px}
+.pub-ul li strong{color:var(--ink);font-weight:600}
+.stat-row{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat-box{flex:1;min-width:140px;background:white;border:1px solid var(--border);border-top:3px solid var(--sage);padding:16px}
+.stat-num{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--sage)}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-top:4px}
+.math-box{background:white;border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px;margin:20px 0;font-family:var(--mono);font-size:13px;color:#3a2c1e;line-height:1.9}
+.math-box strong{color:var(--ink)}
+.step-list{counter-reset:steps;margin:16px 0}
+.step-item{counter-increment:steps;display:flex;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none}
+.step-num{font-family:var(--serif);font-size:32px;font-weight:900;color:var(--terr);min-width:40px;line-height:1}
+.step-body h4{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.step-body p{font-size:14.5px;color:#3a2c1e;line-height:1.75;margin-bottom:8px}
+.step-body .es-step{font-size:13px;color:#6a5a4a;font-style:italic;line-height:1.65}
+.tier-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px}
+.tier-table th{background:var(--warm);color:var(--sand);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:10px 12px;text-align:left}
+.tier-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:#3a2c1e;vertical-align:top}
+.tier-table tr:nth-child(even) td{background:rgba(245,234,216,.4)}
+.tier-table .t1-col{color:var(--sage);font-weight:600}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.refs{background:white;border:1px solid var(--border);padding:24px;margin-top:48px}
+.refs-title{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--terr);margin-bottom:16px}
+.ref-item{font-size:13px;color:#5a4a3a;line-height:1.6;margin-bottom:8px;padding-left:20px;text-indent:-20px}
+.pub-footer{background:var(--earth);border-top:2px solid var(--warm);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold)}
+.footer-id{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,234,216,.25)}
+.en{display:block}.es{display:none}
+body.lang-es .en{display:none}body.lang-es .es{display:block}
+.en-inline{display:inline}.es-inline{display:none}
+body.lang-es .en-inline{display:none}body.lang-es .es-inline{display:inline}
+@media(max-width:640px){.cover,.mast,.pub-body,.pub-footer{padding-left:20px;padding-right:20px}.cover{padding-top:36px;padding-bottom:32px}}
+</style>
+</head>
+<body id="page">
+
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca/">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="vol-id">Vol. 05 · Community Agriculture · April 2026</div>
+    <div class="cover-series">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <h1 class="cover-h1 en">Build <em>MILPA</em>:<br>Your Community Greenhouse</h1>
+    <h1 class="cover-h1 es">Construye <em>MILPA</em>:<br>Tu Invernadero Comunitario</h1>
+    <div class="cover-sub en">From ancient knowledge to your backyard — a greenhouse anyone can build, with whatever they have.</div>
+    <div class="cover-sub es">Del conocimiento ancestral a tu patio — un invernadero que cualquiera puede construir, con lo que tenga.</div>
+    <p class="cover-lede en">CGS-C1 build guide. Four tiers from free to commercial. Passive solar, aquaponics, earth thermal, compute waste heat. Built for the high desert of Northern NM at 6,900 ft.</p>
+    <p class="cover-lede es">Guía de construcción CGS-C1. Cuatro niveles de gratuito a comercial. Solar pasivo, acuaponía, calor terrestre, calor residual de cómputo. Diseñado para el desierto alto del norte de NM a 2,100 m.</p>
+    <div class="tier-strip">
+      <span class="tier-badge t1">🌱 T1 — Free / Gratis</span>
+      <span class="tier-badge">🔧 T2 — Budget</span>
+      <span class="tier-badge">🏗 T3 — Economy</span>
+      <span class="tier-badge">🏢 T4 — Commercial</span>
+    </div>
+    <div class="cover-tags" style="margin-top:16px">
+      <span class="ctag hot">Food Sovereignty</span>
+      <span class="ctag hot">Community Agriculture</span>
+      <span class="ctag">Aquaponics</span>
+      <span class="ctag">CGS-C1</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+  </div>
+</div>
+
+<main class="pub-body">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label en">Section 01</div>
+    <div class="section-label es">Sección 01</div>
+    <h2 class="section-h2 en">What Is MILPA — And Where Does It Come From?</h2>
+    <h2 class="section-h2 es">¿Qué es MILPA y de dónde viene?</h2>
+
+    <p class="body-text en">Your ancestors already solved this problem. Around 1250 CE, in the Valley of Mexico, the Aztec people were denied farmland by more powerful neighbors. So they built it themselves — on the water. They wove reed frames, filled them with rich lake mud, and grew enough food to feed a city of 200,000 people. They called these floating gardens <strong>chinampas</strong>. The United Nations recognized them as a Globally Important Agricultural Heritage System in 2018. That same closed-loop logic — water feeds plants, plants clean water, nothing is wasted — is the engine of MILPA.</p>
+    <p class="body-text es">Tus ancestros ya resolvieron este problema. Alrededor del año 1250 d.C., en el Valle de México, el pueblo Azteca fue privado de tierras de cultivo por vecinos más poderosos. Entonces las construyeron ellos mismos — sobre el agua. Tejieron marcos de caña, los llenaron de barro rico del lago y cultivaron suficiente comida para alimentar una ciudad de 200,000 personas. Llamaron a estos jardines flotantes <strong>chinampas</strong>. Las Naciones Unidas las reconocieron como Sistema de Patrimonio Agrícola de Importancia Mundial en 2018. Esa misma lógica de circuito cerrado — el agua alimenta las plantas, las plantas limpian el agua, nada se desperdicia — es el motor de MILPA.</p>
+
+    <p class="body-text en"><strong>MILPA</strong> is a community greenhouse system that combines three ancient ideas: the earth-sheltered pit greenhouse (buried for warmth), brick thermal mass (heat storage in walls), and the chinampa water cycle (fish feed plants, plants clean water). Add modern computer waste heat recovery, and you have a self-sustaining food system built from mostly free or salvaged parts.</p>
+    <p class="body-text es"><strong>MILPA</strong> es un sistema de invernadero comunitario que combina tres ideas antiguas: el invernadero de hoyo (enterrado para conservar calor), la masa térmica de ladrillo (almacenamiento de calor en paredes), y el ciclo acuático de la chinampa (los peces alimentan a las plantas, las plantas limpian el agua). Añade la recuperación del calor residual de computadoras, y tienes un sistema de alimentación autosustentable construido con piezas mayormente gratuitas o recicladas.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">200k</div>
+        <div class="stat-label en">People fed by chinampas — Tenochtitlan</div>
+        <div class="stat-label es">Personas alimentadas por chinampas — Tenochtitlan</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">52°F</div>
+        <div class="stat-label en">Earth temp at 4 ft depth — year-round baseline</div>
+        <div class="stat-label es">Temp del suelo a 4 pies — base todo el año</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$0</div>
+        <div class="stat-label en">Cost of Tier 1 build — just labor</div>
+        <div class="stat-label es">Costo del Nivel 1 — solo trabajo</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+    <h2 class="section-h2 en">How the System Works — The Big Picture</h2>
+    <h2 class="section-h2 es">Cómo funciona el sistema — La vista general</h2>
+
+    <p class="body-text en">Everything in MILPA connects to everything else. There is no waste — only inputs and outputs that loop back. Four subsystems working as one:</p>
+    <p class="body-text es">Todo en MILPA está conectado. No hay desperdicio — solo entradas y salidas que se retroalimentan. Cuatro subsistemas funcionando como uno:</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>Earth Burial:</strong> Digging 3–4 feet down gives you free baseline heat of ~52°F year-round — enough to keep plants alive through a Northern NM winter with zero heating input.</li>
+      <li class="es"><strong>Entierro en la Tierra:</strong> Cavar 3–4 pies te da una temperatura base gratuita de ~11°C todo el año — suficiente para mantener las plantas vivas durante el invierno del norte de NM sin calefacción.</li>
+      <li class="en"><strong>Brick Thermal Mass:</strong> North and side walls of brick or cinder block (8"+ thick) absorb solar heat by day and radiate it through the night. The more mass, the more stable the temperature.</li>
+      <li class="es"><strong>Masa Térmica de Ladrillo:</strong> Las paredes norte y laterales de ladrillo o bloque de concreto (20+ cm de grosor) absorben el calor solar durante el día y lo irradian durante la noche.</li>
+      <li class="en"><strong>Chinampa Water Cycle:</strong> Fish tank → grow beds → fish tank. Fish waste feeds the plants. Plants filter the water. The pump runs continuously. Nothing leaves the loop.</li>
+      <li class="es"><strong>Ciclo Acuático Chinampa:</strong> Tanque de peces → camas de cultivo → tanque de peces. Los desechos de los peces alimentan las plantas. Las plantas filtran el agua. La bomba corre continuamente.</li>
+      <li class="en"><strong>Compute Waste Heat:</strong> A single modest PC or server running continuously produces 300–600W of heat — enough to warm a 100-gallon fish tank with BTUs to spare. The compute earns its keep twice: processing power + free heat.</li>
+      <li class="es"><strong>Calor Residual de Cómputo:</strong> Una sola PC o servidor modesto produce 300–600W de calor continuo — suficiente para calentar un tanque de 100 galones con BTUs de sobra. El cómputo paga su lugar dos veces: potencia de procesamiento + calor gratuito.</li>
+    </ul>
+
+    <div class="pq">
+      <div class="pq-text en">"The T1 build costs $0. The food it grows is yours. The knowledge it runs on is 1,250 years old. They built cities on it. You can feed your block."</div>
+      <div class="pq-text es">"El Nivel 1 cuesta $0. La comida que produce es tuya. El conocimiento en el que se basa tiene 1,250 años. Con él construyeron ciudades. Tú puedes alimentar tu cuadra."</div>
+      <div class="pq-attr">MILPA CGS-C1 · Sena Colectivo · 2026</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+    <h2 class="section-h2 en">The Math — Why This Works</h2>
+    <h2 class="section-h2 es">Las matemáticas — Por qué funciona</h2>
+
+    <p class="body-text en">You don't need to be an engineer to build MILPA. But you should know the numbers so you can size it right.</p>
+    <p class="body-text es">No necesitas ser ingeniero para construir MILPA. Pero debes conocer los números para dimensionarlo correctamente.</p>
+
+    <div class="math-box">
+      <strong>🌍 Earth Temp at Depth / Temperatura del Suelo a Profundidad</strong><br>
+      Santa Fe: 6,900 ft (2,100 m) · USDA Zone 7a · Winter low: 18°F (-8°C)<br><br>
+      Depth 0 ft → swings -10°F to 95°F seasonally<br>
+      Depth 2 ft → swings 30°F to 75°F<br>
+      Depth 4 ft → <strong>stable ~52°F (11°C) YEAR-ROUND ← your free baseline heat</strong><br>
+      Depth 6 ft → stable ~56°F (13°C) year-round
+    </div>
+
+    <div class="math-box">
+      <strong>🧱 Thermal Mass / Masa Térmica</strong><br>
+      Water → 62.4 BTU / cubic ft / °F (best value per dollar)<br>
+      Brick → 25–30 BTU / cubic ft / °F<br>
+      Earth → 20 BTU / cubic ft / °F<br><br>
+      Rule: 2–5 gallons of water per sq ft of south-facing glazing<br>
+      Example: 100 sq ft glazing → 200–500 gallons needed<br>
+      <strong>Your fish tanks count toward this — they are thermal mass AND food production.</strong>
+    </div>
+
+    <div class="math-box">
+      <strong>💻 Compute Waste Heat / Calor Residual de Cómputo</strong><br>
+      Small server or gaming PC → 300–600W continuous heat output<br>
+      500W = 1,706 BTU/hr of heat available<br><br>
+      Fish tank heat requirement:<br>
+      100-gal tank, maintain 78°F in 52°F ambient → ~1,040 BTU/hr needed<br>
+      Plate heat exchanger efficiency: 80–95% → ~850–960 BTU/hr delivered<br>
+      <strong>→ ONE modest compute node heats a 100-gallon fish tank with BTUs to spare.</strong>
+    </div>
+
+    <div class="math-box">
+      <strong>🌬 Updraft Pipe Sizing / Tamaño de la Chimenea de Convección</strong><br>
+      Stack effect (simplified): Draft = 0.0188 × H × (1/T_cold - 1/T_hot)<br>
+      H = height difference (ft), T = temperature (°Rankine)<br><br>
+      For typical MILPA (8 ft interior, 30°F differential):<br>
+      200 sq ft greenhouse → 2–4 vents of ~1 sq ft each, inlet and outlet<br>
+      Tip: Oil-piston auto-openers (Univents) work without electricity. ~$30–60 each.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label en">Section 04</div>
+    <div class="section-label es">Sección 04</div>
+    <h2 class="section-h2 en">Build It — Four Tiers</h2>
+    <h2 class="section-h2 es">Constrúyelo — Cuatro Niveles</h2>
+
+    <p class="body-text en">Pick your tier based on your budget and what you have access to. Every tier builds the same system. Only the materials change.</p>
+    <p class="body-text es">Elige tu nivel según tu presupuesto y lo que tienes disponible. Cada nivel construye el mismo sistema. Solo cambian los materiales.</p>
+
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th>Part</th>
+          <th class="t1-col">T1 — Free</th>
+          <th>T2 — Budget</th>
+          <th>T3 — Economy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Structure</strong></td>
+          <td class="t1-col">Salvaged lumber, pallets, found wood</td>
+          <td>Mix salvaged + new 2×4s</td>
+          <td>New lumber, metal conduit arches</td>
+        </tr>
+        <tr>
+          <td><strong>Glazing</strong></td>
+          <td class="t1-col">Salvaged windows, clear plastic sheeting</td>
+          <td>Single-wall polycarbonate ($0.50–1/sq ft)</td>
+          <td>Double-wall polycarbonate ($1–2/sq ft)</td>
+        </tr>
+        <tr>
+          <td><strong>Thermal Mass</strong></td>
+          <td class="t1-col">Salvaged brick, cinder block, adobe</td>
+          <td>Salvaged brick + new mortar</td>
+          <td>New brick or concrete block</td>
+        </tr>
+        <tr>
+          <td><strong>Fish Tank</strong></td>
+          <td class="t1-col">IBC tote (salvage ~$40–80)</td>
+          <td>IBC tote new ($120) or 55-gal drums</td>
+          <td>New 100–300 gal stock tank ($80–200)</td>
+        </tr>
+        <tr>
+          <td><strong>Grow Beds</strong></td>
+          <td class="t1-col">Old bathtubs, salvaged containers</td>
+          <td>Rubbermaid totes ($20–40 ea)</td>
+          <td>Raised bed lumber kits</td>
+        </tr>
+        <tr>
+          <td><strong>Heat Exchanger</strong></td>
+          <td class="t1-col">Salvaged copper coil in tank</td>
+          <td>Used plate HX ($40–80)</td>
+          <td>New stainless plate HX ($80–200)</td>
+        </tr>
+        <tr>
+          <td><strong>Pump</strong></td>
+          <td class="t1-col">Salvaged pond or sump pump</td>
+          <td>New small pond pump ($25–50)</td>
+          <td>New aquaponic pump ($60–120)</td>
+        </tr>
+        <tr>
+          <td><strong>Vents</strong></td>
+          <td class="t1-col">Manual — prop open with a stick</td>
+          <td>1–2 Univent auto-openers ($30–60 ea)</td>
+          <td>4 Univents + ridge vent strip</td>
+        </tr>
+        <tr>
+          <td><strong>Est. Cost</strong></td>
+          <td class="t1-col"><strong>$0 + labor</strong></td>
+          <td><strong>$200–$800</strong></td>
+          <td><strong>$1,500–$4,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-label en">Section 05</div>
+    <div class="section-label es">Sección 05</div>
+    <h2 class="section-h2 en">Step by Step — How to Build T1 (Free)</h2>
+    <h2 class="section-h2 es">Paso a Paso — Cómo construir el Nivel 1 (Gratis)</h2>
+
+    <p class="body-text en">Find your site. South-facing slope is ideal. You need sun from 9am–3pm in winter. Mark a rectangle — start small: 8 ft × 12 ft is plenty for one family.</p>
+    <p class="body-text es">Encuentra tu sitio. Una pendiente orientada al sur es ideal. Necesitas sol de 9am a 3pm en invierno. Marca un rectángulo — empieza pequeño: 8 pies × 12 pies es suficiente para una familia.</p>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Dig the Pit / Cavar el Hoyo</h4>
+          <p>Dig down 3–4 feet. Slope the south wall at 45° for drainage. Keep the excavated soil — you'll use it to berm the north and east walls later. The earth you remove becomes your insulation.</p>
+          <p class="es-step">Cava 3–4 pies de profundidad. Inclina la pared sur a 45° para drenaje. Guarda la tierra excavada — la tierra que retiras se convierte en tu aislamiento.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Lay the Brick Walls / Colocar Paredes de Ladrillo</h4>
+          <p>North and side walls: salvaged brick or cinder block, at least 8 inches thick. More mass = more heat storage. Mortar with basic Portland cement mix. These walls absorb sun by day and radiate heat all night.</p>
+          <p class="es-step">Paredes norte y laterales: ladrillo reciclado o bloque de concreto, al menos 8 pulgadas de grosor. Más masa = más almacenamiento de calor.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Install the Updraft Pipe / Instalar la Chimenea de Convección</h4>
+          <p>A 4–6 inch diameter pipe or duct through the roof peak on the north side. PVC, metal conduit, or salvaged duct all work. Cut inlet vents low on the south wall, same total area. Stack effect does the rest — no fan needed.</p>
+          <p class="es-step">Un tubo de 4–6 pulgadas a través del pico del techo en el lado norte. Corta ventilaciones de entrada bajas en la pared sur. No se necesita ventilador.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Set Up the Fish Tank / Instalar el Tanque de Peces</h4>
+          <p>Place your IBC tote near the compute node or heat source. Run a copper coil (salvaged from an old refrigerator or AC unit — free at scrap yards) inside the tank. Connect it to your compute cooling loop via a simple pump. Wait 3–4 weeks for bacteria to establish before adding fish.</p>
+          <p class="es-step">Coloca tu tote IBC cerca del nodo de cómputo. Pasa una espiral de cobre reciclada dentro del tanque. Espera 3–4 semanas para que se establezcan las bacterias antes de agregar peces.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Build Grow Beds / Construir Camas de Cultivo</h4>
+          <p>Old bathtubs work perfectly. Place them higher than the fish tank so gravity returns water. Fill with river gravel (free from any creek) or lava rock. Plant starts go directly in the gravel.</p>
+          <p class="es-step">Las bañeras viejas funcionan perfectamente. Colócalas más arriba que el tanque. Llena con grava de río (gratis en cualquier arroyo).</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Glaze the South Face / Acristalar la Cara Sur</h4>
+          <p>Salvaged windows from Habitat for Humanity ReStores, Craigslist, Facebook Marketplace. Clear 6-mil plastic sheeting works too — $20 for a whole roll. Orient everything south. Seal gaps with foam weatherstripping.</p>
+          <p class="es-step">Ventanas recicladas de Habitat for Humanity ReStores o plástica transparente de 6 mil ($20 por rollo). Sella huecos con burlete de espuma.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Berm and Insulate / Terraplén y Aislamiento</h4>
+          <p>Push your excavated soil back against the north and side walls on the outside. At least 2 feet of earth berming. This is free insulation — the same principle as an adobe home.</p>
+          <p class="es-step">Empuja la tierra excavada contra las paredes norte y laterales por fuera. Al menos 2 pies de terraplén. El mismo principio que una casa de adobe.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Start Growing / Empieza a Cultivar</h4>
+          <p>Add fish (tilapia or catfish from a local hatchery — ~$5–15 for a starter batch). Plant leafy greens first — lettuce, kale, spinach, cilantro. Within 6–8 weeks your system is cycling. Within 6 months you are eating from it.</p>
+          <p class="es-step">Agrega peces (tilapia o bagre de una piscifactoría local). Planta verduras de hoja primero. En 6–8 semanas tu sistema está funcionando. En 6 meses estás comiendo de él.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6 -->
+  <div class="section">
+    <div class="section-label en">Section 06</div>
+    <div class="section-label es">Sección 06</div>
+    <h2 class="section-h2 en">Nuestros Ancestros — Honoring the Knowledge</h2>
+    <h2 class="section-h2 es">Nuestros Ancestros — Honrando el Conocimiento</h2>
+
+    <p class="body-text en">This is not new technology. The chinampa system fed the entire city of Tenochtitlan — now Mexico City — for centuries. The walipini pit greenhouse kept people alive in Bolivia and Russia in climates far harsher than New Mexico. The milpa companion planting system fed millions across Mesoamerica for a thousand years before Europeans arrived.</p>
+    <p class="body-text es">Esto no es tecnología nueva. El sistema de chinampas alimentó toda la ciudad de Tenochtitlan — ahora Ciudad de México — por siglos. El invernadero de hoyo walipini mantuvo viva a la gente en Bolivia y Rusia en climas mucho más duros que Nuevo México. El sistema de milpa policultivo alimentó a millones en Mesoamérica por mil años antes de que llegaran los europeos.</p>
+
+    <p class="body-text en"><strong>MILPA</strong> is named in honor of that ancient polyculture system. The three sisters — corn, beans, squash — grew together, supporting each other. MILPA (CGS-C1) is the same principle: fish, plants, earth, and compute, each supporting the others. Nothing wasted. Everything in relationship.</p>
+    <p class="body-text es"><strong>MILPA</strong> lleva el nombre en honor a ese antiguo sistema de policultivo. Las tres hermanas — maíz, frijoles, calabaza — crecían juntas, apoyándose mutuamente. MILPA (CGS-C1) es el mismo principio: peces, plantas, tierra y cómputo, cada uno apoyando a los demás. Nada se desperdicia. Todo en relación.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"The T1 tier is designed for mutual aid builds. One person has a truck. One has tools. One has land. One has time. Together you build it in a weekend. The food belongs to the community that built it."</div>
+      <div class="pq-text es">"El Nivel 1 está diseñado para construcciones de ayuda mutua. Una persona tiene camioneta. Otra tiene herramientas. Otra tiene terreno. Otra tiene tiempo. Juntos lo construyen en un fin de semana. La comida pertenece a la comunidad que lo construyó."</div>
+      <div class="pq-attr">MILPA CGS-C1 · Community Model · Sena Colectivo · 2026</div>
+    </div>
+  </div>
+
+  <div class="refs">
+    <div class="refs-title">References / Fuentes</div>
+    <p class="ref-item">United Nations FAO. (2018). <em>Chinampa system recognized as Globally Important Agricultural Heritage System.</em></p>
+    <p class="ref-item">Eartheasy. (2024). <em>Walipini Underground Greenhouse: Building Guide.</em></p>
+    <p class="ref-item">Somerville, C. et al. (2014). <em>Small-Scale Aquaponic Food Production.</em> FAO Fisheries Technical Paper No. 589.</p>
+    <p class="ref-item">Sena Colectivo. (2026). <em>CGS-C1 Community Greenhouse Specification.</em> Santa Fe, NM.</p>
+    <p class="ref-item">USDA NRCS. (2023). <em>USDA Plant Hardiness Zone Map — Northern New Mexico.</em></p>
+  </div>
+
+</main>
+
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. 05 · Sena's AI Collective</div>
+  <div class="footer-id">CGS-C1 · Food Sovereignty Series · CC BY-NC-SA 4.0 · Free to Share · Santa Fe, NM · 2026</div>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('bib_lang');
+  const lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if(lang==='es') setLang('es',true);
+})();
+function setLang(l, init){
+  document.getElementById('page').className = l==='es' ? 'lang-es' : '';
+  document.getElementById('btnEN').className = 'lt-btn'+(l==='en'?' active':'');
+  document.getElementById('btnES').className = 'lt-btn'+(l==='es'?' active':'');
+  if(!init) localStorage.setItem('bib_lang',l);
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
