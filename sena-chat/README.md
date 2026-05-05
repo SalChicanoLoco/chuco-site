@@ -16,6 +16,31 @@ Export your Anthropic API key before running:
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
+
+## API readiness check
+
+For the current deployment recommendation, see `PRODUCTION-TONIGHT.md`.
+
+
+Before running a live chat session, use the repo-level dry-run check:
+
+```bash
+make chat-check
+```
+
+Then set your key and optionally override the default model:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+export ANTHROPIC_MODEL=claude-sonnet-4-6   # optional; this is the default
+```
+
+To spend one tiny request and prove the key/model work before entering the REPL:
+
+```bash
+make chat-live
+```
+
 ## Run
 
 ```bash
@@ -54,6 +79,7 @@ Existing sessions are listed and can be resumed. Choosing `n` starts fresh.
 | `/voice nova` | Switch to Nova (strategic PM) |
 | `/voice vex`  | Switch to Vex (precise R&D) |
 | `/voice grant`| Switch to Grant (storytelling) |
+| `/quetzal`    | Show the canonical Quetzal Core contract |
 | `/quit`       | Exit the REPL |
 
 Any other input is sent to Claude under the active voice persona.
@@ -80,6 +106,18 @@ Every message is a node; every reply is a `:reply-to` edge; every voice switch i
  :meta {:msg-counter 2 :rel-counter 1 :version 2 :session-id "20240426-143022"}}
 ```
 
+
+## Quetzal Core contract
+
+Quetzal Core is the canonical coordination substrate for the chat graph. It collapses spelling drift (`Quetzal`, `Quetzl`, `Quetzal Core`) into one named core so future work does not create duplicate versions or competing abstractions. The current contract tracks:
+
+* one canonical core identity and version;
+* swarm-time behavior as turns, pulses, and handoffs;
+* memristor-style memory where repeated paths strengthen over time;
+* isomorphic agents that share graph shape while preserving distinct voices and permissions.
+
+Use `/quetzal` in the REPL to print the active contract.
+
 ## Session persistence
 
 Sessions live in `./sessions/`:
@@ -103,6 +141,7 @@ Snapshots are never overwritten.
 | `sena.chat.api`     | Anthropic HTTP call (clj-http) |
 | `sena.chat.voices`  | Persona system-prompt strings |
 | `sena.chat.session` | EDN serialise / deserialise |
+| `sena.chat.quetzal` | Canonical Quetzal Core naming/version/principles |
 
 ## Leiningen project.clj (optional)
 

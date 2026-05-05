@@ -3,11 +3,15 @@
             [cheshire.core   :as json]))
 
 (def ^:private endpoint "https://api.anthropic.com/v1/messages")
-(def ^:private model    "claude-sonnet-4-6")
+(def ^:private default-model "claude-sonnet-4-6")
 
 (defn- api-key []
   (or (System/getenv "ANTHROPIC_API_KEY")
       (throw (ex-info "ANTHROPIC_API_KEY is not set" {}))))
+
+(defn- model []
+  (or (System/getenv "ANTHROPIC_MODEL")
+      default-model))
 
 (defn send-message
   "Call the Anthropic Messages API.
@@ -16,7 +20,7 @@
    Returns the assistant reply string or throws."
   [system-prompt messages]
   (let [body     (json/generate-string
-                   {:model      model
+                   {:model      (model)
                     :max_tokens 1024
                     :system     system-prompt
                     :messages   (vec messages)})
