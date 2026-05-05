@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Data · Sena's AI Collective</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --earth:  #1a1209;
+      --warm:   #2a1f0e;
+      --sand:   #f5ead8;
+      --terr:   #c2603a;
+      --gold:   #e8a825;
+      --sage:   #6b8f5e;
+      --sky:    #4a7fa5;
+      --cream:  #fdf6ea;
+      --ink:    #1c1410;
+      --border: rgba(194,96,58,0.18);
+      --serif:  'Fraunces', serif;
+      --sans:   'DM Sans', sans-serif;
+      --mono:   'DM Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--earth);
+      color: var(--sand);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* MASTHEAD */
+    .masthead {
+      background: var(--earth);
+      border-bottom: 2px solid var(--terr);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: baseline; gap: 10px; }
+    .brand-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.35);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--warm);
+      border-bottom: 2px solid var(--border);
+      padding: 56px 32px 48px;
+    }
+    .hero-inner { max-width: 760px; margin: 0 auto; }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terr);
+      margin-bottom: 16px;
+    }
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(30px, 5vw, 52px);
+      font-weight: 900;
+      color: var(--sand);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-h1 em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(245,234,216,0.5);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
+
+    /* SECTION */
+    .section { padding: 56px 32px; border-bottom: 1px solid var(--border); }
+    .section-inner { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terr);
+      margin-bottom: 20px;
+    }
+    .section-h2 {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 900;
+      color: var(--sand);
+      margin-bottom: 24px;
+    }
+
+    /* NODE CARDS */
+    .node-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .node-card {
+      background: var(--warm);
+      border: 1px solid rgba(245,234,216,0.07);
+      border-top: 2px solid var(--terr);
+      border-radius: 2px;
+      padding: 18px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .node-card[data-type="visual"]     { border-top-color: var(--sky); }
+    .node-card[data-type="camera"]     { border-top-color: var(--sage); }
+    .node-card[data-type="audio"]      { border-top-color: var(--gold); }
+    .node-card[data-type="effect"]     { border-top-color: var(--terr); }
+    .node-card[data-type="transition"] { border-top-color: #9b6bbf; }
+    .node-card[data-type="metadata"]   { border-top-color: rgba(245,234,216,0.25); }
+    .node-id {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(245,234,216,0.35);
+    }
+    .node-type {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--terr);
+    }
+    .node-card[data-type="visual"]     .node-type { color: var(--sky); }
+    .node-card[data-type="camera"]     .node-type { color: var(--sage); }
+    .node-card[data-type="audio"]      .node-type { color: var(--gold); }
+    .node-card[data-type="effect"]     .node-type { color: var(--terr); }
+    .node-card[data-type="transition"] .node-type { color: #9b6bbf; }
+    .node-card[data-type="metadata"]   .node-type { color: rgba(245,234,216,0.3); }
+    .node-desc {
+      font-size: 13px;
+      color: rgba(245,234,216,0.6);
+      line-height: 1.65;
+    }
+
+    /* EDGES */
+    .edge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .edge-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(245,234,216,0.06);
+      flex-wrap: wrap;
+    }
+    .edge-node {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--sand);
+      background: rgba(245,234,216,0.06);
+      border: 1px solid rgba(245,234,216,0.1);
+      padding: 3px 9px;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
+    }
+    .edge-arrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--terr);
+      letter-spacing: 0.08em;
+    }
+    .edge-rel {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.3);
+      margin-left: auto;
+    }
+
+    /* METADATA BLOCK */
+    .meta-block {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 32px;
+      margin-top: 4px;
+    }
+    .meta-pair { display: flex; flex-direction: column; gap: 2px; }
+    .meta-key {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--terr);
+    }
+    .meta-val {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--sand);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 36px 32px;
+      background: var(--earth);
+    }
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(245,234,216,0.3);
+    }
+    .footer-meta {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,234,216,0.18);
+    }
+
+    @media (max-width: 640px) {
+      .masthead, .hero, .section, footer { padding-left: 16px; padding-right: 16px; }
+      .edge-rel { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brand">
+    <a class="brand-name" href="/">Sena's AI Collective</a>
+    <span class="brand-sub">Santa Fe, NM</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Embedded Graph Data · numara-core</div>
+    <h1 class="hero-h1">My Graph Data<br /><em>Scene Structure</em></h1>
+    <div class="hero-sub">nodes · edges · metadata</div>
+  </div>
+</section>
+
+<section class="section" id="nodes-section">
+  <div class="section-inner">
+    <div class="section-label">Nodes</div>
+    <h2 class="section-h2" id="node-count"></h2>
+    <div class="node-grid" id="node-grid"></div>
+  </div>
+</section>
+
+<section class="section" id="edges-section">
+  <div class="section-inner">
+    <div class="section-label">Edges</div>
+    <h2 class="section-h2" id="edge-count"></h2>
+    <div class="edge-list" id="edge-list"></div>
+  </div>
+</section>
+
+<section class="section" id="meta-section">
+  <div class="section-inner">
+    <div class="section-label">Graph Metadata</div>
+    <div class="meta-block" id="meta-block"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Sena's AI Collective</div>
+    <div class="footer-meta">Santa Fe, NM · Tierra o Muerte</div>
+  </div>
+</footer>
+
+<script id="graph-data" type="application/json">
+{
+  "nodes": [
+    {"id": "v1",  "type": "visual",     "desc": "Cosmic traveler silhouette overlooking a vast, nebula-filled star system"},
+    {"id": "v2",  "type": "visual",     "desc": "Data portal opening, streaming streams of binary and geometric structures"},
+    {"id": "v3",  "type": "visual",     "desc": "Microscopic view of numara-core fibers weaving into existence"},
+    {"id": "c1",  "type": "camera",     "desc": "Slow forward dolly zoom transitioning into an orbital pan"},
+    {"id": "s14", "type": "audio",      "desc": "Narration: 'In the silence of the void, the core awakens. Not just as a tool, but as the architect of what comes next. Observe the convergence.'"},
+    {"id": "fx1", "type": "effect",     "desc": "Vapor-style data overlays pulsing with rhythmic light"},
+    {"id": "t1",  "type": "transition", "desc": "Light-leak portal jump between scenes"},
+    {"id": "m1",  "type": "metadata",   "desc": "Engine refinement: Enhanced nebula luminosity and pulse sync"}
+  ],
+  "edges": [
+    {"source": "v1",  "target": "c1",  "relation": "subject_to_movement"},
+    {"source": "v2",  "target": "fx1", "relation": "contains_overlay"},
+    {"source": "s14", "target": "v1",  "relation": "synchronizes_with"},
+    {"source": "v2",  "target": "t1",  "relation": "leads_to"},
+    {"source": "m1",  "target": "fx1", "relation": "optimizes"}
+  ],
+  "metadata": {
+    "style":  "Cosmic Cinematic",
+    "status": "REFINED",
+    "engine": "numara-core"
+  }
+}
+</script>
+
+<script>
+  const data = JSON.parse(document.getElementById('graph-data').textContent);
+
+  // Nodes
+  document.getElementById('node-count').textContent = data.nodes.length + ' scene elements.';
+  const grid = document.getElementById('node-grid');
+  data.nodes.forEach(n => {
+    const card = document.createElement('div');
+    card.className = 'node-card';
+    card.dataset.type = n.type;
+    card.innerHTML =
+      '<div class="node-type">' + n.type + '</div>' +
+      '<div class="node-id">' + n.id + '</div>' +
+      '<div class="node-desc">' + n.desc + '</div>';
+    grid.appendChild(card);
+  });
+
+  // Edges
+  document.getElementById('edge-count').textContent = data.edges.length + ' relationships.';
+  const list = document.getElementById('edge-list');
+  data.edges.forEach(e => {
+    const row = document.createElement('div');
+    row.className = 'edge-row';
+    row.innerHTML =
+      '<span class="edge-node">' + e.source + '</span>' +
+      '<span class="edge-arrow">&#8594;</span>' +
+      '<span class="edge-node">' + e.target + '</span>' +
+      '<span class="edge-rel">' + e.relation.replace(/_/g, ' ') + '</span>';
+    list.appendChild(row);
+  });
+
+  // Metadata
+  const mb = document.getElementById('meta-block');
+  Object.entries(data.metadata).forEach(([k, v]) => {
+    const pair = document.createElement('div');
+    pair.className = 'meta-pair';
+    pair.innerHTML = '<div class="meta-key">' + k + '</div><div class="meta-val">' + v + '</div>';
+    mb.appendChild(pair);
+  });
+</script>
+
+</body>
+</html>
