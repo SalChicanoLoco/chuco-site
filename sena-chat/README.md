@@ -19,9 +19,6 @@ export ANTHROPIC_API_KEY=sk-ant-...
 
 ## API readiness check
 
-For the current deployment recommendation, see `PRODUCTION-TONIGHT.md`.
-
-
 Before running a live chat session, use the repo-level dry-run check:
 
 ```bash

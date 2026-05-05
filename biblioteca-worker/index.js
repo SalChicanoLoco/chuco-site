@@ -38,10 +38,6 @@ export default {
       airtableUrl.searchParams.set('filterByFormula', 'NOT({Status}="Done")');
       airtableUrl.searchParams.set('sort[0][field]', 'Priority');
 
-      // Only request the public-safe task fields this endpoint is allowed to expose.
-      const fields = ['Task', 'Priority', 'Status', 'Owner', 'Deadline'];
-      fields.forEach((f, i) => airtableUrl.searchParams.set(`fields[${i}]`, f));
-
       const resp = await fetch(airtableUrl.toString(), {
         headers: { Authorization: `Bearer ${env.AIRTABLE_KEY}` },
       });
@@ -56,16 +52,7 @@ export default {
       }
 
       const data = await resp.json();
-      const tasks = (data.records || []).map(r => ({
-        id:       r.id,
-        task:     r.fields['Task']     || '',
-        priority: r.fields['Priority'] || '',
-        status:   r.fields['Status']   || '',
-        owner:    r.fields['Owner']    || '',
-        deadline: r.fields['Deadline'] || '',
-      }));
-
-      return new Response(JSON.stringify({ tasks }), {
+      return new Response(JSON.stringify({ tasks: data.records || [] }), {
         headers: { ...CORS, 'Content-Type': 'application/json' },
       });
     }

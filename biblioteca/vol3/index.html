@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vol. 03 — How Courts Rewrote the Acequia · La Biblioteca</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--earth:#1a1209;--warm:#2a1f0e;--sand:#f5ead8;--terr:#c2603a;--gold:#e8a825;--sage:#6b8f5e;--sky:#4a7fa5;--cream:#fdf6ea;--ink:#1c1410;--border:rgba(194,96,58,0.18);--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.mast{background:var(--earth);border-bottom:3px solid var(--terr);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mast-brand{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.mast-right{display:flex;align-items:center;gap:16px}
+.back-link{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.45);text-decoration:none}
+.back-link:hover{color:var(--terr)}
+.lang-toggle{display:flex;border:1px solid rgba(194,96,58,.35);border-radius:3px;overflow:hidden}
+.lt-btn{padding:5px 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:rgba(245,234,216,.4);cursor:pointer;transition:all .15s}
+.lt-btn.active{background:var(--terr);color:var(--cream)}
+.cover{background:var(--warm);padding:56px 32px 48px;border-bottom:2px solid var(--border)}
+.cover-inner{max-width:720px;margin:0 auto}
+.vol-id{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.cover-series{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,234,216,.35);margin-bottom:20px}
+.cover-h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--sand);line-height:1.1;margin-bottom:8px}
+.cover-h1 em{color:var(--gold);font-style:italic}
+.cover-sub{font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);font-weight:300;color:rgba(245,234,216,.55);margin-bottom:24px;line-height:1.3}
+.cover-lede{font-size:15px;color:rgba(245,234,216,.65);max-width:580px;line-height:1.8;border-left:3px solid var(--terr);padding-left:16px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.ctag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(194,96,58,.3);color:rgba(245,234,216,.45)}
+.ctag.hot{border-color:var(--sky);color:var(--sky)}
+.pub-body{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.section{margin-bottom:48px}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--terr);margin-bottom:8px}
+.section-h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:16px}
+.section-h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:24px 0 12px}
+.body-text{color:#3a2c1e;font-size:15.5px;line-height:1.8;margin-bottom:14px}
+.body-text strong{color:var(--ink);font-weight:600}
+.body-text em{font-style:italic}
+.pq{border-left:4px solid var(--sky);padding:16px 20px;margin:28px 0;background:rgba(74,127,165,.06)}
+.pq-text{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;font-style:italic}
+.pq-attr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-top:8px}
+.pub-ul{margin:12px 0 16px 20px}
+.pub-ul li{color:#3a2c1e;font-size:15px;line-height:1.75;margin-bottom:8px}
+.pub-ul li strong{color:var(--ink);font-weight:600}
+.pub-ul li em{font-style:italic}
+
+/* TIMELINE TABLE */
+.timeline{width:100%;border-collapse:collapse;margin:24px 0;font-size:13.5px}
+.timeline th{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--terr);background:rgba(194,96,58,.07);padding:10px 12px;text-align:left;border-bottom:2px solid var(--border)}
+.timeline td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:#3a2c1e}
+.timeline td:first-child{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);white-space:nowrap}
+.timeline tr:hover td{background:rgba(194,96,58,.03)}
+
+.stat-row{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat-box{flex:1;min-width:140px;background:white;border:1px solid var(--border);border-top:3px solid var(--sky);padding:16px}
+.stat-num{font-family:var(--serif);font-size:26px;font-weight:900;color:var(--sky)}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a5a4a;margin-top:4px}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.refs{background:white;border:1px solid var(--border);padding:24px;margin-top:48px}
+.refs-title{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--terr);margin-bottom:16px}
+.ref-item{font-size:13px;color:#5a4a3a;line-height:1.6;margin-bottom:8px;padding-left:20px;text-indent:-20px}
+.pub-footer{background:var(--earth);border-top:2px solid var(--warm);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold)}
+.footer-id{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,234,216,.25)}
+.en{display:block}.es{display:none}
+body.lang-es .en{display:none}body.lang-es .es{display:block}
+.en-inline{display:inline}.es-inline{display:none}
+body.lang-es .en-inline{display:none}body.lang-es .es-inline{display:inline}
+@media(max-width:640px){.cover,.mast,.pub-body,.pub-footer{padding-left:20px;padding-right:20px}.timeline{font-size:12px}}
+@media print{.mast,.pub-footer{display:none}.cover{background:white;color:black}.cover-h1,.cover-sub{color:black}body{font-size:12pt}}
+</style>
+</head>
+<body id="page">
+
+<nav class="mast">
+  <a class="mast-brand" href="/biblioteca/">La Biblioteca</a>
+  <div class="mast-right">
+    <a class="back-link" href="/biblioteca/">← <span class="en-inline">Archive</span><span class="es-inline">Archivo</span></a>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+      <button class="lt-btn"        id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="vol-id">Vol. 03 · Water Rights Series · April 2026</div>
+    <div class="cover-series">La Biblioteca · Sena's AI Collective · Santa Fe, NM</div>
+    <h1 class="cover-h1 en">How <em>Courts</em><br>Rewrote the Acequia</h1>
+    <h1 class="cover-h1 es">Cómo los <em>Tribunales</em><br>Reescribieron la Acequia</h1>
+    <div class="cover-sub en">Mission Revival Jurisprudence and the Legal Architecture of Water Dispossession</div>
+    <div class="cover-sub es">La Jurisprudencia del Renacimiento de las Misiones y la Arquitectura Legal del Despojo Hídrico</div>
+    <p class="cover-lede en">The Pueblo Water Doctrine was not a misunderstanding. Based on Peter Reich's primary legal analysis: American judges knowingly distorted communal water law post-1848 to transfer sovereignty from acequia communities to cities and large landowners.</p>
+    <p class="cover-lede es">La Doctrina del Agua Pueblo no fue un malentendido. Basado en el análisis legal primario de Peter Reich: los jueces estadounidenses distorsionaron deliberadamente el derecho comunal del agua post-1848 para transferir la soberanía de las comunidades de acequias a las ciudades y los grandes terratenientes.</p>
+    <div class="cover-tags">
+      <span class="ctag hot">Water Rights</span>
+      <span class="ctag hot">Acequia</span>
+      <span class="ctag">Pueblo Doctrine</span>
+      <span class="ctag">Guadalupe Hidalgo</span>
+      <span class="ctag">Free to Share</span>
+    </div>
+  </div>
+</div>
+
+<main class="pub-body">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label en">Section 01 · The Core Question</div>
+    <div class="section-label es">Sección 01 · La Pregunta Central</div>
+    <h2 class="section-h2 en">The Communal Tradition Before 1848</h2>
+    <h2 class="section-h2 es">La Tradición Comunal Antes de 1848</h2>
+
+    <p class="body-text en">How did post-1848 American legal interpretation of Spanish and Mexican communal water law reshape water rights in New Mexico? The transition from a communal, equity-based system to a rigid "prior appropriation" doctrine was not an accidental byproduct of cultural misunderstanding. It was a deliberate judicial re-characterization.</p>
+    <p class="body-text es">¿Cómo reconfiguró los derechos del agua en Nuevo México la interpretación legal estadounidense post-1848 del derecho comunal español y mexicano del agua? La transición de un sistema comunal basado en la equidad a una rígida doctrina de "apropiación previa" no fue un subproducto accidental del malentendido cultural. Fue una recaracterización judicial deliberada.</p>
+
+    <h3 class="section-h3 en">Spanish Colonial Water Law (<em>Derecho de Aguas</em>)</h3>
+    <h3 class="section-h3 es">Derecho Colonial Español del Agua (<em>Derecho de Aguas</em>)</h3>
+    <p class="body-text en">Spanish law rooted in the <em>Recopilación de Leyes de los Reinos de las Indias</em> treated water as a <em>común</em> — a common resource belonging to the Crown but managed for the public benefit. Individual ownership of water did not exist. Users held a "usufructuary right" — the right to use water, contingent on beneficial use and community need.</p>
+    <p class="body-text es">El derecho español arraigado en la <em>Recopilación de Leyes de los Reinos de las Indias</em> trataba el agua como un <em>común</em> — un recurso compartido perteneciente a la Corona pero gestionado para el beneficio público. La propiedad individual del agua no existía. Los usuarios poseían un "derecho usufructuario" — el derecho a usar el agua, condicionado al uso beneficioso y la necesidad comunitaria.</p>
+
+    <ul class="pub-ul">
+      <li class="en"><strong>The Plan of Pitic (1789):</strong> The model for frontier settlements. It mandated shared water use, explicitly barring use by any individual to the detriment of others.</li>
+      <li class="es"><strong>El Plan de Pitic (1789):</strong> El modelo para los asentamientos fronterizos. Ordenaba el uso compartido del agua, prohibiendo explícitamente el uso por cualquier individuo en detrimento de los demás.</li>
+      <li class="en"><strong>The Mayordomo System:</strong> Communities elected a <em>mayordomo</em> (ditch boss) to oversee the <em>repartición</em> — distribution based on equity and need, not priority.</li>
+      <li class="es"><strong>El Sistema del Mayordomo:</strong> Las comunidades elegían un <em>mayordomo</em> para supervisar la <em>repartición</em> — distribución basada en la equidad y la necesidad, no en la prioridad.</li>
+      <li class="en"><strong>Labor-Based Rights:</strong> A member's right to water was tied to their contribution of labor to maintain the shared infrastructure. Work in the ditch, share the water.</li>
+      <li class="es"><strong>Derechos Basados en el Trabajo:</strong> El derecho de un miembro al agua estaba vinculado a su contribución de trabajo para mantener la infraestructura compartida. Trabaja en la acequia, comparte el agua.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label en">Section 02</div>
+    <div class="section-label es">Sección 02</div>
+    <h2 class="section-h2 en">The Betrayal: From Equity to Prior Appropriation</h2>
+    <h2 class="section-h2 es">La Traición: De la Equidad a la Apropiación Previa</h2>
+
+    <p class="body-text en">The Treaty of Guadalupe Hidalgo (1848) promised that "property of every kind" belonging to Mexicans in the ceded territory would be "inviolably respected." It was not. While the <em>Kearny Code</em> (1846) initially stated that Mexican water institutions would continue, U.S. courts systematically failed to recognize communal rights that lacked formal American-style paperwork.</p>
+    <p class="body-text es">El Tratado de Guadalupe Hidalgo (1848) prometía que "la propiedad de todo tipo" perteneciente a los mexicanos en el territorio cedido sería "inviolablemente respetada." No lo fue. Aunque el <em>Código Kearny</em> (1846) inicialmente declaraba que las instituciones hídicas mexicanas continuarían, los tribunales estadounidenses sistematicamente dejaron de reconocer los derechos comunales que carecían de documentación formal al estilo americano.</p>
+
+    <div class="pq">
+      <div class="pq-text en">"American judges created an historical fiction of 'Spanish' absolute water control, and intentionally disregarded actual law and custom dictating water apportionment."</div>
+      <div class="pq-text es">"Los jueces estadounidenses crearon una ficción histórica del control absoluto 'español' del agua, e intencionalmente ignoraron la ley y la costumbre reales que dictaban la distribución del agua."</div>
+      <div class="pq-attr en">Peter L. Reich · Mission Revival Jurisprudence · 69 Washington Law Review 869 (1994)</div>
+      <div class="pq-attr es">Peter L. Reich · Jurisprudencia del Renacimiento de las Misiones · 69 Washington Law Review 869 (1994)</div>
+    </div>
+
+    <h3 class="section-h3 en">Key Cases That Dismantled the Commons</h3>
+    <h3 class="section-h3 es">Casos Clave Que Desmantelaron los Bienes Comunes</h3>
+    <ul class="pub-ul">
+      <li class="en"><strong><em>State v. Tularosa Community Ditch</em> (1914):</strong> Ruled that acequias no longer "owned" water rights as communal entities. Rights now held by individuals, governed by the state. Power shifted from local mayordomos to the Office of the State Engineer.</li>
+      <li class="es"><strong><em>Estado v. Acequia Comunitaria de Tularosa</em> (1914):</strong> Dictaminó que las acequias ya no "poseían" derechos de agua como entidades comunales. Los derechos ahora los tenían individuos, gobernados por el estado. El poder pasó de los mayordomos locales a la Oficina del Ingeniero del Estado.</li>
+      <li class="en"><strong><em>Cartwright v. Public Service Co.</em> (1958):</strong> The New Mexico Supreme Court upheld the Pueblo Water Doctrine for Las Vegas, NM — allowing the city to take as much water as needed, even to the detriment of senior rural irrigators who had farmed the Gallinas River for generations.</li>
+      <li class="es"><strong><em>Cartwright v. Public Service Co.</em> (1958):</strong> La Corte Suprema de Nuevo México respaldó la Doctrina del Agua Pueblo para Las Vegas, NM — permitiendo a la ciudad tomar tanta agua como necesitara, incluso en detrimento de los regantes rurales mayores que habían cultivado el Río Gallinas durante generaciones.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label en">Section 03</div>
+    <div class="section-label es">Sección 03</div>
+    <h2 class="section-h2 en">The Acequia Today: 700 Systems, Still Standing</h2>
+    <h2 class="section-h2 es">La Acequia Hoy: 700 Sistemas, Todavía en Pie</h2>
+
+    <p class="body-text en">New Mexico recognizes over <strong>700 acequias</strong> as "political subdivisions of the state." They survived. The NM Acequia Association (NMAA) now advocates for <strong>House Bill 21 (2026)</strong> — a permanent $20 million funding stream for acequia and land grant infrastructure. Since 1987, acequia water rights cannot be lost through non-use, a critical protection against prior appropriation pressures.</p>
+    <p class="body-text es">Nuevo México reconoce más de <strong>700 acequias</strong> como "subdivisiones políticas del estado." Sobrevivieron. La Asociación de Acequias de Nuevo México (NMAA) ahora aboga por la <strong>Ley de la Cámara 21 (2026)</strong> — un fondo permanente de $20 millones para infraestructura de acequias y mercedes de tierra. Desde 1987, los derechos de agua de las acequias no pueden perderse por falta de uso, una protección crítica contra las presiones de apropiación previa.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">700+</div>
+        <div class="stat-label en">NM acequias recognized by state</div>
+        <div class="stat-label es">Acequias reconocidas por el estado</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$20M</div>
+        <div class="stat-label en">HB 21 — proposed annual fund</div>
+        <div class="stat-label es">HB 21 — fondo anual propuesto</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1987</div>
+        <div class="stat-label en">Year non-use forfeiture ended</div>
+        <div class="stat-label es">Año en que terminó la caducidad por falta de uso</div>
+      </div>
+    </div>
+
+    <h3 class="section-h3 en">Contemporary Threats</h3>
+    <h3 class="section-h3 es">Amenazas Contemporáneas</h3>
+    <ul class="pub-ul">
+      <li class="en"><strong>Extractive Industry:</strong> The Pecos River watershed has faced significant threats from exploratory mining (Comexico), leading to its listing as one of America's most endangered waterways in 2024.</li>
+      <li class="es"><strong>Industria Extractiva:</strong> La cuenca del Río Pecos ha enfrentado amenazas significativas de la minería exploratoria (Comexico), lo que llevó a su clasificación como una de las vías fluviales más en peligro de América en 2024.</li>
+      <li class="en"><strong>Climate:</strong> The Hermits Peak-Calf Canyon fire (2022) devastated Mora County acequias — some went years without water due to debris and infrastructure damage.</li>
+      <li class="es"><strong>Clima:</strong> El incendio Hermits Peak-Calf Canyon (2022) devastó las acequias del Condado de Mora — algunas estuvieron años sin agua debido a escombros y daños a la infraestructura.</li>
+      <li class="en"><strong>Stealth Leases:</strong> The State Engineer granted "preliminary approval" for water leases to developers without public notice — a practice found unlawful in 2023 after NMAA challenge.</li>
+      <li class="es"><strong>Arrendamientos Furtivos:</strong> El Ingeniero del Estado otorgó "aprobación preliminar" para arrendamientos de agua a desarrolladores sin aviso público — una práctica declarada ilegal en 2023 tras el desafío de la NMAA.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- TIMELINE -->
+  <div class="section">
+    <div class="section-label en">Timeline</div>
+    <div class="section-label es">Cronología</div>
+    <h2 class="section-h2 en">New Mexico Water Rights: 1848 – Present</h2>
+    <h2 class="section-h2 es">Derechos del Agua en Nuevo México: 1848 – Presente</h2>
+
+    <table class="timeline">
+      <thead>
+        <tr>
+          <th class="en">Year</th><th class="es">Año</th>
+          <th class="en">Event</th><th class="es">Evento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1848</td><td class="en">Treaty of Guadalupe Hidalgo — U.S. promises to respect existing property and water rights.</td><td class="es">Tratado de Guadalupe Hidalgo — EE.UU. promete respetar los derechos de propiedad y agua existentes.</td></tr>
+        <tr><td>1907</td><td class="en">NM Water Code — Centralized water authority; institutionalized prior appropriation.</td><td class="es">Código del Agua de NM — Autoridad hídrica centralizada; institucionalización de la apropiación previa.</td></tr>
+        <tr><td>1914</td><td class="en"><em>State v. Tularosa</em> — Acequias lose communal water ownership. Individual rights only.</td><td class="es"><em>Estado v. Tularosa</em> — Las acequias pierden la propiedad comunal del agua. Solo derechos individuales.</td></tr>
+        <tr><td>1958</td><td class="en"><em>Cartwright v. PSCo</em> — Pueblo Water Doctrine formalized. Cities take priority over rural acequias.</td><td class="es"><em>Cartwright v. PSCo</em> — Doctrina del Agua Pueblo formalizada. Las ciudades tienen prioridad sobre las acequias rurales.</td></tr>
+        <tr><td>1987</td><td class="en">Non-forfeiture legislation — Acequia water rights protected from loss due to non-use.</td><td class="es">Legislación de no-caducidad — Derechos de agua de acequias protegidos de la pérdida por falta de uso.</td></tr>
+        <tr><td>2024</td><td class="en"><em>Lujan v. Acequia Mesa Del Medio</em> — Confirmed acequia authority to govern by local custom.</td><td class="es"><em>Lujan v. Acequia Mesa Del Medio</em> — Confirmada la autoridad de las acequias para gobernarse por costumbre local.</td></tr>
+        <tr><td>2026</td><td class="en">House Bill 21 — Proposed permanent $20M trust fund for acequia infrastructure.</td><td class="es">Ley de la Cámara 21 — Fondo fiduciario permanente de $20M propuesto para infraestructura de acequias.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <div class="refs">
+    <div class="refs-title">References / Fuentes</div>
+    <p class="ref-item">Reich, P. L. (1994). "Mission Revival Jurisprudence: State Courts and Hispanic Water Law Since 1850." <em>69 Washington Law Review 869.</em></p>
+    <p class="ref-item">Crawford, S. (1988). <em>Mayordomo: Chronicle of an Acequia in Northern New Mexico.</em></p>
+    <p class="ref-item">New Mexico Acequia Association. (2015). <em>Acequia Governance Handbook.</em></p>
+    <p class="ref-item">Utton Center, UNM School of Law. (2021). "What Came Prior to Prior Appropriation?"</p>
+    <p class="ref-item"><em>Cartwright v. Public Service Co. of New Mexico,</em> 343 P.2d 654 (N.M. 1958).</p>
+    <p class="ref-item"><em>State v. Tularosa Community Ditch,</em> 143 P. 207 (N.M. 1914).</p>
+    <p class="ref-item">NM Office of the State Engineer. (2024). <em>50-Year Water Action Plan.</em></p>
+    <p class="ref-item">Lohmann, P. (2026). "NM committee OKs bill giving acequias dedicated funding stream." <em>Source NM.</em></p>
+  </div>
+
+</main>
+
+<footer class="pub-footer">
+  <div class="footer-brand">La Biblioteca · Vol. 03 · Sena's AI Collective</div>
+  <div class="footer-id en">New Mexico Socialists Inc. · EIN 41-5210879 · CC BY-NC-SA 4.0 · Free to Share</div>
+  <div class="footer-id es">Socialistas de NM · EIN 41-5210879 · CC BY-NC-SA 4.0 · Libre de Compartir</div>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('bib_lang');
+  const lang = saved || (navigator.language?.startsWith('es') ? 'es' : 'en');
+  if(lang==='es') setLang('es',true);
+})();
+function setLang(l,init){
+  document.getElementById('page').className = l==='es'?'lang-es':'';
+  document.getElementById('btnEN').className='lt-btn'+(l==='en'?' active':'');
+  document.getElementById('btnES').className='lt-btn'+(l==='es'?' active':'');
+  if(!init) localStorage.setItem('bib_lang',l);
+  document.documentElement.lang=l;
+}
+</script>
+</body>
+</html>
