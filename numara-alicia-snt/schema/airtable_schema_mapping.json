@@ -1,0 +1,755 @@
+{
+  "schema_id": "NUMARA_ALICIA_META_GRAPH_V2_2",
+  "base_name": "NUMARA-Alicia-SNT",
+  "generated_at": "2026-05-06T00:00:00Z",
+  "notes": [
+    "Stable IDs are formula fields: CONCATENATE(prefix, RECORD_ID()). Never reassigned.",
+    "Delta Version is monotonically increasing. Never decrements, never skips.",
+    "Soft-delete only: set Status = 'archived' or 'redacted'. Hard deletes are blocked.",
+    "Provenance fields (Provenance Source, Provenance Ref) are append-only; never null after first write.",
+    "Integrity Hash is write-once: set on ingestion, ignored on subsequent PATCHes.",
+    "All timestamps (Created At, Updated At) are system-managed; do not write to them.",
+    "Table creation order matters for linked fields: Attorney Contacts → Legal Targets → Nodes → Documents → Evidence Ledger → Edges."
+  ],
+  "tables": [
+    {
+      "name": "Nodes",
+      "description": "Entities in the NUMARA Alicia meta-graph: persons, organizations, events, claims, locations, and documents.",
+      "primaryFieldName": "Label",
+      "fields": [
+        {
+          "name": "Label",
+          "type": "singleLineText",
+          "description": "Human-readable display name. Primary field. Required."
+        },
+        {
+          "name": "Node ID",
+          "type": "formula",
+          "description": "Stable external identifier. Never reassigned. Format: N-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"N-\", RECORD_ID())" }
+        },
+        {
+          "name": "Node Type",
+          "type": "singleSelect",
+          "description": "Semantic category of this node.",
+          "options": {
+            "choices": [
+              { "name": "person", "color": "blueLight2" },
+              { "name": "organization", "color": "greenLight2" },
+              { "name": "event", "color": "yellowLight2" },
+              { "name": "location", "color": "orangeLight2" },
+              { "name": "claim", "color": "redLight2" },
+              { "name": "document", "color": "purpleLight2" },
+              { "name": "entity", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Epistemic classification per NUMARA_ALICIA_META_GRAPH_V2_2.",
+          "options": {
+            "choices": [
+              { "name": "fact", "color": "greenLight2" },
+              { "name": "allegation", "color": "yellowLight2" },
+              { "name": "inference", "color": "blueLight2" },
+              { "name": "hearsay", "color": "orangeLight2" },
+              { "name": "stipulated", "color": "purpleLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Reliability score 0.0–1.0. Never decrease without a provenance note.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "Origin agent, system, or person that produced this record. Required. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Document ID, case number, or external reference. Required. Never null after first write."
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "description": "Lifecycle state. Use 'archived' for soft-delete. Never hard-delete a record.",
+          "options": {
+            "choices": [
+              { "name": "active", "color": "greenLight2" },
+              { "name": "disputed", "color": "yellowLight2" },
+              { "name": "archived", "color": "grayLight2" },
+              { "name": "redacted", "color": "redLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Description",
+          "type": "multilineText",
+          "description": "Narrative description. Append new entries with ISO timestamp prefix rather than overwriting."
+        },
+        {
+          "name": "Tags",
+          "type": "multipleSelects",
+          "description": "Free-form categorical tags for cross-cutting concerns.",
+          "options": { "choices": [] }
+        },
+        {
+          "name": "Delta Version",
+          "type": "number",
+          "description": "Monotonically increasing write counter. Starts at 1. Never write a lower value than currently stored.",
+          "options": { "precision": 0 }
+        },
+        {
+          "name": "Last Modified By",
+          "type": "singleLineText",
+          "description": "Agent or user ID that last wrote this record. Required on every write."
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime",
+          "description": "System-managed creation timestamp. Immutable."
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime",
+          "description": "System-managed last-modification timestamp."
+        }
+      ]
+    },
+    {
+      "name": "Edges",
+      "description": "Directed relationships between Nodes in the NUMARA Alicia meta-graph.",
+      "primaryFieldName": "Edge Label",
+      "fields": [
+        {
+          "name": "Edge Label",
+          "type": "singleLineText",
+          "description": "Human-readable relationship description. Primary field."
+        },
+        {
+          "name": "Edge ID",
+          "type": "formula",
+          "description": "Stable external identifier. Format: E-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"E-\", RECORD_ID())" }
+        },
+        {
+          "name": "Source Node",
+          "type": "multipleRecordLinks",
+          "description": "Origin node(s) of this edge.",
+          "options": { "linkedTableName": "Nodes", "allowDuplicates": false }
+        },
+        {
+          "name": "Target Node",
+          "type": "multipleRecordLinks",
+          "description": "Destination node(s) of this edge.",
+          "options": { "linkedTableName": "Nodes", "allowDuplicates": false }
+        },
+        {
+          "name": "Relation Type",
+          "type": "singleSelect",
+          "description": "Semantic type of the relationship.",
+          "options": {
+            "choices": [
+              { "name": "asserts" },
+              { "name": "refutes" },
+              { "name": "supports" },
+              { "name": "contradicts" },
+              { "name": "involves" },
+              { "name": "filed_against" },
+              { "name": "represents" },
+              { "name": "authored" },
+              { "name": "references" },
+              { "name": "co-defendant" },
+              { "name": "witness_of" },
+              { "name": "related_to" },
+              { "name": "owns" },
+              { "name": "employed_by" },
+              { "name": "colluded_with" }
+            ]
+          }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Epistemic classification of this relationship assertion.",
+          "options": {
+            "choices": [
+              { "name": "fact", "color": "greenLight2" },
+              { "name": "allegation", "color": "yellowLight2" },
+              { "name": "inference", "color": "blueLight2" },
+              { "name": "hearsay", "color": "orangeLight2" },
+              { "name": "stipulated", "color": "purpleLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Confidence score 0.0–1.0.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "Direction",
+          "type": "singleSelect",
+          "description": "Whether this edge is directional (Source → Target) or undirected.",
+          "options": {
+            "choices": [
+              { "name": "directed", "color": "blueLight2" },
+              { "name": "undirected", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "Origin of this relationship claim. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Supporting document or case reference. Never null after first write."
+        },
+        {
+          "name": "Effective Date",
+          "type": "date",
+          "description": "Date this relationship was established or first documented.",
+          "options": { "dateFormat": { "name": "iso" } }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "description": "Lifecycle state of this edge.",
+          "options": {
+            "choices": [
+              { "name": "active", "color": "greenLight2" },
+              { "name": "disputed", "color": "yellowLight2" },
+              { "name": "superseded", "color": "blueLight2" },
+              { "name": "archived", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText",
+          "description": "Supporting notes. Append new entries with ISO timestamp prefix."
+        },
+        {
+          "name": "Delta Version",
+          "type": "number",
+          "description": "Monotonically increasing write counter.",
+          "options": { "precision": 0 }
+        },
+        {
+          "name": "Evidence",
+          "type": "multipleRecordLinks",
+          "description": "Evidence records supporting this edge.",
+          "options": { "linkedTableName": "Evidence Ledger" }
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime"
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime"
+        }
+      ]
+    },
+    {
+      "name": "Evidence Ledger",
+      "description": "Immutable append-only ledger of all evidence items. Record deletion is prohibited; use Status = 'excluded' or 'sealed'.",
+      "primaryFieldName": "Title",
+      "fields": [
+        {
+          "name": "Title",
+          "type": "singleLineText",
+          "description": "Short descriptor of this evidence item. Primary field."
+        },
+        {
+          "name": "Evidence ID",
+          "type": "formula",
+          "description": "Stable external identifier. Format: EV-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"EV-\", RECORD_ID())" }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Evidentiary category.",
+          "options": {
+            "choices": [
+              { "name": "documentary", "color": "blueLight2" },
+              { "name": "testimonial", "color": "greenLight2" },
+              { "name": "physical", "color": "yellowLight2" },
+              { "name": "digital", "color": "purpleLight2" },
+              { "name": "circumstantial", "color": "orangeLight2" },
+              { "name": "expert", "color": "redLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Reliability / admissibility confidence 0.0–1.0.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "Source Node",
+          "type": "multipleRecordLinks",
+          "description": "Node(s) this evidence directly relates to.",
+          "options": { "linkedTableName": "Nodes" }
+        },
+        {
+          "name": "Document",
+          "type": "multipleRecordLinks",
+          "description": "Document record(s) that constitute or support this evidence.",
+          "options": { "linkedTableName": "Documents" }
+        },
+        {
+          "name": "Legal Target",
+          "type": "multipleRecordLinks",
+          "description": "Legal target(s) this evidence concerns.",
+          "options": { "linkedTableName": "Legal Targets" }
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "Agent or custodian who submitted this evidence. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Chain-of-custody reference or case exhibit number. Never null after first write."
+        },
+        {
+          "name": "Integrity Hash",
+          "type": "singleLineText",
+          "description": "SHA-256 of the document payload at time of ingestion. Write-once: immutable after first set."
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "description": "Admissibility status. Use 'excluded' or 'sealed' instead of deleting.",
+          "options": {
+            "choices": [
+              { "name": "pending", "color": "yellowLight2" },
+              { "name": "admitted", "color": "greenLight2" },
+              { "name": "disputed", "color": "orangeLight2" },
+              { "name": "excluded", "color": "redLight2" },
+              { "name": "sealed", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Date Acquired",
+          "type": "date",
+          "description": "Date this evidence was obtained.",
+          "options": { "dateFormat": { "name": "iso" } }
+        },
+        {
+          "name": "Filed Date",
+          "type": "date",
+          "description": "Date formally filed with court or authority.",
+          "options": { "dateFormat": { "name": "iso" } }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText",
+          "description": "Append-only analyst notes. Prefix each entry with ISO timestamp."
+        },
+        {
+          "name": "Delta Version",
+          "type": "number",
+          "description": "Write counter. Status transitions increment this; never decrements.",
+          "options": { "precision": 0 }
+        },
+        {
+          "name": "Last Modified By",
+          "type": "singleLineText",
+          "description": "Agent or user ID that last updated this record."
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime"
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime"
+        }
+      ]
+    },
+    {
+      "name": "Legal Targets",
+      "description": "Defendants, co-defendants, persons of interest, and witnesses in the Alicia case graph.",
+      "primaryFieldName": "Full Name",
+      "fields": [
+        {
+          "name": "Full Name",
+          "type": "singleLineText",
+          "description": "Legal full name. Primary field."
+        },
+        {
+          "name": "Target ID",
+          "type": "formula",
+          "description": "Stable external identifier. Format: LT-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"LT-\", RECORD_ID())" }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Role classification in the legal proceedings.",
+          "options": {
+            "choices": [
+              { "name": "defendant", "color": "redLight2" },
+              { "name": "co-defendant", "color": "orangeLight2" },
+              { "name": "witness", "color": "blueLight2" },
+              { "name": "person_of_interest", "color": "yellowLight2" },
+              { "name": "co-conspirator", "color": "purpleLight2" },
+              { "name": "third_party", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Confidence in this classification 0.0–1.0.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "Role",
+          "type": "singleLineText",
+          "description": "Narrative role description, e.g. 'primary lender', 'notary public'."
+        },
+        {
+          "name": "Node",
+          "type": "multipleRecordLinks",
+          "description": "Corresponding graph node(s) for this target.",
+          "options": { "linkedTableName": "Nodes" }
+        },
+        {
+          "name": "Attorney",
+          "type": "multipleRecordLinks",
+          "description": "Legal counsel for this target.",
+          "options": { "linkedTableName": "Attorney Contacts" }
+        },
+        {
+          "name": "Evidence",
+          "type": "multipleRecordLinks",
+          "description": "Evidence records involving this target.",
+          "options": { "linkedTableName": "Evidence Ledger" }
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "How this target was identified. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Case reference or filing that names this target. Never null after first write."
+        },
+        {
+          "name": "Case Reference",
+          "type": "singleLineText",
+          "description": "Official case / docket number."
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "description": "Current legal status.",
+          "options": {
+            "choices": [
+              { "name": "active", "color": "greenLight2" },
+              { "name": "pending", "color": "yellowLight2" },
+              { "name": "settled", "color": "blueLight2" },
+              { "name": "dismissed", "color": "grayLight2" },
+              { "name": "convicted", "color": "redLight2" },
+              { "name": "acquitted", "color": "purpleLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Delta Version",
+          "type": "number",
+          "options": { "precision": 0 }
+        },
+        {
+          "name": "Last Modified By",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime"
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime"
+        }
+      ]
+    },
+    {
+      "name": "Attorney Contacts",
+      "description": "Legal counsel, advocates, and court officers relevant to the Alicia case. Created first; other tables link to this one.",
+      "primaryFieldName": "Full Name",
+      "fields": [
+        {
+          "name": "Full Name",
+          "type": "singleLineText",
+          "description": "Attorney full name. Primary field."
+        },
+        {
+          "name": "Attorney ID",
+          "type": "formula",
+          "description": "Stable external identifier. Format: AC-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"AC-\", RECORD_ID())" }
+        },
+        {
+          "name": "Bar Number",
+          "type": "singleLineText",
+          "description": "State bar license number."
+        },
+        {
+          "name": "Firm Name",
+          "type": "singleLineText",
+          "description": "Law firm or organization."
+        },
+        {
+          "name": "Role",
+          "type": "singleSelect",
+          "description": "Functional role in the case.",
+          "options": {
+            "choices": [
+              { "name": "plaintiff_counsel", "color": "greenLight2" },
+              { "name": "defense_counsel", "color": "redLight2" },
+              { "name": "court_appointed", "color": "blueLight2" },
+              { "name": "mediator", "color": "purpleLight2" },
+              { "name": "judge", "color": "grayLight2" },
+              { "name": "pro_se", "color": "yellowLight2" },
+              { "name": "expert_witness", "color": "orangeLight2" },
+              { "name": "paralegal", "color": "pinkLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Verification status of contact information.",
+          "options": {
+            "choices": [
+              { "name": "verified", "color": "greenLight2" },
+              { "name": "unverified", "color": "yellowLight2" },
+              { "name": "disputed", "color": "redLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Confidence in contact details 0.0–1.0.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "Email",
+          "type": "email"
+        },
+        {
+          "name": "Phone",
+          "type": "phoneNumber"
+        },
+        {
+          "name": "Address",
+          "type": "multilineText",
+          "description": "Mailing or office address."
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "How this contact was obtained. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Bar directory, filing, or verification source. Never null after first write."
+        },
+        {
+          "name": "Legal Targets",
+          "type": "multipleRecordLinks",
+          "description": "Targets this attorney represents.",
+          "options": { "linkedTableName": "Legal Targets" }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              { "name": "active", "color": "greenLight2" },
+              { "name": "inactive", "color": "grayLight2" },
+              { "name": "disbarred", "color": "redLight2" },
+              { "name": "retired", "color": "blueLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime"
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime"
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "description": "Court filings, exhibits, transcripts, and all documentary evidence in the Alicia case. Linked by Evidence Ledger.",
+      "primaryFieldName": "Title",
+      "fields": [
+        {
+          "name": "Title",
+          "type": "singleLineText",
+          "description": "Document title or short descriptor. Primary field."
+        },
+        {
+          "name": "Document ID",
+          "type": "formula",
+          "description": "Stable external identifier. Format: DOC-recXXXXXXXXXXXXXX.",
+          "options": { "formula": "CONCATENATE(\"DOC-\", RECORD_ID())" }
+        },
+        {
+          "name": "Doc Type",
+          "type": "singleSelect",
+          "description": "Category of document.",
+          "options": {
+            "choices": [
+              { "name": "court_filing" },
+              { "name": "exhibit" },
+              { "name": "transcript" },
+              { "name": "report" },
+              { "name": "correspondence" },
+              { "name": "contract" },
+              { "name": "affidavit" },
+              { "name": "deposition" },
+              { "name": "motion" },
+              { "name": "order" },
+              { "name": "judgment" },
+              { "name": "subpoena" },
+              { "name": "other" }
+            ]
+          }
+        },
+        {
+          "name": "Claim Class",
+          "type": "singleSelect",
+          "description": "Authenticity and classification status.",
+          "options": {
+            "choices": [
+              { "name": "official", "color": "greenLight2" },
+              { "name": "unofficial", "color": "yellowLight2" },
+              { "name": "disputed", "color": "orangeLight2" },
+              { "name": "sealed", "color": "grayLight2" },
+              { "name": "redacted", "color": "redLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "description": "Authenticity confidence 0.0–1.0.",
+          "options": { "precision": 2 }
+        },
+        {
+          "name": "File URL",
+          "type": "url",
+          "description": "Link to document in storage (Cloudflare R2, Drive, etc.)."
+        },
+        {
+          "name": "Provenance Source",
+          "type": "singleLineText",
+          "description": "How or from whom this document was obtained. Never null after first write."
+        },
+        {
+          "name": "Provenance Ref",
+          "type": "singleLineText",
+          "description": "Chain-of-custody ID, case exhibit tag, or docket reference. Never null after first write."
+        },
+        {
+          "name": "Integrity Hash",
+          "type": "singleLineText",
+          "description": "SHA-256 of the file at ingestion time. Write-once: immutable after first set."
+        },
+        {
+          "name": "Filing Date",
+          "type": "date",
+          "options": { "dateFormat": { "name": "iso" } }
+        },
+        {
+          "name": "Received Date",
+          "type": "date",
+          "options": { "dateFormat": { "name": "iso" } }
+        },
+        {
+          "name": "Legal Target",
+          "type": "multipleRecordLinks",
+          "options": { "linkedTableName": "Legal Targets" }
+        },
+        {
+          "name": "Attorney",
+          "type": "multipleRecordLinks",
+          "options": { "linkedTableName": "Attorney Contacts" }
+        },
+        {
+          "name": "Evidence Ledger",
+          "type": "multipleRecordLinks",
+          "options": { "linkedTableName": "Evidence Ledger" }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              { "name": "draft", "color": "grayLight2" },
+              { "name": "pending", "color": "yellowLight2" },
+              { "name": "filed", "color": "greenLight2" },
+              { "name": "sealed", "color": "blueLight2" },
+              { "name": "withdrawn", "color": "orangeLight2" },
+              { "name": "archived", "color": "grayLight2" }
+            ]
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Delta Version",
+          "type": "number",
+          "options": { "precision": 0 }
+        },
+        {
+          "name": "Last Modified By",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Created At",
+          "type": "createdTime"
+        },
+        {
+          "name": "Updated At",
+          "type": "lastModifiedTime"
+        }
+      ]
+    }
+  ]
+}
