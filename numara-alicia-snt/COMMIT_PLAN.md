@@ -107,6 +107,89 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ---
 
+
+
+### Canonical Reconciliation Update (2026-05-06)
+
+**Status:** Canonical approved for Gemini research pass after Claude cross-verification.
+
+#### Integrated Claude Notes
+
+- Added low-confidence investigative stubs (isolated + hold):
+  - `city_contract_self_dealing`
+  - `institutional_cover_up`
+- Required properties for these stubs:
+  - `claim_class: inference`
+  - `source: speculative_inference`
+  - `weight <= 0.35`
+  - `status: HOLD`
+  - `DO_NOT_EXPAND_IN_EMERGENCY_FILING`
+
+#### Conflict Policy (Canonical)
+
+Conflict clearance requests to prospective attorneys must explicitly disclose:
+
+- **Cardinal Trust of Albuquerque, NM**
+
+Reason: generic checks may miss indirect fiduciary/entity relationships.
+
+#### Current Graph Priority
+
+1. beneficiary stabilization
+2. document preservation
+3. trustee transition
+4. distribution analysis
+5. attorney intake
+6. secondary investigations
+
+#### Low-Confidence Tracks — HOLD
+
+- `public_corruption_branch`
+- `city_contract_self_dealing`
+- `institutional_cover_up`
+- `treble_damages_theory`
+
+Operational rule: do **not** cite in emergency filings, expand narratively, escalate publicly, or convert into asserted facts.
+
+#### Gemini Research Pass Constraints
+
+Gemini receives **only** a constrained legal/documentary research prompt (not full graph), focused on:
+
+- compelled accounting
+- emergency relief / TRO
+- trustee removal under `NMSA 46A-7-706`
+- fiduciary impartiality
+- New Mexico IPRA procedures
+
+Research focus: documentary sufficiency, procedural sequencing, evidentiary thresholds, and filing prerequisites.
+
+#### Post-Gemini Routing
+
+Gemini output routes to Claude verification node for:
+
+- citation verification
+- procedural validation
+- statute normalization
+- `legal_reference` node generation
+
+`legal_reference` node claim class policy:
+
+- `verified_fact` if confirmed
+- `inference` if uncertain
+
+#### System State
+
+- Graph: stable
+- Claude: verification judiciary
+- GPT: coordination + synthesis
+- Gemini: constrained legal/documentary research
+- Kimi: geometry stabilization + provenance normalization
+- Codex: Airtable scaffolding + GitHub persistence
+
+Primary bottleneck: documentary provenance closure.
+Primary objective: beneficiary stabilization.
+Final rule: **do not convert allegations into facts.**
+
 ### Salvador Approval Checklist
 
 - [ ] Review `airtable_schema_mapping.json` — confirm all 6 tables, field names, and select options match case requirements
