@@ -9,7 +9,11 @@
     "Provenance fields (Provenance Source, Provenance Ref) are append-only; never null after first write.",
     "Integrity Hash is write-once: set on ingestion, ignored on subsequent PATCHes.",
     "All timestamps (Created At, Updated At) are system-managed; do not write to them.",
-    "Table creation order matters for linked fields: Attorney Contacts → Legal Targets → Nodes → Documents → Evidence Ledger → Edges."
+    "Table creation order matters for linked fields: Attorney Contacts \u2192 Legal Targets \u2192 Nodes \u2192 Documents \u2192 Evidence Ledger \u2192 Edges.",
+    "Canonical reconciliation update (2026-05-06): low-confidence tracks remain HOLD and must not be cited in emergency filings.",
+    "Low-confidence stubs: city_contract_self_dealing and institutional_cover_up are inference/speculative_inference with weight <= 0.35 and DO_NOT_EXPAND_IN_EMERGENCY_FILING.",
+    "Conflict disclosure policy: name Cardinal Trust of Albuquerque NM in all attorney conflict-clearance requests.",
+    "Operational final rule: do not convert allegations into facts."
   ],
   "tables": [
     {
@@ -26,7 +30,9 @@
           "name": "Node ID",
           "type": "formula",
           "description": "Stable external identifier. Never reassigned. Format: N-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"N-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"N-\", RECORD_ID())"
+          }
         },
         {
           "name": "Node Type",
@@ -34,13 +40,34 @@
           "description": "Semantic category of this node.",
           "options": {
             "choices": [
-              { "name": "person", "color": "blueLight2" },
-              { "name": "organization", "color": "greenLight2" },
-              { "name": "event", "color": "yellowLight2" },
-              { "name": "location", "color": "orangeLight2" },
-              { "name": "claim", "color": "redLight2" },
-              { "name": "document", "color": "purpleLight2" },
-              { "name": "entity", "color": "grayLight2" }
+              {
+                "name": "person",
+                "color": "blueLight2"
+              },
+              {
+                "name": "organization",
+                "color": "greenLight2"
+              },
+              {
+                "name": "event",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "location",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "claim",
+                "color": "redLight2"
+              },
+              {
+                "name": "document",
+                "color": "purpleLight2"
+              },
+              {
+                "name": "entity",
+                "color": "grayLight2"
+              }
             ]
           }
         },
@@ -50,19 +77,36 @@
           "description": "Epistemic classification per NUMARA_ALICIA_META_GRAPH_V2_2.",
           "options": {
             "choices": [
-              { "name": "fact", "color": "greenLight2" },
-              { "name": "allegation", "color": "yellowLight2" },
-              { "name": "inference", "color": "blueLight2" },
-              { "name": "hearsay", "color": "orangeLight2" },
-              { "name": "stipulated", "color": "purpleLight2" }
+              {
+                "name": "fact",
+                "color": "greenLight2"
+              },
+              {
+                "name": "allegation",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "inference",
+                "color": "blueLight2"
+              },
+              {
+                "name": "hearsay",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "stipulated",
+                "color": "purpleLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Reliability score 0.0–1.0. Never decrease without a provenance note.",
-          "options": { "precision": 2 }
+          "description": "Reliability score 0.0\u20131.0. Never decrease without a provenance note.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "Provenance Source",
@@ -80,10 +124,22 @@
           "description": "Lifecycle state. Use 'archived' for soft-delete. Never hard-delete a record.",
           "options": {
             "choices": [
-              { "name": "active", "color": "greenLight2" },
-              { "name": "disputed", "color": "yellowLight2" },
-              { "name": "archived", "color": "grayLight2" },
-              { "name": "redacted", "color": "redLight2" }
+              {
+                "name": "active",
+                "color": "greenLight2"
+              },
+              {
+                "name": "disputed",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "archived",
+                "color": "grayLight2"
+              },
+              {
+                "name": "redacted",
+                "color": "redLight2"
+              }
             ]
           }
         },
@@ -96,13 +152,17 @@
           "name": "Tags",
           "type": "multipleSelects",
           "description": "Free-form categorical tags for cross-cutting concerns.",
-          "options": { "choices": [] }
+          "options": {
+            "choices": []
+          }
         },
         {
           "name": "Delta Version",
           "type": "number",
           "description": "Monotonically increasing write counter. Starts at 1. Never write a lower value than currently stored.",
-          "options": { "precision": 0 }
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Last Modified By",
@@ -135,19 +195,27 @@
           "name": "Edge ID",
           "type": "formula",
           "description": "Stable external identifier. Format: E-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"E-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"E-\", RECORD_ID())"
+          }
         },
         {
           "name": "Source Node",
           "type": "multipleRecordLinks",
           "description": "Origin node(s) of this edge.",
-          "options": { "linkedTableName": "Nodes", "allowDuplicates": false }
+          "options": {
+            "linkedTableName": "Nodes",
+            "allowDuplicates": false
+          }
         },
         {
           "name": "Target Node",
           "type": "multipleRecordLinks",
           "description": "Destination node(s) of this edge.",
-          "options": { "linkedTableName": "Nodes", "allowDuplicates": false }
+          "options": {
+            "linkedTableName": "Nodes",
+            "allowDuplicates": false
+          }
         },
         {
           "name": "Relation Type",
@@ -155,21 +223,51 @@
           "description": "Semantic type of the relationship.",
           "options": {
             "choices": [
-              { "name": "asserts" },
-              { "name": "refutes" },
-              { "name": "supports" },
-              { "name": "contradicts" },
-              { "name": "involves" },
-              { "name": "filed_against" },
-              { "name": "represents" },
-              { "name": "authored" },
-              { "name": "references" },
-              { "name": "co-defendant" },
-              { "name": "witness_of" },
-              { "name": "related_to" },
-              { "name": "owns" },
-              { "name": "employed_by" },
-              { "name": "colluded_with" }
+              {
+                "name": "asserts"
+              },
+              {
+                "name": "refutes"
+              },
+              {
+                "name": "supports"
+              },
+              {
+                "name": "contradicts"
+              },
+              {
+                "name": "involves"
+              },
+              {
+                "name": "filed_against"
+              },
+              {
+                "name": "represents"
+              },
+              {
+                "name": "authored"
+              },
+              {
+                "name": "references"
+              },
+              {
+                "name": "co-defendant"
+              },
+              {
+                "name": "witness_of"
+              },
+              {
+                "name": "related_to"
+              },
+              {
+                "name": "owns"
+              },
+              {
+                "name": "employed_by"
+              },
+              {
+                "name": "colluded_with"
+              }
             ]
           }
         },
@@ -179,28 +277,51 @@
           "description": "Epistemic classification of this relationship assertion.",
           "options": {
             "choices": [
-              { "name": "fact", "color": "greenLight2" },
-              { "name": "allegation", "color": "yellowLight2" },
-              { "name": "inference", "color": "blueLight2" },
-              { "name": "hearsay", "color": "orangeLight2" },
-              { "name": "stipulated", "color": "purpleLight2" }
+              {
+                "name": "fact",
+                "color": "greenLight2"
+              },
+              {
+                "name": "allegation",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "inference",
+                "color": "blueLight2"
+              },
+              {
+                "name": "hearsay",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "stipulated",
+                "color": "purpleLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Confidence score 0.0–1.0.",
-          "options": { "precision": 2 }
+          "description": "Confidence score 0.0\u20131.0.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "Direction",
           "type": "singleSelect",
-          "description": "Whether this edge is directional (Source → Target) or undirected.",
+          "description": "Whether this edge is directional (Source \u2192 Target) or undirected.",
           "options": {
             "choices": [
-              { "name": "directed", "color": "blueLight2" },
-              { "name": "undirected", "color": "grayLight2" }
+              {
+                "name": "directed",
+                "color": "blueLight2"
+              },
+              {
+                "name": "undirected",
+                "color": "grayLight2"
+              }
             ]
           }
         },
@@ -218,7 +339,11 @@
           "name": "Effective Date",
           "type": "date",
           "description": "Date this relationship was established or first documented.",
-          "options": { "dateFormat": { "name": "iso" } }
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Status",
@@ -226,10 +351,22 @@
           "description": "Lifecycle state of this edge.",
           "options": {
             "choices": [
-              { "name": "active", "color": "greenLight2" },
-              { "name": "disputed", "color": "yellowLight2" },
-              { "name": "superseded", "color": "blueLight2" },
-              { "name": "archived", "color": "grayLight2" }
+              {
+                "name": "active",
+                "color": "greenLight2"
+              },
+              {
+                "name": "disputed",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "superseded",
+                "color": "blueLight2"
+              },
+              {
+                "name": "archived",
+                "color": "grayLight2"
+              }
             ]
           }
         },
@@ -242,13 +379,17 @@
           "name": "Delta Version",
           "type": "number",
           "description": "Monotonically increasing write counter.",
-          "options": { "precision": 0 }
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Evidence",
           "type": "multipleRecordLinks",
           "description": "Evidence records supporting this edge.",
-          "options": { "linkedTableName": "Evidence Ledger" }
+          "options": {
+            "linkedTableName": "Evidence Ledger"
+          }
         },
         {
           "name": "Created At",
@@ -274,7 +415,9 @@
           "name": "Evidence ID",
           "type": "formula",
           "description": "Stable external identifier. Format: EV-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"EV-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"EV-\", RECORD_ID())"
+          }
         },
         {
           "name": "Claim Class",
@@ -282,38 +425,64 @@
           "description": "Evidentiary category.",
           "options": {
             "choices": [
-              { "name": "documentary", "color": "blueLight2" },
-              { "name": "testimonial", "color": "greenLight2" },
-              { "name": "physical", "color": "yellowLight2" },
-              { "name": "digital", "color": "purpleLight2" },
-              { "name": "circumstantial", "color": "orangeLight2" },
-              { "name": "expert", "color": "redLight2" }
+              {
+                "name": "documentary",
+                "color": "blueLight2"
+              },
+              {
+                "name": "testimonial",
+                "color": "greenLight2"
+              },
+              {
+                "name": "physical",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "digital",
+                "color": "purpleLight2"
+              },
+              {
+                "name": "circumstantial",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "expert",
+                "color": "redLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Reliability / admissibility confidence 0.0–1.0.",
-          "options": { "precision": 2 }
+          "description": "Reliability / admissibility confidence 0.0\u20131.0.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "Source Node",
           "type": "multipleRecordLinks",
           "description": "Node(s) this evidence directly relates to.",
-          "options": { "linkedTableName": "Nodes" }
+          "options": {
+            "linkedTableName": "Nodes"
+          }
         },
         {
           "name": "Document",
           "type": "multipleRecordLinks",
           "description": "Document record(s) that constitute or support this evidence.",
-          "options": { "linkedTableName": "Documents" }
+          "options": {
+            "linkedTableName": "Documents"
+          }
         },
         {
           "name": "Legal Target",
           "type": "multipleRecordLinks",
           "description": "Legal target(s) this evidence concerns.",
-          "options": { "linkedTableName": "Legal Targets" }
+          "options": {
+            "linkedTableName": "Legal Targets"
+          }
         },
         {
           "name": "Provenance Source",
@@ -336,11 +505,26 @@
           "description": "Admissibility status. Use 'excluded' or 'sealed' instead of deleting.",
           "options": {
             "choices": [
-              { "name": "pending", "color": "yellowLight2" },
-              { "name": "admitted", "color": "greenLight2" },
-              { "name": "disputed", "color": "orangeLight2" },
-              { "name": "excluded", "color": "redLight2" },
-              { "name": "sealed", "color": "grayLight2" }
+              {
+                "name": "pending",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "admitted",
+                "color": "greenLight2"
+              },
+              {
+                "name": "disputed",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "excluded",
+                "color": "redLight2"
+              },
+              {
+                "name": "sealed",
+                "color": "grayLight2"
+              }
             ]
           }
         },
@@ -348,13 +532,21 @@
           "name": "Date Acquired",
           "type": "date",
           "description": "Date this evidence was obtained.",
-          "options": { "dateFormat": { "name": "iso" } }
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Filed Date",
           "type": "date",
           "description": "Date formally filed with court or authority.",
-          "options": { "dateFormat": { "name": "iso" } }
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Notes",
@@ -365,7 +557,9 @@
           "name": "Delta Version",
           "type": "number",
           "description": "Write counter. Status transitions increment this; never decrements.",
-          "options": { "precision": 0 }
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Last Modified By",
@@ -396,7 +590,9 @@
           "name": "Target ID",
           "type": "formula",
           "description": "Stable external identifier. Format: LT-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"LT-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"LT-\", RECORD_ID())"
+          }
         },
         {
           "name": "Claim Class",
@@ -404,20 +600,40 @@
           "description": "Role classification in the legal proceedings.",
           "options": {
             "choices": [
-              { "name": "defendant", "color": "redLight2" },
-              { "name": "co-defendant", "color": "orangeLight2" },
-              { "name": "witness", "color": "blueLight2" },
-              { "name": "person_of_interest", "color": "yellowLight2" },
-              { "name": "co-conspirator", "color": "purpleLight2" },
-              { "name": "third_party", "color": "grayLight2" }
+              {
+                "name": "defendant",
+                "color": "redLight2"
+              },
+              {
+                "name": "co-defendant",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "witness",
+                "color": "blueLight2"
+              },
+              {
+                "name": "person_of_interest",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "co-conspirator",
+                "color": "purpleLight2"
+              },
+              {
+                "name": "third_party",
+                "color": "grayLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Confidence in this classification 0.0–1.0.",
-          "options": { "precision": 2 }
+          "description": "Confidence in this classification 0.0\u20131.0.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "Role",
@@ -428,19 +644,25 @@
           "name": "Node",
           "type": "multipleRecordLinks",
           "description": "Corresponding graph node(s) for this target.",
-          "options": { "linkedTableName": "Nodes" }
+          "options": {
+            "linkedTableName": "Nodes"
+          }
         },
         {
           "name": "Attorney",
           "type": "multipleRecordLinks",
           "description": "Legal counsel for this target.",
-          "options": { "linkedTableName": "Attorney Contacts" }
+          "options": {
+            "linkedTableName": "Attorney Contacts"
+          }
         },
         {
           "name": "Evidence",
           "type": "multipleRecordLinks",
           "description": "Evidence records involving this target.",
-          "options": { "linkedTableName": "Evidence Ledger" }
+          "options": {
+            "linkedTableName": "Evidence Ledger"
+          }
         },
         {
           "name": "Provenance Source",
@@ -463,12 +685,30 @@
           "description": "Current legal status.",
           "options": {
             "choices": [
-              { "name": "active", "color": "greenLight2" },
-              { "name": "pending", "color": "yellowLight2" },
-              { "name": "settled", "color": "blueLight2" },
-              { "name": "dismissed", "color": "grayLight2" },
-              { "name": "convicted", "color": "redLight2" },
-              { "name": "acquitted", "color": "purpleLight2" }
+              {
+                "name": "active",
+                "color": "greenLight2"
+              },
+              {
+                "name": "pending",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "settled",
+                "color": "blueLight2"
+              },
+              {
+                "name": "dismissed",
+                "color": "grayLight2"
+              },
+              {
+                "name": "convicted",
+                "color": "redLight2"
+              },
+              {
+                "name": "acquitted",
+                "color": "purpleLight2"
+              }
             ]
           }
         },
@@ -479,7 +719,9 @@
         {
           "name": "Delta Version",
           "type": "number",
-          "options": { "precision": 0 }
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Last Modified By",
@@ -509,7 +751,9 @@
           "name": "Attorney ID",
           "type": "formula",
           "description": "Stable external identifier. Format: AC-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"AC-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"AC-\", RECORD_ID())"
+          }
         },
         {
           "name": "Bar Number",
@@ -527,14 +771,38 @@
           "description": "Functional role in the case.",
           "options": {
             "choices": [
-              { "name": "plaintiff_counsel", "color": "greenLight2" },
-              { "name": "defense_counsel", "color": "redLight2" },
-              { "name": "court_appointed", "color": "blueLight2" },
-              { "name": "mediator", "color": "purpleLight2" },
-              { "name": "judge", "color": "grayLight2" },
-              { "name": "pro_se", "color": "yellowLight2" },
-              { "name": "expert_witness", "color": "orangeLight2" },
-              { "name": "paralegal", "color": "pinkLight2" }
+              {
+                "name": "plaintiff_counsel",
+                "color": "greenLight2"
+              },
+              {
+                "name": "defense_counsel",
+                "color": "redLight2"
+              },
+              {
+                "name": "court_appointed",
+                "color": "blueLight2"
+              },
+              {
+                "name": "mediator",
+                "color": "purpleLight2"
+              },
+              {
+                "name": "judge",
+                "color": "grayLight2"
+              },
+              {
+                "name": "pro_se",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "expert_witness",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "paralegal",
+                "color": "pinkLight2"
+              }
             ]
           }
         },
@@ -544,17 +812,28 @@
           "description": "Verification status of contact information.",
           "options": {
             "choices": [
-              { "name": "verified", "color": "greenLight2" },
-              { "name": "unverified", "color": "yellowLight2" },
-              { "name": "disputed", "color": "redLight2" }
+              {
+                "name": "verified",
+                "color": "greenLight2"
+              },
+              {
+                "name": "unverified",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "disputed",
+                "color": "redLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Confidence in contact details 0.0–1.0.",
-          "options": { "precision": 2 }
+          "description": "Confidence in contact details 0.0\u20131.0.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "Email",
@@ -583,17 +862,31 @@
           "name": "Legal Targets",
           "type": "multipleRecordLinks",
           "description": "Targets this attorney represents.",
-          "options": { "linkedTableName": "Legal Targets" }
+          "options": {
+            "linkedTableName": "Legal Targets"
+          }
         },
         {
           "name": "Status",
           "type": "singleSelect",
           "options": {
             "choices": [
-              { "name": "active", "color": "greenLight2" },
-              { "name": "inactive", "color": "grayLight2" },
-              { "name": "disbarred", "color": "redLight2" },
-              { "name": "retired", "color": "blueLight2" }
+              {
+                "name": "active",
+                "color": "greenLight2"
+              },
+              {
+                "name": "inactive",
+                "color": "grayLight2"
+              },
+              {
+                "name": "disbarred",
+                "color": "redLight2"
+              },
+              {
+                "name": "retired",
+                "color": "blueLight2"
+              }
             ]
           }
         },
@@ -625,7 +918,9 @@
           "name": "Document ID",
           "type": "formula",
           "description": "Stable external identifier. Format: DOC-recXXXXXXXXXXXXXX.",
-          "options": { "formula": "CONCATENATE(\"DOC-\", RECORD_ID())" }
+          "options": {
+            "formula": "CONCATENATE(\"DOC-\", RECORD_ID())"
+          }
         },
         {
           "name": "Doc Type",
@@ -633,19 +928,45 @@
           "description": "Category of document.",
           "options": {
             "choices": [
-              { "name": "court_filing" },
-              { "name": "exhibit" },
-              { "name": "transcript" },
-              { "name": "report" },
-              { "name": "correspondence" },
-              { "name": "contract" },
-              { "name": "affidavit" },
-              { "name": "deposition" },
-              { "name": "motion" },
-              { "name": "order" },
-              { "name": "judgment" },
-              { "name": "subpoena" },
-              { "name": "other" }
+              {
+                "name": "court_filing"
+              },
+              {
+                "name": "exhibit"
+              },
+              {
+                "name": "transcript"
+              },
+              {
+                "name": "report"
+              },
+              {
+                "name": "correspondence"
+              },
+              {
+                "name": "contract"
+              },
+              {
+                "name": "affidavit"
+              },
+              {
+                "name": "deposition"
+              },
+              {
+                "name": "motion"
+              },
+              {
+                "name": "order"
+              },
+              {
+                "name": "judgment"
+              },
+              {
+                "name": "subpoena"
+              },
+              {
+                "name": "other"
+              }
             ]
           }
         },
@@ -655,19 +976,36 @@
           "description": "Authenticity and classification status.",
           "options": {
             "choices": [
-              { "name": "official", "color": "greenLight2" },
-              { "name": "unofficial", "color": "yellowLight2" },
-              { "name": "disputed", "color": "orangeLight2" },
-              { "name": "sealed", "color": "grayLight2" },
-              { "name": "redacted", "color": "redLight2" }
+              {
+                "name": "official",
+                "color": "greenLight2"
+              },
+              {
+                "name": "unofficial",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "disputed",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "sealed",
+                "color": "grayLight2"
+              },
+              {
+                "name": "redacted",
+                "color": "redLight2"
+              }
             ]
           }
         },
         {
           "name": "Confidence",
           "type": "number",
-          "description": "Authenticity confidence 0.0–1.0.",
-          "options": { "precision": 2 }
+          "description": "Authenticity confidence 0.0\u20131.0.",
+          "options": {
+            "precision": 2
+          }
         },
         {
           "name": "File URL",
@@ -692,39 +1030,71 @@
         {
           "name": "Filing Date",
           "type": "date",
-          "options": { "dateFormat": { "name": "iso" } }
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Received Date",
           "type": "date",
-          "options": { "dateFormat": { "name": "iso" } }
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Legal Target",
           "type": "multipleRecordLinks",
-          "options": { "linkedTableName": "Legal Targets" }
+          "options": {
+            "linkedTableName": "Legal Targets"
+          }
         },
         {
           "name": "Attorney",
           "type": "multipleRecordLinks",
-          "options": { "linkedTableName": "Attorney Contacts" }
+          "options": {
+            "linkedTableName": "Attorney Contacts"
+          }
         },
         {
           "name": "Evidence Ledger",
           "type": "multipleRecordLinks",
-          "options": { "linkedTableName": "Evidence Ledger" }
+          "options": {
+            "linkedTableName": "Evidence Ledger"
+          }
         },
         {
           "name": "Status",
           "type": "singleSelect",
           "options": {
             "choices": [
-              { "name": "draft", "color": "grayLight2" },
-              { "name": "pending", "color": "yellowLight2" },
-              { "name": "filed", "color": "greenLight2" },
-              { "name": "sealed", "color": "blueLight2" },
-              { "name": "withdrawn", "color": "orangeLight2" },
-              { "name": "archived", "color": "grayLight2" }
+              {
+                "name": "draft",
+                "color": "grayLight2"
+              },
+              {
+                "name": "pending",
+                "color": "yellowLight2"
+              },
+              {
+                "name": "filed",
+                "color": "greenLight2"
+              },
+              {
+                "name": "sealed",
+                "color": "blueLight2"
+              },
+              {
+                "name": "withdrawn",
+                "color": "orangeLight2"
+              },
+              {
+                "name": "archived",
+                "color": "grayLight2"
+              }
             ]
           }
         },
@@ -735,7 +1105,9 @@
         {
           "name": "Delta Version",
           "type": "number",
-          "options": { "precision": 0 }
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Last Modified By",
