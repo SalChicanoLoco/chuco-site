@@ -57,8 +57,11 @@
     chuco.curiosity = clamp((chuco.curiosity * 0.75) + 0.18, 0, 1);
     chuco.play = clamp((chuco.play * 0.75) + 0.12, 0, 1);
     chuco.attachment = clamp((chuco.attachment * 0.75) + 0.08, 0, 1);
-    persist();
-    log('Baked axolotl priors loaded: seek, approach, playful curiosity.');
+    const saved=persist();
+    if(saved){
+      try{localStorage.setItem(PROFILE_KEY,'trained');}catch(_){}
+    }
+    log(saved?'Baked axolotl priors loaded: seek, approach, playful curiosity.':'Baked axolotl priors computed, but local persistence failed.');
   }
 
   function runLispTreat(){
