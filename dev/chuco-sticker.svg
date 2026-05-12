@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140" role="img" aria-label="Chuco sticker">
+<defs><radialGradient id="g" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#ffc8ef"/><stop offset="1" stop-color="#ff7ad9"/></radialGradient></defs>
+<circle cx="70" cy="70" r="64" fill="#0b1822" stroke="#4de3ff" stroke-width="4"/>
+<ellipse cx="70" cy="76" rx="40" ry="26" fill="url(#g)"/>
+<circle cx="89" cy="69" r="6" fill="#fff"/><circle cx="89" cy="69" r="2.2" fill="#000"/>
+<path d="M99 78q-9 10-21 0" fill="none" stroke="#4d1230" stroke-width="3" stroke-linecap="round"/>
+<circle cx="36" cy="58" r="10" fill="#ff7ad9"/><circle cx="34" cy="76" r="11" fill="#ff7ad9"/><circle cx="36" cy="93" r="10" fill="#ff7ad9"/>
+<text x="70" y="28" text-anchor="middle" font-family="Inter,Arial" font-size="11" fill="#4de3ff">GPT-5.5 + Image Gen</text>
+</svg>
