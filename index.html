@@ -1,249 +1,72 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Chuco | NUMARA Axolotl</title>
-  <style>
-    :root {
-      --bg: #071014;
-      --bg2: #04090c;
-      --panel: #0e1a21;
-      --line: #26414f;
-      --text: #e8f6ff;
-      --muted: #8da7b6;
-      --cyan: #4de3ff;
-      --pink: #ff7ad9;
-      --green: #55ff99;
-      --yellow: #ffd84d;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; font-family: Inter, system-ui, sans-serif; color: var(--text); background: radial-gradient(circle at top, #132a38, var(--bg2) 72%); }
-    body { display: grid; grid-template-rows: auto 1fr auto; }
-    .top { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(7,16,20,.85); backdrop-filter: blur(8px); }
-    .kicker { font-size: 11px; color: var(--yellow); font-weight: 700; letter-spacing: .08em; }
-    .title { margin: 4px 0 6px; font-size: 30px; line-height: .95; letter-spacing: -.05em; color: var(--cyan); }
-    .sub { font-size: 12px; color: var(--muted); line-height: 1.35; }
-    .main { display: grid; grid-template-rows: 56vh auto auto; gap: 10px; padding: 10px; min-height: 0; }
-    .stage { position: relative; overflow: hidden; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: #07131a; }
-    canvas { width: 100%; height: 100%; display: block; }
-    .overlay { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 20%, rgba(77,227,255,.08), transparent 35%); }
-    .hud { position: absolute; inset: auto 8px 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .pill { background: rgba(8,16,22,.76); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 8px; font-size: 10px; }
-    .pill b { display: block; font-size: 12px; color: #fff; }
-    .panel { border: 1px solid rgba(255,255,255,.08); border-radius: 14px; background: rgba(8,16,22,.82); padding: 10px; }
-    .actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    button { border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: linear-gradient(180deg, #193341, #11202a); color: #fff; font: inherit; font-weight: 700; padding: 12px; cursor: pointer; }
-    button:active { transform: scale(.98); }
-    .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; }
-    .bar { height: 8px; margin: 6px 0; border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #0a1419; }
-    .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), var(--green)); }
-    .research { display: none; }
-    .research.on { display: block; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-    .cell { border: 1px solid rgba(255,255,255,.08); border-radius: 8px; padding: 8px; font-size: 10px; color: var(--muted); }
-    .cell b { display: block; margin-top: 3px; color: #fff; font-size: 12px; }
-    .log { max-height: 140px; overflow: auto; display: flex; flex-direction: column; gap: 6px; }
-    .entry { border-left: 3px solid var(--cyan); border-radius: 8px; background: rgba(255,255,255,.04); padding: 8px; font-size: 11px; }
-    .footer { padding: 10px 14px; font-size: 11px; color: var(--muted); }
-    @media (min-width: 980px) {
-      body { grid-template-rows: auto 1fr; }
-      .main { grid-template-columns: 1.2fr .8fr; grid-template-rows: 1fr; }
-      .stack { display: grid; gap: 10px; min-height: 0; }
-      .stage { min-height: 620px; }
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Chuco — NUMARA Axolotl</title>
+<style>
+:root{--bg:#071014;--panel:#0f1a20;--line:#28404d;--text:#e8f6ff;--muted:#87a3b3;--cyan:#4de3ff;--pink:#ff7ad9;--green:#55ff99;--yellow:#ffd84d;--danger:#ff6767}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at top,#122734,#04090c 70%);color:var(--text)}
+body{display:grid;grid-template-rows:auto 1fr auto}
+.top{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(7,16,20,.85);backdrop-filter:blur(8px)}
+.kicker{font-size:11px;color:var(--yellow);letter-spacing:.08em;font-weight:700}.title{margin:4px 0 6px;font-size:30px;letter-spacing:-.05em;color:var(--cyan)}
+.sub{font-size:12px;color:var(--muted);line-height:1.35}
+.main{display:grid;grid-template-rows:56vh auto auto;gap:10px;padding:10px;min-height:0}
+.stage{position:relative;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;background:#071017}
+canvas{width:100%;height:100%;display:block}.overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 20%,rgba(77,227,255,.08),transparent 35%)}
+.hud{position:absolute;inset:auto 8px 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.pill{background:rgba(8,16,22,.75);border:1px solid rgba(255,255,255,.07);padding:8px;border-radius:10px;font-size:10px}.pill b{display:block;color:#fff;font-size:12px}
+.panel{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px;background:rgba(8,16,22,.82)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}.bar{height:8px;background:#0a141a;border:1px solid rgba(255,255,255,.07);border-radius:999px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;width:50%;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}button{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;background:linear-gradient(180deg,#18313d,#102028);color:#fff;font-weight:700}
+button:active{transform:scale(.98)}
+.research{display:none}.research.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.cell{font-size:10px;color:var(--muted);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px}.cell b{display:block;color:#fff;font-size:13px}
+.log{max-height:140px;overflow:auto;display:flex;flex-direction:column;gap:6px}.entry{font-size:11px;padding:8px;border-left:3px solid var(--cyan);background:rgba(255,255,255,.04);border-radius:8px}
+.footer{padding:10px 14px;font-size:11px;color:var(--muted)}
+@media(min-width:980px){body{grid-template-rows:auto 1fr}.main{grid-template-columns:1.2fr .8fr;grid-template-rows:1fr;align-items:stretch}.stack{display:grid;gap:10px;min-height:0}.stage{min-height:620px}}
+</style>
 </head>
 <body>
-  <header class="top">
-    <div class="kicker">#OpenAIDevDay2026 | senaColectivo.com/dev</div>
-    <h1 class="title">CHUCO</h1>
-    <div class="sub">Fast start. Tap Feed, Pet, Light, or Toy and watch the NUMARA mini-brain shift edge pressures in real time.</div>
-  </header>
-
-  <main class="main">
-    <section class="stage">
-      <canvas id="c"></canvas>
-      <div class="overlay"></div>
-      <div class="hud">
-        <div class="pill"><span>morphology</span><b id="morphologyHud">explore</b></div>
-        <div class="pill"><span>residual</span><b id="residualHud">1.00</b></div>
-        <div class="pill"><span>trust</span><b id="trustHud">0.20</b></div>
-        <div class="pill"><span>energy</span><b id="energyHud">0.55</b></div>
-      </div>
-    </section>
-
-    <section class="stack">
-      <div class="panel"><div class="actions"><button id="feed">Feed</button><button id="pet">Pet</button><button id="light">Light</button><button id="toy">Toy</button></div></div>
-      <div class="panel">
-        <div class="row"><span>Mood</span><b id="mood">curious</b></div><div class="bar"><i id="moodBar"></i></div>
-        <div class="row"><span>Energy</span><b id="energy">0.55</b></div><div class="bar"><i id="energyBar"></i></div>
-        <div class="row"><span>Trust</span><b id="trust">0.20</b></div><div class="bar"><i id="trustBar"></i></div>
-        <div class="row"><span>Residual</span><b id="residual">1.00</b></div>
-      </div>
-      <div class="panel"><div class="row"><b>Research Mode</b><button id="researchToggle">Off</button></div><div class="sub">Share link with <code>?research=1</code> to open inspect mode.</div></div>
-      <div id="researchPanel" class="panel research"><div class="sub">NUMARA graph (weight + pressure), live morphology, and residual.</div><div id="graph" class="grid"></div></div>
-      <div class="panel"><div id="log" class="log"></div></div>
-    </section>
-  </main>
-
-  <footer class="footer">Static v1, no backend. NUMARA edge memory persists locally.</footer>
-
-  <script>
-    const KEY = 'chuco_numara_edges_v1';
-    const $ = (id) => document.getElementById(id);
-    const ui = {
-      mood: $('mood'), energy: $('energy'), trust: $('trust'), residual: $('residual'), graph: $('graph'),
-      moodBar: $('moodBar'), energyBar: $('energyBar'), trustBar: $('trustBar'),
-      morphologyHud: $('morphologyHud'), residualHud: $('residualHud'), trustHud: $('trustHud'), energyHud: $('energyHud'),
-      researchPanel: $('researchPanel'), researchToggle: $('researchToggle'), log: $('log')
-    };
-
-    const canvas = $('c');
-    const ctx = canvas.getContext('2d', { alpha: false });
-    let W = 0, H = 0;
-    function resize() {
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      W = canvas.parentElement.clientWidth;
-      H = canvas.parentElement.clientHeight;
-      canvas.width = Math.floor(W * dpr);
-      canvas.height = Math.floor(H * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener('resize', resize, { passive: true });
-    resize();
-
-    const graph = { edges: {
-      'HUNGER->SEEK': { w: .5, p: 0 }, 'TRUST->APPROACH': { w: .2, p: 0 }, 'PLAY->SPIN': { w: .1, p: 0 },
-      'LIGHT->CURIOUS': { w: .3, p: 0 }, 'FEAR->HIDE': { w: .15, p: 0 }, 'REWARD->REPEAT': { w: .4, p: 0 },
-      'PET->TRUST': { w: .2, p: 0 }, 'TOY->PLAY': { w: .2, p: 0 }
-    }};
-
-    function loadMemory() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-        if (!saved) return;
-        for (const key of Object.keys(graph.edges)) {
-          const source = saved[key];
-          if (!source) continue;
-          graph.edges[key].w = Number.isFinite(+source.w) ? +source.w : graph.edges[key].w;
-          graph.edges[key].p = Number.isFinite(+source.p) ? +source.p : graph.edges[key].p;
-        }
-      } catch (_) {}
-    }
-    function persistMemory() { localStorage.setItem(KEY, JSON.stringify(graph.edges)); }
-    loadMemory();
-
-    const chuco = { x: 0, y: 0, vx: 0, vy: 0, heading: 0, energy: .55, trust: .2, curiosity: .6, hunger: .5, play: .4, attachment: .12, rhythm: .5, comfort: .35, mood: 'curious', morphology: 'explore', rewardResidual: 1 };
-    const food = []; const ripples = []; const mouse = { x: 0, y: 0 };
-    const ACTION_WEIGHT = { feed: .10, pet: .18, light: .20, toy: .12 };
-
-    function log(msg) {
-      const n = document.createElement('div'); n.className = 'entry'; n.textContent = msg;
-      ui.log.prepend(n); while (ui.log.children.length > 18) ui.log.lastChild.remove();
-    }
-
-    function spawnFood() { food.push({ x: Math.random() * W * .78 + W * .1, y: Math.random() * H * .64 + H * .22, r: 10 }); }
-    function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
-    function applyEdge(name, delta) {
-      const e = graph.edges[name]; if (!e) return;
-      e.p = clamp(e.p + delta, 0, 5);
-      e.w = clamp(e.w * .96 + delta * .04, .02, .99);
-      persistMemory();
-    }
-    function reward(v) { applyEdge('REWARD->REPEAT', v); chuco.trust = clamp(chuco.trust + v * .04, 0, 1); }
-
-    function think() {
-      const weighted = {
-        seek_food: graph.edges['HUNGER->SEEK'].w * chuco.hunger + .04,
-        approach: graph.edges['TRUST->APPROACH'].w * chuco.trust + chuco.attachment * .2,
-        spin: graph.edges['PLAY->SPIN'].w * chuco.play + chuco.rhythm * .15,
-        explore: graph.edges['LIGHT->CURIOUS'].w * chuco.curiosity + .12,
-        idle: .08 + chuco.comfort * .2
-      };
-      let best = 'idle'; let top = -Infinity;
-      for (const [k, v] of Object.entries(weighted)) if (v > top) { best = k; top = v; }
-      chuco.morphology = best;
-
-      if (best === 'seek_food' && food.length) {
-        let target = food[0]; let bestDist = Infinity;
-        for (const f of food) { const d = Math.hypot(chuco.x - f.x, chuco.y - f.y); if (d < bestDist) { bestDist = d; target = f; } }
-        chuco.vx += (target.x - chuco.x) * .0011; chuco.vy += (target.y - chuco.y) * .0011; applyEdge('HUNGER->SEEK', .006);
-      } else if (best === 'approach') {
-        chuco.vx += (mouse.x - chuco.x) * .0007; chuco.vy += (mouse.y - chuco.y) * .0007; applyEdge('TRUST->APPROACH', .004);
-      } else if (best === 'spin') {
-        chuco.heading += .08; chuco.vx += Math.sin(chuco.heading) * .18; chuco.vy += Math.cos(chuco.heading) * .18; applyEdge('PLAY->SPIN', .004);
-      } else if (best === 'explore') {
-        chuco.vx += (Math.random() - .5) * .11; chuco.vy += (Math.random() - .5) * .11; applyEdge('LIGHT->CURIOUS', .003);
-      }
-
-      const recurrencePressure = (graph.edges['REWARD->REPEAT'].w + graph.edges['TRUST->APPROACH'].w) * .5;
-      chuco.rewardResidual = clamp(1 - recurrencePressure * chuco.trust, 0, 1);
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#07131a'; ctx.fillRect(0, 0, W, H);
-      for (const f of food) { ctx.fillStyle = '#55ff99'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill(); }
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        const r = ripples[i]; ctx.strokeStyle = `${r.c}${r.a})`; ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2); ctx.stroke(); r.r += 2; r.a *= .94;
-        if (r.a < .03) ripples.splice(i, 1);
-      }
-      ctx.save(); ctx.translate(chuco.x, chuco.y); ctx.rotate(chuco.heading * .15);
-      ctx.fillStyle = '#ff9fe6'; ctx.beginPath(); ctx.ellipse(0, 0, 42, 28, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#ff7ad9'; ctx.beginPath(); ctx.arc(-36, -14, 11, 0, Math.PI * 2); ctx.arc(-40, 0, 12, 0, Math.PI * 2); ctx.arc(-36, 14, 11, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(14, -7, 5, 0, Math.PI * 2); ctx.arc(14, 7, 5, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(15, -7, 2, 0, Math.PI * 2); ctx.arc(15, 7, 2, 0, Math.PI * 2); ctx.fill();
-      ctx.restore();
-    }
-
-    function renderUI() {
-      const residual = chuco.rewardResidual;
-      chuco.mood = residual < .65 ? 'learning' : (chuco.energy < .3 ? 'sleepy' : 'curious');
-      ui.mood.textContent = chuco.mood; ui.energy.textContent = chuco.energy.toFixed(2); ui.trust.textContent = chuco.trust.toFixed(2); ui.residual.textContent = residual.toFixed(2);
-      ui.morphologyHud.textContent = chuco.morphology; ui.residualHud.textContent = residual.toFixed(2); ui.trustHud.textContent = chuco.trust.toFixed(2); ui.energyHud.textContent = chuco.energy.toFixed(2);
-      ui.moodBar.style.width = `${(1 - residual) * 100}%`; ui.energyBar.style.width = `${chuco.energy * 100}%`; ui.trustBar.style.width = `${chuco.trust * 100}%`;
-      if (!ui.researchPanel.classList.contains('on')) return;
-      const frag = document.createDocumentFragment();
-      for (const [k, v] of Object.entries(graph.edges)) {
-        const d = document.createElement('div'); d.className = 'cell'; d.innerHTML = `${k}<b>w:${v.w.toFixed(2)} p:${v.p.toFixed(2)}</b>`; frag.appendChild(d);
-      }
-      ui.graph.replaceChildren(frag);
-    }
-
-    function step() {
-      think(); chuco.vx *= .985; chuco.vy *= .985;
-      chuco.x = clamp(chuco.x + chuco.vx, 40, W - 40); chuco.y = clamp(chuco.y + chuco.vy, 90, H - 40);
-      chuco.energy = clamp(chuco.energy - .0005, 0, 1); chuco.hunger = clamp(chuco.hunger + .0003, 0, 1);
-      for (let i = food.length - 1; i >= 0; i--) if (Math.hypot(chuco.x - food[i].x, chuco.y - food[i].y) < 28) {
-        food.splice(i, 1); chuco.energy = clamp(chuco.energy + .25, 0, 1); chuco.hunger = clamp(chuco.hunger - .35, 0, 1);
-        reward(.4); applyEdge('HUNGER->SEEK', .2); ripples.push({ x: chuco.x, y: chuco.y, r: 8, a: .9, c: 'rgba(85,255,153,' }); log('Chuco reinforced HUNGER->SEEK.'); spawnFood();
-      }
-      draw(); renderUI(); requestAnimationFrame(step);
-    }
-
-    canvas.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; }, { passive: true });
-    $('feed').onclick = () => { spawnFood(); reward(ACTION_WEIGHT.feed); log('Food dropped.'); };
-    $('pet').onclick = () => { applyEdge('PET->TRUST', .25); applyEdge('TRUST->APPROACH', .18); chuco.trust = clamp(chuco.trust + .12, 0, 1); reward(ACTION_WEIGHT.pet); ripples.push({ x: chuco.x, y: chuco.y, r: 12, a: .8, c: 'rgba(255,122,217,' }); log('Pet reinforced TRUST->APPROACH.'); };
-    $('light').onclick = () => { applyEdge('LIGHT->CURIOUS', .2); chuco.curiosity = clamp(chuco.curiosity + .08, 0, 1); log('Light pulse increased exploration pressure.'); };
-    $('toy').onclick = () => { applyEdge('TOY->PLAY', .22); applyEdge('PLAY->SPIN', .18); chuco.play = clamp(chuco.play + .1, 0, 1); reward(ACTION_WEIGHT.toy); log('Toy strengthened PLAY recurrence.'); };
-
-    function setResearchMode(on) {
-      ui.researchPanel.classList.toggle('on', on);
-      ui.researchToggle.textContent = on ? 'On' : 'Off';
-      const next = new URL(location.href);
-      if (on) next.searchParams.set('research', '1'); else next.searchParams.delete('research');
-      history.replaceState({}, '', next);
-      if (!on) ui.graph.replaceChildren();
-    }
-    const researchOn = new URLSearchParams(location.search).get('research') === '1';
-    ui.researchToggle.onclick = () => setResearchMode(!ui.researchPanel.classList.contains('on'));
-    setResearchMode(researchOn);
-
-    spawnFood();
-    chuco.x = W / 2; chuco.y = H / 2; mouse.x = W / 2; mouse.y = H / 2;
-    log('Chuco initialized. NUMARA mini-brain online.');
-    step();
-  </script>
+<header class="top">
+  <div class="kicker">#OpenAIDevDay2026 • senaColectivo.com/dev</div>
+  <h1 class="title">CHUCO</h1>
+  <div class="sub">Adorable in under 5 seconds: tap Feed, Pet, Light, or Toy and watch NUMARA edge pressures evolve in real time.</div>
+</header>
+<main class="main">
+  <section class="stage"><canvas id="c"></canvas><div class="overlay"></div>
+    <div class="hud"><div class="pill"><span>morphology</span><b id="morphologyHud">explore</b></div><div class="pill"><span>residual</span><b id="residualHud">1.00</b></div><div class="pill"><span>trust</span><b id="trustHud">0.20</b></div><div class="pill"><span>energy</span><b id="energyHud">0.55</b></div></div>
+  </section>
+  <section class="stack">
+    <div class="panel"><div class="actions"><button id="feed">🍤 Feed</button><button id="pet">🫳 Pet</button><button id="light">✨ Light</button><button id="toy">🫧 Toy</button></div></div>
+    <div class="panel"><div class="row"><span>Mood</span><b id="mood">curious</b></div><div class="bar"><i id="moodBar"></i></div><div class="row"><span>Energy</span><b id="energy">0.55</b></div><div class="bar"><i id="energyBar"></i></div><div class="row"><span>Trust</span><b id="trust">0.20</b></div><div class="bar"><i id="trustBar"></i></div><div class="row"><span>Residual</span><b id="residual">1.00</b></div></div>
+    <div class="panel"><div class="row"><b>Research Mode</b><button id="researchToggle">Off</button></div><div class="sub">Share link with <code>?research=1</code> to open inspect mode.</div></div>
+    <div id="researchPanel" class="panel research"><div class="sub">NUMARA graph (weights + edge pressure), live morphology, residual.</div><div id="graph" class="grid"></div></div>
+    <div class="panel"><div id="log" class="log"></div></div>
+  </section>
+</main>
+<footer class="footer">Static v1, no backend. Learned edge weights persist in localStorage.</footer>
+<script>
+const KEY='chuco_numara_edges_v1';
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');let W,H,DPR;
+function resize(){DPR=Math.min(2,devicePixelRatio||1);W=canvas.parentElement.clientWidth;H=canvas.parentElement.clientHeight;canvas.width=W*DPR;canvas.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}addEventListener('resize',resize);resize();
+const graph={edges:{'HUNGER->SEEK':{w:.5,p:0},'TRUST->APPROACH':{w:.2,p:0},'PLAY->SPIN':{w:.1,p:0},'LIGHT->CURIOUS':{w:.3,p:0},'FEAR->HIDE':{w:.15,p:0},'REWARD->REPEAT':{w:.4,p:0},'PET->TRUST':{w:.2,p:0},'TOY->PLAY':{w:.2,p:0}}};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved)Object.keys(graph.edges).forEach(k=>saved[k]&&(graph.edges[k].w=+saved[k].w||graph.edges[k].w,graph.edges[k].p=+saved[k].p||0));}catch{}
+function persist(){localStorage.setItem(KEY,JSON.stringify(graph.edges))}
+const chuco={x:0,y:0,vx:0,vy:0,heading:0,energy:.55,trust:.2,curiosity:.6,hunger:.5,play:.4,attachment:.12,rhythm:.5,comfort:.35,mood:'curious',morphology:'explore',graphMemory:{rewardResidual:1}};
+const food=[],ripples=[],mouse={x:0,y:0};const logEl=document.getElementById('log');
+const log=(m)=>{const d=document.createElement('div');d.className='entry';d.innerHTML=m;logEl.prepend(d);while(logEl.children.length>18)logEl.lastChild.remove()};
+const spawnFood=()=>food.push({x:Math.random()*W*.78+W*.1,y:Math.random()*H*.64+H*.22,r:10});spawnFood();
+function edge(n,d){const e=graph.edges[n];if(!e)return;e.p=Math.max(0,Math.min(5,e.p+d));e.w=Math.max(.02,Math.min(.99,e.w*.96+d*.04));persist()}
+function reward(v){edge('REWARD->REPEAT',v);chuco.trust=Math.min(1,chuco.trust+v*.04)}
+function think(){const weighted={seek_food:graph.edges['HUNGER->SEEK'].w*chuco.hunger+.04,approach:graph.edges['TRUST->APPROACH'].w*chuco.trust+chuco.attachment*.2,spin:graph.edges['PLAY->SPIN'].w*chuco.play+chuco.rhythm*.15,explore:graph.edges['LIGHT->CURIOUS'].w*chuco.curiosity+.12,idle:.08+chuco.comfort*.2};let best='idle',score=-1;for(const[k,v]of Object.entries(weighted)){if(v>score){score=v;best=k}}chuco.morphology=best;if(best==='seek_food'&&food.length){const t=food.reduce((a,b)=>Math.hypot(chuco.x-b.x,chuco.y-b.y)<Math.hypot(chuco.x-a.x,chuco.y-a.y)?b:a);chuco.vx+=(t.x-chuco.x)*.0011;chuco.vy+=(t.y-chuco.y)*.0011;edge('HUNGER->SEEK',.006)}if(best==='approach'){chuco.vx+=(mouse.x-chuco.x)*.0007;chuco.vy+=(mouse.y-chuco.y)*.0007;edge('TRUST->APPROACH',.004)}if(best==='spin'){chuco.heading+=.08;chuco.vx+=Math.sin(chuco.heading)*.18;chuco.vy+=Math.cos(chuco.heading)*.18;edge('PLAY->SPIN',.004)}if(best==='explore'){chuco.vx+=(Math.random()-.5)*.11;chuco.vy+=(Math.random()-.5)*.11;edge('LIGHT->CURIOUS',.003)}const rp=(graph.edges['REWARD->REPEAT'].w+graph.edges['TRUST->APPROACH'].w)*.5;chuco.graphMemory.rewardResidual=Math.max(0,1-rp*chuco.trust)}
+addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top});
+function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle='#07131a';ctx.fillRect(0,0,W,H);for(const f of food){ctx.fillStyle='#55ff99';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill()}for(let i=ripples.length-1;i>=0;i--){const p=ripples[i];ctx.strokeStyle=p.c+p.a+')';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.stroke();p.r+=2;p.a*=.94;if(p.a<.03)ripples.splice(i,1)}ctx.save();ctx.translate(chuco.x,chuco.y);ctx.rotate(chuco.heading*.15);ctx.fillStyle='#ff9fe6';ctx.beginPath();ctx.ellipse(0,0,42,28,0,0,7);ctx.fill();ctx.fillStyle='#ff7ad9';ctx.beginPath();ctx.arc(-36,-14,11,0,7);ctx.arc(-40,0,12,0,7);ctx.arc(-36,14,11,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(14,-7,5,0,7);ctx.arc(14,7,5,0,7);ctx.fill();ctx.fillStyle='#000';ctx.beginPath();ctx.arc(15,-7,2,0,7);ctx.arc(15,7,2,0,7);ctx.fill();ctx.restore()}
+function renderUI(){const residual=chuco.graphMemory.rewardResidual;chuco.mood=residual<.65?'learning':chuco.energy<.3?'sleepy':'curious';energy.textContent=chuco.energy.toFixed(2);trust.textContent=chuco.trust.toFixed(2);residual.textContent=residual.toFixed(2);mood.textContent=chuco.mood;morphologyHud.textContent=chuco.morphology;residualHud.textContent=residual.toFixed(2);trustHud.textContent=chuco.trust.toFixed(2);energyHud.textContent=chuco.energy.toFixed(2);moodBar.style.width=((1-residual)*100)+'%';energyBar.style.width=(chuco.energy*100)+'%';trustBar.style.width=(chuco.trust*100)+'%';graph.innerHTML='';for(const[k,v]of Object.entries(graph.edges)){const d=document.createElement('div');d.className='cell';d.innerHTML=`${k}<b>w:${v.w.toFixed(2)} · p:${v.p.toFixed(2)}</b>`;graph.appendChild(d)}}
+function tick(){think();chuco.vx*=.985;chuco.vy*=.985;chuco.x=Math.min(W-40,Math.max(40,chuco.x+chuco.vx));chuco.y=Math.min(H-40,Math.max(90,chuco.y+chuco.vy));chuco.energy=Math.max(0,Math.min(1,chuco.energy-.0005));chuco.hunger=Math.min(1,chuco.hunger+.0003);for(let i=food.length-1;i>=0;i--){if(Math.hypot(chuco.x-food[i].x,chuco.y-food[i].y)<28){food.splice(i,1);chuco.energy=Math.min(1,chuco.energy+.25);chuco.hunger=Math.max(0,chuco.hunger-.35);reward(.4);edge('HUNGER->SEEK',.2);ripples.push({x:chuco.x,y:chuco.y,r:8,a:.9,c:'rgba(85,255,153,'});log('Chuco reinforced <b>HUNGER→SEEK</b>.');spawnFood()}}draw();renderUI();requestAnimationFrame(tick)}
+feed.onclick=()=>{spawnFood();reward(.1);log('Food dropped.');};pet.onclick=()=>{edge('PET->TRUST',.25);edge('TRUST->APPROACH',.18);chuco.trust=Math.min(1,chuco.trust+.12);reward(.18);ripples.push({x:chuco.x,y:chuco.y,r:12,a:.8,c:'rgba(255,122,217,'});log('Pet reinforced <b>TRUST→APPROACH</b>.');};light.onclick=()=>{edge('LIGHT->CURIOUS',.2);chuco.curiosity=Math.min(1,chuco.curiosity+.08);log('Light pulse boosted curiosity.');};toy.onclick=()=>{edge('TOY->PLAY',.22);edge('PLAY->SPIN',.18);chuco.play=Math.min(1,chuco.play+.1);reward(.12);log('Toy deepened <b>PLAY</b> recurrence.');};
+const query=new URLSearchParams(location.search);let research=query.get('research')==='1';
+function setResearch(on){research=on;researchPanel.classList.toggle('on',on);researchToggle.textContent=on?'On':'Off';const u=new URL(location.href);on?u.searchParams.set('research','1'):u.searchParams.delete('research');history.replaceState({},'',u)}
+researchToggle.onclick=()=>setResearch(!research);setResearch(research);
+chuco.x=W/2;chuco.y=H/2;mouse.x=W/2;mouse.y=H/2;log('Chuco initialized. NUMARA graph live and inspectable.');tick();
+</script>
 </body>
 </html>
