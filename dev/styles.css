@@ -12,6 +12,3 @@ button{border:1px solid rgba(255,255,255,.14);border-radius:12px;background:line
 .trace{margin-top:8px;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#09141a;color:#9fe6ff;font-size:11px;white-space:pre-wrap}
 .log{max-height:140px;overflow:auto;display:flex;flex-direction:column;gap:6px}.entry{border-left:3px solid var(--cyan);border-radius:8px;background:rgba(255,255,255,.04);padding:8px;font-size:11px}.footer{padding:10px 14px;font-size:11px;color:var(--muted)}
 @media (min-width:980px){body{grid-template-rows:auto 1fr}.main{grid-template-columns:1.2fr .8fr;grid-template-rows:1fr}.stack{display:grid;gap:10px;min-height:0}.stage{min-height:620px}}
-
-.badge{display:inline-block;margin-top:8px;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#4de3ff,#55ff99);color:#052028;font-size:11px;font-weight:800}
-.sticker{position:absolute;right:10px;top:10px;width:88px;height:88px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.35));opacity:.95;pointer-events:none}
