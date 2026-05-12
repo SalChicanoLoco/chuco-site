@@ -1,7 +1,6 @@
 (() => {
   'use strict';
   const KEY = 'chuco_numara_edges_v1';
-  const PROFILE_KEY = 'chuco_axolotl_profile_v1';
   const $ = (id) => document.getElementById(id);
   const ui = {mood:$('mood'),energy:$('energy'),trust:$('trust'),residual:$('residual'),graph:$('graph'),moodBar:$('moodBar'),energyBar:$('energyBar'),trustBar:$('trustBar'),morphologyHud:$('morphologyHud'),residualHud:$('residualHud'),trustHud:$('trustHud'),energyHud:$('energyHud'),researchPanel:$('researchPanel'),researchToggle:$('researchToggle'),log:$('log'),lispTrace:$('lispTrace')};
   const canvas=$('c'); const ctx=canvas.getContext('2d',{alpha:false}); let W=0,H=0;
@@ -9,17 +8,7 @@
   const graph={edges:{'HUNGER->SEEK':{w:.5,p:0},'TRUST->APPROACH':{w:.2,p:0},'PLAY->SPIN':{w:.1,p:0},'LIGHT->CURIOUS':{w:.3,p:0},'FEAR->HIDE':{w:.15,p:0},'REWARD->REPEAT':{w:.4,p:0},'PET->TRUST':{w:.2,p:0},'TOY->PLAY':{w:.2,p:0},'LISP->INSIGHT':{w:.24,p:0}}};
   const chuco={x:0,y:0,vx:0,vy:0,heading:0,energy:.55,trust:.2,curiosity:.6,hunger:.5,play:.4,attachment:.12,rhythm:.5,comfort:.35,mood:'curious',morphology:'explore',rewardResidual:1};
   const food=[],ripples=[],mouse={x:0,y:0}; let lispProgram='(observe (edges trust play curiosity) (adapt reward residual))';
-  let persistQueued = false;
-  const persist=()=>{
-    if (persistQueued) return;
-    persistQueued = true;
-    const flush = () => {
-      persistQueued = false;
-      try{localStorage.setItem(KEY,JSON.stringify(graph.edges));}catch(_){ }
-    };
-    if ('requestIdleCallback' in window) window.requestIdleCallback(flush,{timeout:300});
-    else setTimeout(flush,80);
-  };
+  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(graph.edges));}catch(_){}};
   const load=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(!s)return; for(const k of Object.keys(graph.edges)){ if(!s[k])continue; graph.edges[k].w=Number.isFinite(+s[k].w)?+s[k].w:graph.edges[k].w; graph.edges[k].p=Number.isFinite(+s[k].p)?+s[k].p:graph.edges[k].p; }}catch(_){}};
   function log(m){const n=document.createElement('div'); n.className='entry'; n.textContent=String(m).slice(0,220); ui.log.prepend(n); while(ui.log.children.length>18)ui.log.lastChild.remove();}
   function resize(){const dpr=Math.min(2,window.devicePixelRatio||1); W=canvas.parentElement.clientWidth; H=canvas.parentElement.clientHeight; canvas.width=Math.floor(W*dpr); canvas.height=Math.floor(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);}
@@ -48,7 +37,6 @@
     chuco.play = clamp((chuco.play * 0.75) + 0.12, 0, 1);
     chuco.attachment = clamp((chuco.attachment * 0.75) + 0.08, 0, 1);
     persist();
-    try { localStorage.setItem(PROFILE_KEY, 'trained'); } catch (_) {}
     log('Baked axolotl priors loaded: seek, approach, playful curiosity.');
   }
 
@@ -69,9 +57,5 @@
   function setResearch(on){ui.researchPanel.classList.toggle('on',on); ui.researchToggle.textContent=on?'On':'Off'; const u=new URL(location.href); if(on)u.searchParams.set('research','1'); else u.searchParams.delete('research'); history.replaceState({},'',u); if(!on){ui.graph.replaceChildren(); ui.lispTrace.textContent='';}}
   window.addEventListener('resize',resize,{passive:true}); canvas.addEventListener('pointermove',(e)=>{const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;},{passive:true});
   $('feed').onclick=()=>{spawnFood();reward(.10);log('Food dropped.');}; $('pet').onclick=()=>{edge('PET->TRUST',.25);edge('TRUST->APPROACH',.18);chuco.trust=clamp(chuco.trust+.12,0,1);reward(.18);log('Pet reinforced TRUST->APPROACH.');}; $('light').onclick=()=>{edge('LIGHT->CURIOUS',.2);chuco.curiosity=clamp(chuco.curiosity+.08,0,1);log('Light increased exploration pressure.');}; $('toy').onclick=()=>{edge('TOY->PLAY',.22);edge('PLAY->SPIN',.18);chuco.play=clamp(chuco.play+.1,0,1);reward(.12);log('Toy strengthened PLAY recurrence.');}; $('lisp').onclick=runLispTreat; ui.researchToggle.onclick=()=>setResearch(!ui.researchPanel.classList.contains('on'));
-  load();
-  let alreadyTrained = false;
-  try { alreadyTrained = localStorage.getItem(PROFILE_KEY) === 'trained'; } catch (_) {}
-  if (!alreadyTrained) bakeAxolotlTraining();
-  resize(); spawnFood(); chuco.x=W/2; chuco.y=H/2; mouse.x=W/2; mouse.y=H/2; setResearch(new URLSearchParams(location.search).get('research')==='1'); log('Chuco initialized. NUMARA mini-brain online.'); step();
+  load(); bakeAxolotlTraining(); resize(); spawnFood(); chuco.x=W/2; chuco.y=H/2; mouse.x=W/2; mouse.y=H/2; setResearch(new URLSearchParams(location.search).get('research')==='1'); log('Chuco initialized. NUMARA mini-brain online.'); step();
 })();
