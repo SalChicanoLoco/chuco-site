@@ -20,6 +20,33 @@ function json(payload, status = 200) {
   });
 }
 
+
+async function readBodyWithLimit(request, maxBytes) {
+  const reader = request.body?.getReader();
+  if (!reader) return new Uint8Array();
+
+  const chunks = [];
+  let total = 0;
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      return null;
+    }
+    chunks.push(value);
+  }
+
+  const buffer = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    buffer.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return buffer;
+}
+
 function isAuthorizedRequest(request, env) {
   const expected = (env.VOICE_ACCESS_TOKEN || "").trim();
   if (!expected) return true;
@@ -94,7 +121,23 @@ export default {
         return json({ error: "Audio file too large", limit: maxBytes }, 413);
       }
 
-      const form = await request.formData();
+      const bodyBytes = await readBodyWithLimit(request, maxBytes);
+      if (bodyBytes === null) {
+        return json({ error: "Audio file too large", limit: maxBytes }, 413);
+      }
+
+      let form;
+      try {
+        const boundedRequest = new Request(request.url, {
+          method: request.method,
+          headers: request.headers,
+          body: bodyBytes,
+        });
+        form = await boundedRequest.formData();
+      } catch {
+        return json({ error: "Invalid multipart form data" }, 400);
+      }
+
       const file = form.get("file");
       if (!(file instanceof File)) {
         return json({ error: "Missing audio file" }, 400);
