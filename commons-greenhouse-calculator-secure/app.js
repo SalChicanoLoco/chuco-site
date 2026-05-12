@@ -68,8 +68,7 @@
       'Cover ~'+Math.round(d.totalArea*1.6)+' sq ft',
       'Beds / grow zones',
       (el('showAirTube').checked?'Air tube':'Passive vent')+' climate loop',
-      (el('showBarrels').checked?'Thermal barrels':'No barrels')+' (north wall)',
-      (el('showRollSides').checked?'Roll-up sides':'Fixed sidewalls')
+      'Thermal barrels (north wall)'
     ];
 
     items.forEach(t=>{
@@ -129,10 +128,6 @@
       const x=px+(pw*(i/(d.hoops-1||1)));
       plan.appendChild(svg('line',{x1:x,y1:py-10,x2:x,y2:py+ph+10,stroke:'#9ca3af','stroke-dasharray':'5 5'}));
     }
-    if(el('showNursery').checked){
-      plan.appendChild(svg('rect',{x:px+pw-190,y:usableY+usableH-88,width:160,height:64,fill:'#eef2ff',stroke:'#4f46e5','stroke-width':1.5,rx:10}));
-      plan.appendChild(svg('text',{x:px+pw-110,y:usableY+usableH-50,'text-anchor':'middle','font-size':14,'font-weight':700,fill:'#4338ca'})).textContent='Nursery / Semilleros';
-    }
 
     // Section
     const sx=110, sy=660, sw=980, sh=240;
@@ -147,9 +142,7 @@
     // Notes
     const n1=svg('text',{x:1120,y:210,'font-size':15,fill:'#374151'}); n1.textContent=`${state.lengthFt}ft × ${state.widthFt}ft · hoops ${d.hoops}`;
     const n2=svg('text',{x:1120,y:236,'font-size':15,fill:'#374151'}); n2.textContent=`berm ${state.bermFt}ft · trench ${state.trenchFt}ft`;
-    const n3=svg('text',{x:1120,y:262,'font-size':14,fill:'#374151'}); n3.textContent=`walls: ${el('showRollSides').checked ? 'roll-up' : 'fixed'}`;
     notes.appendChild(n1); notes.appendChild(n2);
-    notes.appendChild(n3);
   }
 
   function exportJson(){
