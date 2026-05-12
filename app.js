@@ -87,6 +87,9 @@
   })();
   if(!hasSavedEdges || !isProfileTrained){
     bakeAxolotlTraining();
+    if(persist()){
+      try{localStorage.setItem(PROFILE_KEY,'trained');}catch(_){}
+    }
   }
   resize(); spawnFood(); chuco.x=W/2; chuco.y=H/2; mouse.x=W/2; mouse.y=H/2; setResearch(new URLSearchParams(location.search).get('research')==='1'); log('Chuco initialized. NUMARA mini-brain online.'); step();
 })();
