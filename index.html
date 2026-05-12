@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'" />
+  <title>Chuco | NUMARA Axolotl</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="kicker">#OpenAIDevDay2026 | senaColectivo.com/dev</div>
+    <h1 class="title">CHUCO</h1>
+    <div class="sub">Fast start. Tap actions and watch the NUMARA mini-brain adapt in real time.</div>
+  </header>
+
+  <main class="main">
+    <section class="stage">
+      <canvas id="c"></canvas>
+      <div class="overlay"></div>
+      <div class="hud">
+        <div class="pill"><span>morphology</span><b id="morphologyHud">explore</b></div>
+        <div class="pill"><span>residual</span><b id="residualHud">1.00</b></div>
+        <div class="pill"><span>trust</span><b id="trustHud">0.20</b></div>
+        <div class="pill"><span>energy</span><b id="energyHud">0.55</b></div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <div class="panel"><div class="actions"><button id="feed">Feed</button><button id="pet">Pet</button><button id="light">Light</button><button id="toy">Toy</button><button id="lisp">LISP Treat</button></div></div>
+      <div class="panel">
+        <div class="row"><span>Mood</span><b id="mood">curious</b></div><div class="bar"><i id="moodBar"></i></div>
+        <div class="row"><span>Energy</span><b id="energy">0.55</b></div><div class="bar"><i id="energyBar"></i></div>
+        <div class="row"><span>Trust</span><b id="trust">0.20</b></div><div class="bar"><i id="trustBar"></i></div>
+        <div class="row"><span>Residual</span><b id="residual">1.00</b></div>
+      </div>
+      <div class="panel"><div class="row"><b>Research Mode</b><button id="researchToggle">Off</button></div><div class="sub">Share link with <code>?research=1</code> to open inspect mode.</div></div>
+      <div id="researchPanel" class="panel research"><div class="sub">NUMARA graph (weight + pressure), morphology, residual, and LISP traces.</div><div id="graph" class="grid"></div><pre id="lispTrace" class="trace"></pre></div>
+      <div class="panel"><div id="log" class="log"></div></div>
+    </section>
+  </main>
+
+  <footer class="footer">Static v1, strict CSP, no backend. NUMARA edge memory persists locally.</footer>
+  <script src="./app.js" defer></script>
+</body>
+</html>
