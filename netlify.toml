@@ -1,3 +1,15 @@
 [build]
   publish = "."
   command = ""
+
+[[redirects]]
+  from = "/"
+  to = "/staging/newmexicosocialists/nmnewsfeed.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/index.html"
+  to = "/staging/newmexicosocialists/nmnewsfeed.html"
+  status = 302
+  force = true

@@ -189,7 +189,7 @@ body.lang-es .en { display:none; } body.lang-es .es { display:block; }
 <body id="page">
 
 <script>
-const WORKER_URL = 'https://biblioteca-api.salvadorsena.workers.dev';
+const WORKER_URL = (window.BIBLIOTECA_WORKER_URL || document.documentElement.dataset.workerUrl || window.location.origin).replace(/\/$/, '');
 const DATA_URL = `${WORKER_URL}/volumes`;
 </script>
 
