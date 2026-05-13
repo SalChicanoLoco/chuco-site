@@ -10,7 +10,9 @@
 
 ### Staging Note
 
-`staging/newmexicosocialists/nmnewsfeed.html` is intended for the future newmexicosocialists.org rebuild.
+`staging/newmexicosocialists/nmnewsfeed.html` is a bridge/staging artifact.
+Primary `newmexicosocialists.org` production work should live in its dedicated repository.
+See `docs/NMS_REPO_EXTRACTION_PLAN.md` for migration/extraction details.
 
 ## Agent-friendly checks
 
