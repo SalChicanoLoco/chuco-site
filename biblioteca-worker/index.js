@@ -52,7 +52,11 @@ export default {
       }
 
       const data = await resp.json();
-      return new Response(JSON.stringify({ tasks: data.records || [] }), {
+      const tasks = (data.records || []).map((r) => ({
+        id: r.id,
+        ...r.fields,
+      }));
+      return new Response(JSON.stringify({ tasks }), {
         headers: { ...CORS, 'Content-Type': 'application/json' },
       });
     }
