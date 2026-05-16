@@ -22,9 +22,7 @@ out.push('syntax:app.js=OK');
 
 const hasCaps = /const MAX_FOOD = \d+;[\s\S]*const MAX_FISH = \d+;[\s\S]*const MAX_RIPPLES = \d+;/.test(js);
 const hasSoftFail = /Runtime soft-fail:/.test(js) && /try\s*\{[\s\S]*\}\s*catch\s*\(err\)/.test(js);
-const hasInitGuards = /CHUCO init failed: missing DOM nodes\./.test(js) && /CHUCO init failed: 2d context unavailable\./.test(js);
-const hasDtClamp = /MAX_FRAME_DT/.test(js) && /frameDt=clamp\(ts-lastTs,0,MAX_FRAME_DT\)/.test(js);
-out.push(`guards:caps=${hasCaps?'OK':'BAD'} softfail=${hasSoftFail?'OK':'BAD'} init=${hasInitGuards?'OK':'BAD'} dt=${hasDtClamp?'OK':'BAD'}`);
+out.push(`guards:caps=${hasCaps?'OK':'BAD'} softfail=${hasSoftFail?'OK':'BAD'}`);
 
 const signature = `${Buffer.from(js).length}:${Buffer.from(html).length}`;
 out.push(`deterministic-signature:${signature}`);

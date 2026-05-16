@@ -5,7 +5,6 @@
   const MAX_FOOD = 10;
   const MAX_FISH = 16;
   const MAX_RIPPLES = 64;
-  const MAX_FRAME_DT = 50;
   const $ = (id) => document.getElementById(id);
   const ui = {mood:$('mood'),energy:$('energy'),trust:$('trust'),residual:$('residual'),graph:$('graph'),moodBar:$('moodBar'),energyBar:$('energyBar'),trustBar:$('trustBar'),morphologyHud:$('morphologyHud'),residualHud:$('residualHud'),trustHud:$('trustHud'),energyHud:$('energyHud'),researchPanel:$('researchPanel'),researchToggle:$('researchToggle'),quality:$('quality'),log:$('log'),lispTrace:$('lispTrace')};
   const uiReady = Object.values(ui).every(Boolean);
@@ -24,7 +23,7 @@
   const sanitize=(v,fallback,lo,hi)=>Number.isFinite(v)?clamp(v,lo,hi):fallback;
   const graph={edges:{'HUNGER->SEEK':{w:.5,p:0},'TRUST->APPROACH':{w:.2,p:0},'PLAY->SPIN':{w:.1,p:0},'LIGHT->CURIOUS':{w:.3,p:0},'FEAR->HIDE':{w:.15,p:0},'REWARD->REPEAT':{w:.4,p:0},'PET->TRUST':{w:.2,p:0},'TOY->PLAY':{w:.2,p:0},'LISP->INSIGHT':{w:.24,p:0}}};
   const chuco={x:0,y:0,vx:0,vy:0,heading:0,energy:.55,trust:.2,curiosity:.6,hunger:.5,play:.4,attachment:.12,rhythm:.5,comfort:.35,mood:'curious',morphology:'explore',rewardResidual:1,skin:{body:'#8e7bff',gill:'#6a4dff',spots:'#c6bcff'}};
-  const food=[],ripples=[],fish=[],bubbles=[],plants=[],mouse={x:0,y:0}; let quality='auto', frameDt=16, lastTs=performance.now(); let lispProgram='(observe (edges trust play curiosity) (adapt reward residual))'; let dirtyEdges=false, lastPersistTs=0, softFailLogged=false, healthyFrames=0;
+  const food=[],ripples=[],fish=[],bubbles=[],plants=[],mouse={x:0,y:0}; let quality='auto', frameDt=16, lastTs=performance.now(); let lispProgram='(observe (edges trust play curiosity) (adapt reward residual))'; let dirtyEdges=false, lastPersistTs=0, softFailLogged=false;
   const persist=()=>{
     try{
       localStorage.setItem(KEY,JSON.stringify(graph.edges));
@@ -123,14 +122,10 @@
   function render(){const residual=chuco.rewardResidual; chuco.mood=residual<.65?'learning':(chuco.energy<.3?'sleepy':'curious'); ui.mood.textContent=chuco.mood; ui.energy.textContent=chuco.energy.toFixed(2); ui.trust.textContent=chuco.trust.toFixed(2); ui.residual.textContent=residual.toFixed(2); ui.morphologyHud.textContent=chuco.morphology; ui.residualHud.textContent=residual.toFixed(2); ui.trustHud.textContent=chuco.trust.toFixed(2); ui.energyHud.textContent=chuco.energy.toFixed(2); ui.moodBar.style.width=`${(1-residual)*100}%`; ui.energyBar.style.width=`${chuco.energy*100}%`; ui.trustBar.style.width=`${chuco.trust*100}%`; if(!ui.researchPanel.classList.contains('on')) return; const frag=document.createDocumentFragment(); for(const [k,v] of Object.entries(graph.edges)){const d=document.createElement('div'); d.className='cell'; d.append(document.createTextNode(k)); const b=document.createElement('b'); b.textContent=`w:${v.w.toFixed(2)} p:${v.p.toFixed(2)}`; d.appendChild(b); frag.appendChild(d);} ui.graph.replaceChildren(frag); ui.lispTrace.textContent=lispProgram;}
   function step(ts=performance.now()){
     try {
-      frameDt=clamp(ts-lastTs,0,MAX_FRAME_DT); lastTs=ts;
-      healthyFrames++;
-      if(softFailLogged && healthyFrames>180){softFailLogged=false;}
-      if(quality==='auto'){if(frameDt>26&&bubbles.length>12){quality='low'; ui.quality.textContent='Low'; setupTank();} else if(frameDt<18&&bubbles.length<20){quality='high'; ui.quality.textContent='High'; setupTank();}} think(); for(const sw of fish){sw.x+=sw.vx; sw.y+=sw.vy; sw.h=Math.atan2(sw.vy,sw.vx); if(sw.x<20||sw.x>W-20)sw.vx*=-1; if(sw.y<80||sw.y>H-20)sw.vy*=-1; sw.vx+=(Math.random()-.5)*.04; sw.vy+=(Math.random()-.5)*.03; sw.vx=clamp(sw.vx,-1.6,1.6); sw.vy=clamp(sw.vy,-1.2,1.2);} for(const b of bubbles){b.y-=b.v; b.x+=Math.sin((b.y+b.r)*.03)*.2; if(b.y<-10){b.y=H+Math.random()*40; b.x=Math.random()*W;}} chuco.vx*=.985; chuco.vy*=.985; chuco.x=clamp(chuco.x+chuco.vx,40,W-40); chuco.y=clamp(chuco.y+chuco.vy,90,H-40); chuco.energy=clamp(chuco.energy-(bestEffortDrain()),0,1); chuco.hunger=clamp(chuco.hunger+.0003,0,1); for(let i=food.length-1;i>=0;i--){if(Math.hypot(chuco.x-food[i].x,chuco.y-food[i].y)<28){food.splice(i,1); chuco.energy=clamp(chuco.energy+.25,0,1); chuco.hunger=clamp(chuco.hunger-.35,0,1); reward(.4); edge('HUNGER->SEEK',.2); capPush(ripples,{x:chuco.x,y:chuco.y,r:8,a:.9,c:'rgba(85,255,153,'},MAX_RIPPLES); log('Chuco reinforced HUNGER->SEEK.'); spawnFood();}} draw(); render(); flushPersist(ts);
+      frameDt=ts-lastTs; lastTs=ts; if(quality==='auto'){if(frameDt>26&&bubbles.length>12){quality='low'; ui.quality.textContent='Low'; setupTank();} else if(frameDt<18&&bubbles.length<20){quality='high'; ui.quality.textContent='High'; setupTank();}} think(); for(const sw of fish){sw.x+=sw.vx; sw.y+=sw.vy; sw.h=Math.atan2(sw.vy,sw.vx); if(sw.x<20||sw.x>W-20)sw.vx*=-1; if(sw.y<80||sw.y>H-20)sw.vy*=-1; sw.vx+=(Math.random()-.5)*.04; sw.vy+=(Math.random()-.5)*.03; sw.vx=clamp(sw.vx,-1.6,1.6); sw.vy=clamp(sw.vy,-1.2,1.2);} for(const b of bubbles){b.y-=b.v; b.x+=Math.sin((b.y+b.r)*.03)*.2; if(b.y<-10){b.y=H+Math.random()*40; b.x=Math.random()*W;}} chuco.vx*=.985; chuco.vy*=.985; chuco.x=clamp(chuco.x+chuco.vx,40,W-40); chuco.y=clamp(chuco.y+chuco.vy,90,H-40); chuco.energy=clamp(chuco.energy-(bestEffortDrain()),0,1); chuco.hunger=clamp(chuco.hunger+.0003,0,1); for(let i=food.length-1;i>=0;i--){if(Math.hypot(chuco.x-food[i].x,chuco.y-food[i].y)<28){food.splice(i,1); chuco.energy=clamp(chuco.energy+.25,0,1); chuco.hunger=clamp(chuco.hunger-.35,0,1); reward(.4); edge('HUNGER->SEEK',.2); capPush(ripples,{x:chuco.x,y:chuco.y,r:8,a:.9,c:'rgba(85,255,153,'},MAX_RIPPLES); log('Chuco reinforced HUNGER->SEEK.'); spawnFood();}} draw(); render(); flushPersist(ts);
     } catch (err) {
       quality = 'low';
       ui.quality.textContent = 'Low';
-      healthyFrames=0;
       if(!softFailLogged){
         log(`Runtime soft-fail: ${(err && err.message) ? err.message : 'unknown error'}.`);
         softFailLogged=true;
