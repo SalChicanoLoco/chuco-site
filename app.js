@@ -7,7 +7,18 @@
   const MAX_RIPPLES = 64;
   const $ = (id) => document.getElementById(id);
   const ui = {mood:$('mood'),energy:$('energy'),trust:$('trust'),residual:$('residual'),graph:$('graph'),moodBar:$('moodBar'),energyBar:$('energyBar'),trustBar:$('trustBar'),morphologyHud:$('morphologyHud'),residualHud:$('residualHud'),trustHud:$('trustHud'),energyHud:$('energyHud'),researchPanel:$('researchPanel'),researchToggle:$('researchToggle'),quality:$('quality'),log:$('log'),lispTrace:$('lispTrace')};
-  const canvas=$('c'); const ctx=canvas.getContext('2d',{alpha:false}); let W=0,H=0;
+  const uiReady = Object.values(ui).every(Boolean);
+  const canvas=$('c');
+  if(!canvas || !uiReady){
+    console.error('CHUCO init failed: missing DOM nodes.');
+    return;
+  }
+  const ctx=canvas.getContext('2d',{alpha:false});
+  if(!ctx){
+    console.error('CHUCO init failed: 2d context unavailable.');
+    return;
+  }
+  let W=0,H=0;
   const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
   const sanitize=(v,fallback,lo,hi)=>Number.isFinite(v)?clamp(v,lo,hi):fallback;
   const graph={edges:{'HUNGER->SEEK':{w:.5,p:0},'TRUST->APPROACH':{w:.2,p:0},'PLAY->SPIN':{w:.1,p:0},'LIGHT->CURIOUS':{w:.3,p:0},'FEAR->HIDE':{w:.15,p:0},'REWARD->REPEAT':{w:.4,p:0},'PET->TRUST':{w:.2,p:0},'TOY->PLAY':{w:.2,p:0},'LISP->INSIGHT':{w:.24,p:0}}};
