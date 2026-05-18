@@ -1,0 +1,50 @@
+name: CHUCO UI Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ui-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Start local server
+        run: |
+          python3 -m http.server 4173 > /tmp/chuco-http.log 2>&1 &
+          echo $! > /tmp/chuco-http.pid
+          sleep 1
+
+      - name: Smoke check
+        run: node scripts/smoke-check.mjs
+
+      - name: UI probe
+        run: node scripts/ui-probe.mjs
+
+      - name: Upload probe artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chuco-ui-probe
+          path: artifacts/ui-probe
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f /tmp/chuco-http.pid ]; then
+            kill "$(cat /tmp/chuco-http.pid)" || true
+          fi
