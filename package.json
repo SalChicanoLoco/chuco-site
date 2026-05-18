@@ -1,0 +1,1 @@
+{"scripts":{"dev":"vite","build":"vite build","preview":"vite preview","check":"node --check src/main.js"},"dependencies":{"vite":"latest","three":"latest"},"devDependencies":{}}
