@@ -1,36 +1,68 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Chuco — NUMARA Axolotl</title>
-<link rel="stylesheet" href="styles.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#031015" />
+  <meta name="description" content="CHUCO CGS Tank — real 3D aquaponics simulation with NUMARA state routing and procedural audio." />
+  <title>CHUCO CGS Tank | #OpenAIDevDay2026</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-<header class="top">
-  <div class="kicker">#OpenAIDevDay2026 • senaColectivo.com/dev</div>
-  <h1 class="title">CHUCO</h1>
-  <div class="sub">Tap Feed, Pet, Light, Toy, or LISP Treat and watch NUMARA edges adapt in real time.</div>
-</header>
-<main class="main">
-  <section class="stage">
-    <canvas id="c"></canvas><div class="overlay"></div>
-    <div class="hud">
-      <div class="pill"><span>morphology</span><b id="morphologyHud">explore</b></div>
-      <div class="pill"><span>residual</span><b id="residualHud">1.00</b></div>
-      <div class="pill"><span>trust</span><b id="trustHud">0.20</b></div>
-      <div class="pill"><span>energy</span><b id="energyHud">0.55</b></div>
-    </div>
-  </section>
-  <section class="stack">
-    <div class="panel"><div class="actions"><button id="feed">🍤 Feed</button><button id="pet">🫳 Pet</button><button id="light">✨ Light</button><button id="toy">🫧 Toy</button><button id="lisp">🧠 LISP Treat</button><button id="skin">🎨 New Skin</button></div><div class="sub">Care loop: keep energy up with Feed, build trust with Pet, and use Light/Toy to shape exploration. New Skin mutates style instantly.</div></div>
-    <div class="panel"><div class="row"><span>Mood</span><b id="mood">curious</b></div><div class="bar"><i id="moodBar"></i></div><div class="row"><span>Energy</span><b id="energy">0.55</b></div><div class="bar"><i id="energyBar"></i></div><div class="row"><span>Trust</span><b id="trust">0.20</b></div><div class="bar"><i id="trustBar"></i></div><div class="row"><span>Residual</span><b id="residual">1.00</b></div></div>
-    <div class="panel"><div class="row"><b>Research Mode</b><button id="researchToggle">Off</button></div><div class="sub">Use <code>?research=1</code> for edge diagnostics.</div><div class="row"><span>Quality</span><button id="quality">Auto</button></div></div>
-    <div id="researchPanel" class="panel research"><div class="sub">NUMARA graph (weight + pressure) and LISP trace.</div><div id="graph" class="grid"></div><pre id="lispTrace" class="trace"></pre></div>
-    <div class="panel"><div id="log" class="log"></div></div>
-  </section>
-</main>
-<footer class="footer">Static v1, no backend. Learned edge weights persist in localStorage.</footer>
-<script src="app.js"></script>
+  <main id="app" class="shell" aria-label="CHUCO CGS Tank conference simulation">
+    <section class="hero" aria-label="Launch header">
+      <div class="brandMark" aria-hidden="true">CGS</div>
+      <div>
+        <p class="eyebrow">#OpenAIDevDay2026 · CGS Greenhouse</p>
+        <h1>CHUCO CGS Tank</h1>
+        <p class="subhead">Real 3D tank runtime, species behavior, NUMARA telemetry, and biofilter guardian simulation.</p>
+      </div>
+      <div class="livePill" id="livePill">3D READY</div>
+    </section>
+
+    <section class="stageWrap" aria-label="Interactive fish tank">
+      <div id="threeRoot" aria-label="WebGL 3D aquaponics fish tank simulation"></div>
+      <div class="screenGlass" aria-hidden="true"></div>
+      <div class="cornerReadout leftTop">
+        <span>MODE</span><strong id="modeLabel">Conference</strong>
+      </div>
+      <div class="cornerReadout rightTop">
+        <span>AUDIO</span><strong id="audioLabel">Off</strong>
+      </div>
+      <div class="centerPrompt" id="centerPrompt">
+        <strong>Tap Start</strong>
+        <span>Enables 3D scene + procedural water audio.</span>
+      </div>
+      <button id="startBtn" class="startBtn" type="button">Start Experience</button>
+    </section>
+
+    <section class="controls" aria-label="Tank controls">
+      <button type="button" data-action="feed"><span>Feed</span><small>schooling response</small></button>
+      <button type="button" data-action="oxygen"><span>O2 Pulse</span><small>bubble column</small></button>
+      <button type="button" data-action="shade"><span>Shade</span><small>cool water</small></button>
+      <button type="button" data-action="biofilter"><span>Biofilter</span><small>Chuco cleans</small></button>
+      <button type="button" data-action="scan"><span>Scan</span><small>NUMARA trace</small></button>
+      <button type="button" data-action="species"><span>Species</span><small>cycle tank</small></button>
+    </section>
+
+    <section class="telemetry" aria-label="Aquaponics telemetry">
+      <article><span>Temp</span><strong id="tempVal">21.6C</strong><meter id="tempMeter" min="18" max="28" value="21.6"></meter></article>
+      <article><span>pH</span><strong id="phVal">7.1</strong><meter id="phMeter" min="6" max="8.5" value="7.1"></meter></article>
+      <article><span>Oxygen</span><strong id="o2Val">8.2</strong><meter id="o2Meter" min="4" max="10" value="8.2"></meter></article>
+      <article><span>Ammonia</span><strong id="nh3Val">0.03</strong><meter id="nh3Meter" min="0" max="0.25" value="0.03"></meter></article>
+    </section>
+
+    <section class="numara" aria-label="NUMARA graph trace">
+      <header>
+        <span>NUMARA P0-P7 Runtime</span>
+        <strong id="graphState">S:Biofilter</strong>
+      </header>
+      <div class="nodes" id="nodes"></div>
+      <p id="graphLine">P0 delta -> P1 relation -> P7 selection: Chuco patrols the algae edge.</p>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
