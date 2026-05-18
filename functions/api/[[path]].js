@@ -1,2 +1,78 @@
-function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})}async function body(request){try{return await request.json()}catch{return {}}}
-export async function onRequest(context){const{request,env}=context;const url=new URL(request.url);const path=url.pathname.replace(/^\/api\/?/,'')||'health';if(request.method==='OPTIONS')return new Response(null,{status:204});if(request.method==='GET'&&path==='health')return json({ok:true,app:'CHUCO CGS Tank',mode:'conference',backend:'cloudflare-pages-function'});if(request.method==='POST'&&path==='session'){const b=await body(request);return json({ok:true,sessionId:crypto.randomUUID(),received:{display:b.display||'unknown',mode:b.mode||'conference'}})}if(request.method==='POST'&&path==='telemetry'){const b=await body(request);return json({ok:true,receivedAt:new Date().toISOString(),action:b.action||'none'})}if(request.method==='POST'&&path==='generate-style'){const b=await body(request);if(!env.OPENAI_API_KEY)return json({ok:false,needsSecret:true,message:'Set OPENAI_API_KEY as a Cloudflare secret to enable live style generation.',fallbackStyle:{theme:b.theme||'Santa Fe Noir CGS',palette:['#02070a','#00ff9c','#59efff','#a87cff'],chucoRole:'algae-surfing biofilter guardian'}});const prompt=`Create a premium game-ready aquaponics tank style asset pack for ${String(b.theme||'Santa Fe Noir aquaponics greenhouse')}. Include ${String(b.species||'axolotl cleaner guardian, schooling fish, luminous shrimp')}. Semi-realistic, cinematic, luminous teal cyan violet, clean isolated app assets, no text, no watermark.`;const r=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{'content-type':'application/json',authorization:`Bearer ${env.OPENAI_API_KEY}`},body:JSON.stringify({model:'gpt-image-1',prompt,size:'1024x1024'})});const data=await r.json();return json({ok:r.ok,prompt,data},r.ok?200:502)}return json({ok:false,error:'not_found',path},404)}
+const json = (data, status = 200) => new Response(JSON.stringify(data), {
+  status,
+  headers: {
+    'content-type': 'application/json; charset=utf-8',
+    'cache-control': 'no-store'
+  }
+});
+
+const cors = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET,POST,OPTIONS',
+  'access-control-allow-headers': 'content-type'
+};
+
+function withCors(response) {
+  const headers = new Headers(response.headers);
+  for (const [k, v] of Object.entries(cors)) headers.set(k, v);
+  return new Response(response.body, { status: response.status, headers });
+}
+
+export async function onRequest(context) {
+  const { request, env } = context;
+  if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
+
+  const url = new URL(request.url);
+  const path = url.pathname.replace(/^\/api\/?/, '');
+
+  if (request.method === 'GET' && path === 'health') {
+    return withCors(json({ ok: true, service: 'chuco-pages-functions', now: new Date().toISOString() }));
+  }
+
+  if (request.method === 'POST' && path === 'session') {
+    const id = crypto.randomUUID();
+    return withCors(json({ ok: true, sessionId: id, createdAt: Date.now() }));
+  }
+
+  if (request.method === 'POST' && path === 'telemetry') {
+    let payload = {};
+    try { payload = await request.json(); } catch (_) {}
+    return withCors(json({ ok: true, accepted: true, event: payload?.event || 'unknown' }));
+  }
+
+  if (request.method === 'POST' && path === 'generate-style') {
+    let prompt = 'algae-surfing biofilter guardian palette';
+    try {
+      const body = await request.json();
+      if (typeof body?.prompt === 'string' && body.prompt.trim()) prompt = body.prompt.trim().slice(0, 240);
+    } catch (_) {}
+
+    if (!env.OPENAI_API_KEY) {
+      return withCors(json({
+        ok: true,
+        source: 'fallback',
+        reason: 'OPENAI_API_KEY not configured',
+        style: {
+          body: '#2f7f72',
+          gill: '#84f0cf',
+          spots: 'hsla(162 80% 90% / .85)'
+        },
+        prompt
+      }));
+    }
+
+    // Conference-safe deterministic style response even when key exists.
+    return withCors(json({
+      ok: true,
+      source: 'deterministic',
+      style: {
+        body: '#3b6acb',
+        gill: '#8fe0ff',
+        spots: 'hsla(200 90% 85% / .9)'
+      },
+      prompt
+    }));
+  }
+
+  return withCors(json({ ok: false, error: 'Not found' }, 404));
+}

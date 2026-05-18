@@ -1,1 +1,190 @@
-(()=>{"use strict";const $=id=>document.getElementById(id),c=$("tank"),app=$("app"),start=$("startBtn"),audioL=$("audioLabel"),pill=$("livePill"),mode=$("modeLabel"),gstate=$("graphState"),gline=$("graphLine"),nodes=$("nodes"),M={temp:[tempVal,tempMeter],ph:[phVal,phMeter],o2:[o2Val,o2Meter],nh3:[nh3Val,nh3Meter]},S={t:0,last:performance.now(),w:1,h:1,dpr:1,started:0,set:0,feed:0,o2p:0,shade:0,scan:0,bio:0,hot:5,ready:0,tel:{temp:21.6,ph:7.12,o2:8.2,nh3:.03},fish:[],reduce:matchMedia("(prefers-reduced-motion: reduce)").matches};for(const n of["P0","P1","P2","P3","P4","P5","P6","P7"]){let d=document.createElement("div");d.className="node";d.textContent=n;nodes.appendChild(d)}const nodeEls=[...nodes.children],gl=c.getContext("webgl",{alpha:false,antialias:true,depth:false,powerPreference:"high-performance"});if(!gl){pill.textContent="WEBGL UNAVAILABLE";return}const V=`attribute vec2 p,u;uniform vec2 r;varying vec2 v;void main(){vec2 z=p/r;gl_Position=vec4((z*2.-1.)*vec2(1.,-1.),0,1);v=u;}`,F=`precision mediump float;varying vec2 v;uniform float t,scan,shade,bio,o2p;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5);}float n(vec2 p){vec2 i=floor(p),f=fract(p);float a=h(i),b=h(i+vec2(1,0)),c=h(i+vec2(0,1)),d=h(i+1.);vec2 u=f*f*(3.-2.*f);return mix(a,b,u.x)+(c-a)*u.y*(1.-u.x)+(d-b)*u.x*u.y;}void main(){vec2 uv=v;vec3 col=mix(vec3(.10,.42,.50),vec3(.003,.025,.040),smoothstep(.05,1.,uv.y));float ca=sin(uv.x*24.+n(uv*5.+t*.08)*2.+t*.46)*sin(uv.y*16.-t*.28);col+=vec3(.18,.72,.82)*smoothstep(.78,1.,ca)*(.11+.16*o2p)*(1.-uv.y);col+=vec3(0,.85,.45)*smoothstep(.60,0.,length(uv-vec2(.20,.78)))*bio*.28;col*=1.-.36*shade;float s=smoothstep(.014,0.,abs(fract(uv.y*1.25+t*.15)-.5))*scan;col+=vec3(0,1,.65)*s*.33;float edge=1.-smoothstep(.0,.025,min(min(uv.x,uv.y),min(1.-uv.x,1.-uv.y)));col+=edge*vec3(.28,.95,1.)*.28;gl_FragColor=vec4(col,1);}`,SV=`attribute vec2 p,u;uniform vec2 r;varying vec2 v;void main(){vec2 z=p/r;gl_Position=vec4((z*2.-1.)*vec2(1.,-1.),0,1);v=u;}`,SF=`precision mediump float;varying vec2 v;uniform sampler2D tex;uniform float depth,pulse,flip,t;uniform vec3 tint;void main(){vec2 uv=v;if(flip<0.)uv.x=1.-uv.x;uv.y+=sin((uv.x+t)*7.)*.012*(1.-abs(uv.x-.5)*2.);vec4 px=texture2D(tex,uv);if(px.a<.04)discard;vec3 water=mix(vec3(.06,.24,.28),vec3(.02,.06,.10),depth);vec3 lit=px.rgb*(.72+.38*(1.-depth))+tint*.10+vec3(0,.9,.65)*pulse*.22;lit=mix(lit,water,smoothstep(.65,1.,depth)*.22);float rim=smoothstep(.02,.0,min(min(uv.x,uv.y),min(1.-uv.x,1.-uv.y)));gl_FragColor=vec4(lit+rim*vec3(.05,.18,.2),px.a);}`;function P(vs,fs){let p=gl.createProgram(),cs=(t,s)=>{let x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(x));return x};gl.attachShader(p,cs(gl.VERTEX_SHADER,vs));gl.attachShader(p,cs(gl.FRAGMENT_SHADER,fs));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));return p}const prog={tank:P(V,F),sprite:P(SV,SF)},buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);function q(p,x,y,w,h){let d=new Float32Array([x,y,0,0,x+w,y,1,0,x,y+h,0,1,x,y+h,0,1,x+w,y,1,0,x+w,y+h,1,1]);gl.bufferData(gl.ARRAY_BUFFER,d,gl.DYNAMIC_DRAW);let a=gl.getAttribLocation(p,"p"),u=gl.getAttribLocation(p,"u");gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,16,0);gl.enableVertexAttribArray(u);gl.vertexAttribPointer(u,2,gl.FLOAT,false,16,8)}function R(a,b){return a+Math.random()*(b-a)}const tex={};function mkTex(){let t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);return t}function loadTex(name,url){return new Promise(res=>{const img=new Image();img.onload=()=>{const t=mkTex();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);tex[name]={t,w:img.width,h:img.height,ok:1};res()};img.onerror=()=>{tex[name]=null;res()};img.src=url})}Promise.all([loadTex("blue","assets/creatures/fish-blue.svg"),loadTex("gold","assets/creatures/fish-gold.svg"),loadTex("chuco","assets/creatures/chuco-cleaner.svg"),loadTex("shrimp","assets/creatures/tank-cleaner-small.svg")]).then(()=>{S.ready=1;pill.textContent="TEXTURE GPU"});function init(){S.fish=[];let sets=[[['blue',7,.45,.066],['gold',2,.56,.078]],[['blue',5,.40,.06],['gold',4,.58,.083]],[['gold',4,.50,.082],['blue',4,.47,.064]]];for(const s of sets[S.set%3])for(let i=0;i<s[1];i++)S.fish.push({tex:s[0],x:R(.16,.84),y:R(.24,.72),z:R(.22,.94),vx:R(-.012,.012),vy:R(-.006,.006),phase:R(0,6.28),size:R(s[3]*.82,s[3]*1.18),zone:s[2]+R(-.05,.05),flip:Math.random()>.5?1:-1,tint:s[0]==='gold'?[1,.65,.18]:[.22,.82,1]});S.fish.push({tex:'chuco',x:.28,y:.73,z:.88,vx:.006,vy:-.002,phase:1.4,size:.15,zone:.74,flip:1,chuco:1,tint:[.25,1,.76]});S.fish.push({tex:'shrimp',x:.74,y:.84,z:.92,vx:-.003,vy:0,phase:4,size:.065,zone:.84,flip:-1,shrimp:1,tint:[1,.35,.9]})}init();let audio=null;function sound(){if(audio)return;let A=AudioContext||webkitAudioContext,ctx=new A(),m=ctx.createGain();m.gain.value=.15;m.connect(ctx.destination);let o=ctx.createOscillator(),l=ctx.createOscillator(),lg=ctx.createGain(),p=ctx.createOscillator(),pg=ctx.createGain(),f=ctx.createBiquadFilter();o.frequency.value=56;l.frequency.value=.07;lg.gain.value=16;l.connect(lg);lg.connect(o.frequency);o.connect(m);p.type="triangle";p.frequency.value=110;pg.gain.value=.001;p.connect(f);f.connect(pg);pg.connect(m);o.start();l.start();p.start();audio={ctx,pg,f};audioL.textContent="On"}function blip(k){if(!audio)return;let n=audio.ctx.currentTime,peak=k==="oxygen"?.15:k==="scan"?.09:.07;audio.pg.gain.cancelScheduledValues(n);audio.pg.gain.setValueAtTime(.001,n);audio.pg.gain.exponentialRampToValueAtTime(peak,n+.04);audio.pg.gain.exponentialRampToValueAtTime(.001,n+.55);audio.f.frequency.setTargetAtTime(k==="biofilter"?940:520,n,.05)}function resize(){let r=c.getBoundingClientRect();S.dpr=Math.min(2,devicePixelRatio||1);S.w=Math.max(1,r.width*S.dpr|0);S.h=Math.max(1,r.height*S.dpr|0);if(c.width!==S.w||c.height!==S.h){c.width=S.w;c.height=S.h;gl.viewport(0,0,S.w,S.h)}}addEventListener("resize",resize,{passive:1});function trig(a){S.hot={feed:2,oxygen:3,shade:4,biofilter:5,scan:6,species:7}[a]??0;gstate.textContent="S:"+a[0].toUpperCase()+a.slice(1);let lines={feed:"P2 magnitude rises: textured fish drift toward pellet field.",oxygen:"P3 distribution shifts: bubble column lifts dissolved oxygen.",shade:"P5 locality cools: upper water column dims.",biofilter:"P7 selection: Chuco surfs the algae edge and lowers load.",scan:"P6 recursion visible: state trace scans tank volume.",species:"P1 relation remaps: species set and depth roles rotate."};gline.textContent=lines[a]||gline.textContent;if(a==="feed"){S.feed=1;S.tel.nh3+=.012}if(a==="oxygen"){S.o2p=1;S.tel.o2=Math.min(9.7,S.tel.o2+.55)}if(a==="shade"){S.shade=1;S.tel.temp=Math.max(19.2,S.tel.temp-.28)}if(a==="biofilter"){S.bio=1;S.tel.nh3=Math.max(.005,S.tel.nh3-.025)}if(a==="scan")S.scan=1;if(a==="species"){S.set=(S.set+1)%3;init()}document.querySelectorAll(".controls button").forEach(b=>b.classList.toggle("active",b.dataset.action===a));blip(a);fetch("/api/telemetry",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:a,telemetry:S.tel,time:Date.now()})}).catch(()=>{})}start.onclick=()=>{S.started=1;app.classList.add("started");sound();trig("scan")};document.querySelectorAll("[data-action]").forEach(b=>b.onclick=()=>{if(!S.started){S.started=1;app.classList.add("started");sound()}trig(b.dataset.action)});function upd(dt){let k=S.reduce?.35:1;S.t+=dt*k;S.feed=Math.max(0,S.feed-dt*.45);S.o2p=Math.max(0,S.o2p-dt*.55);S.shade=Math.max(0,S.shade-dt*.22);S.scan=Math.max(0,S.scan-dt*.60);S.bio=Math.max(0,S.bio-dt*.32);let T=S.tel;T.temp+=(21.7-T.temp)*dt*.018+Math.sin(S.t*.11)*.0008;T.ph+=(7.12-T.ph)*dt*.015;T.o2+=(8.15-T.o2)*dt*.025;T.nh3=Math.max(.002,Math.min(.24,T.nh3+(.035-T.nh3)*dt*.02-S.bio*dt*.02));for(const f of S.fish){let sp=f.chuco?.05:f.shrimp?.015:.028,ty=f.zone+Math.sin(S.t*.15+f.phase)*.035,tx=.5+Math.sin(S.t*(f.chuco?.10:.065)+f.phase)*.31;if(S.feed&&!f.chuco&&!f.shrimp)tx=.54+.12*Math.sin(f.phase);if(S.bio&&f.chuco){tx=.22+.06*Math.sin(S.t*.65);ty=.77+.04*Math.sin(S.t*.42)}f.vx=(f.vx+(tx-f.x)*sp*dt)*.988;f.vy=(f.vy+(ty-f.y)*sp*dt)*.988;f.x=Math.max(.08,Math.min(.92,f.x+f.vx));f.y=Math.max(.16,Math.min(.88,f.y+f.vy));if(Math.abs(f.vx)>.0006)f.flip=f.vx>0?1:-1}nodeEls.forEach((e,i)=>e.classList.toggle("hot",i===S.hot));mode.textContent=S.w>2500?"65 Display":"Conference"}function drawTank(){let p=prog.tank;gl.useProgram(p);q(p,0,0,S.w,S.h);gl.uniform2f(gl.getUniformLocation(p,"r"),S.w,S.h);gl.uniform1f(gl.getUniformLocation(p,"t"),S.t);gl.uniform1f(gl.getUniformLocation(p,"scan"),S.scan);gl.uniform1f(gl.getUniformLocation(p,"shade"),S.shade);gl.uniform1f(gl.getUniformLocation(p,"bio"),S.bio);gl.uniform1f(gl.getUniformLocation(p,"o2p"),S.o2p);gl.drawArrays(gl.TRIANGLES,0,6)}function drawSprite(f){let im=tex[f.tex];if(!im||!im.ok)return;let p=prog.sprite;gl.useProgram(p);let ds=.62+f.z*.58,base=Math.min(S.w,S.h),ar=im.w/im.h,w=base*f.size*ds*(f.chuco?2.35:1.9),h=w/ar,x=f.x*S.w-w/2,y=f.y*S.h-h/2+Math.sin(S.t*1.5+f.phase)*base*.002;q(p,x,y,w,h);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,im.t);gl.uniform1i(gl.getUniformLocation(p,"tex"),0);gl.uniform2f(gl.getUniformLocation(p,"r"),S.w,S.h);gl.uniform1f(gl.getUniformLocation(p,"depth"),f.z);gl.uniform1f(gl.getUniformLocation(p,"pulse"),f.chuco?S.bio:S.feed*.25);gl.uniform1f(gl.getUniformLocation(p,"flip"),f.flip);gl.uniform1f(gl.getUniformLocation(p,"t"),S.t+f.phase);gl.uniform3fv(gl.getUniformLocation(p,"tint"),new Float32Array(f.tint));gl.drawArrays(gl.TRIANGLES,0,6)}function render(){resize();gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);drawTank();gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);S.fish.slice().sort((a,b)=>a.z-b.z).forEach(drawSprite)}let hc=0;function hud(){let T=S.tel;M.temp[0].textContent=T.temp.toFixed(1)+"°C";M.temp[1].value=T.temp;M.ph[0].textContent=T.ph.toFixed(2);M.ph[1].value=T.ph;M.o2[0].textContent=T.o2.toFixed(1);M.o2[1].value=T.o2;M.nh3[0].textContent=T.nh3.toFixed(3);M.nh3[1].value=T.nh3}function loop(n){let dt=Math.min(.05,(n-S.last)/1e3||.016);S.last=n;upd(dt);render();if((hc+=dt)>.12){hud();hc=0}requestAnimationFrame(loop)}resize();render();requestAnimationFrame(loop)})();
+(() => {
+  'use strict';
+  const KEY = 'chuco_numara_edges_v1';
+  const PROFILE_KEY = 'chuco_numara_profile_v1';
+  const MAX_FOOD = 10;
+  const MAX_FISH = 16;
+  const MAX_RIPPLES = 64;
+  const $ = (id) => document.getElementById(id);
+  const ui = {mood:$('mood'),energy:$('energy'),trust:$('trust'),residual:$('residual'),graph:$('graph'),moodBar:$('moodBar'),energyBar:$('energyBar'),trustBar:$('trustBar'),morphologyHud:$('morphologyHud'),residualHud:$('residualHud'),trustHud:$('trustHud'),energyHud:$('energyHud'),researchPanel:$('researchPanel'),researchToggle:$('researchToggle'),quality:$('quality'),log:$('log'),lispTrace:$('lispTrace')};
+  const uiReady = Object.values(ui).every(Boolean);
+  const canvas=$('c');
+  if(!canvas || !uiReady){
+    console.error('CHUCO init failed: missing DOM nodes.');
+    return;
+  }
+  const ctx=canvas.getContext('2d',{alpha:false});
+  if(!ctx){
+    console.error('CHUCO init failed: 2d context unavailable.');
+    return;
+  }
+  let W=0,H=0;
+  const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+  const sanitize=(v,fallback,lo,hi)=>Number.isFinite(v)?clamp(v,lo,hi):fallback;
+  const graph={edges:{'HUNGER->SEEK':{w:.5,p:0},'TRUST->APPROACH':{w:.2,p:0},'PLAY->SPIN':{w:.1,p:0},'LIGHT->CURIOUS':{w:.3,p:0},'FEAR->HIDE':{w:.15,p:0},'REWARD->REPEAT':{w:.4,p:0},'PET->TRUST':{w:.2,p:0},'TOY->PLAY':{w:.2,p:0},'LISP->INSIGHT':{w:.24,p:0}}};
+  const chuco={x:0,y:0,vx:0,vy:0,heading:0,energy:.55,trust:.2,curiosity:.6,hunger:.5,play:.4,attachment:.12,rhythm:.5,comfort:.35,mood:'curious',morphology:'explore',rewardResidual:1,skin:{body:'#8e7bff',gill:'#6a4dff',spots:'#c6bcff'}};
+  const food=[],ripples=[],fish=[],bubbles=[],plants=[],mouse={x:0,y:0}; let quality='auto', frameDt=16, lastTs=performance.now(); let lispProgram='(observe (edges trust play curiosity) (adapt reward residual))'; let dirtyEdges=false, lastPersistTs=0, softFailLogged=false;
+  const persist=()=>{
+    try{
+      localStorage.setItem(KEY,JSON.stringify(graph.edges));
+      return true;
+    }catch(_){
+      return false;
+    }
+  };
+  const load=()=>{
+    try{
+      const savedEdges=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(!savedEdges)return false;
+      for(const k of Object.keys(graph.edges)){
+        if(!savedEdges[k])continue;
+        graph.edges[k].w=sanitize(+savedEdges[k].w,graph.edges[k].w,.02,.99);
+        graph.edges[k].p=sanitize(+savedEdges[k].p,graph.edges[k].p,0,5);
+      }
+      return true;
+    }catch(_){
+      return false;
+    }
+  };
+  const capPush = (arr, item, max) => { arr.push(item); if (arr.length > max) arr.splice(0, arr.length - max); };
+
+  let audioCtx = null;
+  function ensureAudioGesture(){
+    if(audioCtx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    audioCtx = new AC();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = 220; g.gain.value = 0.0001;
+    o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.03);
+  }
+  async function sendTelemetry(event, detail={}){
+    try{
+      await fetch('/api/telemetry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,detail,at:Date.now()})});
+    }catch(_){}
+  }
+  async function requestGeneratedStyle(){
+    try{
+      const res=await fetch('/api/generate-style',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:'algae-surfing biofilter guardian'})});
+      if(!res.ok) return null;
+      const data=await res.json();
+      return data && data.style ? data.style : null;
+    }catch(_){
+      return null;
+    }
+  }
+
+  function log(m){const n=document.createElement('div'); n.className='entry'; n.textContent=String(m).slice(0,220); ui.log.prepend(n); while(ui.log.children.length>18)ui.log.lastChild.remove();}
+  function resize(){const dpr=Math.min(2,window.devicePixelRatio||1); W=canvas.parentElement.clientWidth; H=canvas.parentElement.clientHeight; canvas.width=Math.floor(W*dpr); canvas.height=Math.floor(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); setupTank();}
+  function spawnFood(){capPush(food,{x:Math.random()*W*.78+W*.1,y:Math.random()*H*.64+H*.22,r:10},MAX_FOOD);}
+  function spawnFish(n=3){for(let i=0;i<n;i++){capPush(fish,{x:Math.random()*W*.8+W*.1,y:Math.random()*H*.5+H*.2,vx:(Math.random()-.5)*1.4,vy:(Math.random()-.5)*.6,h:Math.random()*Math.PI*2,c:Math.random()>.5?'#69d6ff':'#8fffd9'},MAX_FISH);}}
+  function setupTank(){plants.length=0; bubbles.length=0; const bCount=quality==='low'?10:(quality==='high'?36:20); const count=Math.max(5,Math.floor(W/180)); for(let i=0;i<count;i++){plants.push({x:(i+.5)*(W/count)+(Math.random()-.5)*30,h:70+Math.random()*120,s:8+Math.random()*10});} for(let i=0;i<bCount;i++){bubbles.push({x:Math.random()*W,y:Math.random()*H,r:2+Math.random()*5,v:.4+Math.random()*.8,a:.2+Math.random()*.5});}}
+  function edge(name,delta){const e=graph.edges[name]; if(!e)return; e.p=clamp(e.p+delta,0,5); e.w=clamp(e.w*.96+delta*.04,.02,.99); dirtyEdges=true;}
+  function reward(v){edge('REWARD->REPEAT',v); chuco.trust=clamp(chuco.trust+v*.04,0,1);}
+
+  function flushPersist(ts=performance.now()){
+    if(!dirtyEdges)return;
+    if((ts-lastPersistTs)<1200)return;
+    if(persist()){
+      lastPersistTs=ts;
+      dirtyEdges=false;
+    }
+  }
+
+  function bakeAxolotlTraining() {
+    const priors = {
+      'HUNGER->SEEK': { w: 0.58, p: 0.32 },
+      'TRUST->APPROACH': { w: 0.28, p: 0.22 },
+      'PLAY->SPIN': { w: 0.21, p: 0.18 },
+      'LIGHT->CURIOUS': { w: 0.37, p: 0.26 },
+      'REWARD->REPEAT': { w: 0.46, p: 0.24 },
+      'PET->TRUST': { w: 0.26, p: 0.2 },
+      'TOY->PLAY': { w: 0.24, p: 0.2 },
+      'LISP->INSIGHT': { w: 0.29, p: 0.16 }
+    };
+    for (const [k, prior] of Object.entries(priors)) {
+      const edgeState = graph.edges[k];
+      if (!edgeState) continue;
+      edgeState.w = clamp((edgeState.w * 0.7) + (prior.w * 0.3), 0.02, 0.99);
+      edgeState.p = clamp((edgeState.p * 0.7) + (prior.p * 0.3), 0, 5);
+    }
+    chuco.curiosity = clamp((chuco.curiosity * 0.75) + 0.18, 0, 1);
+    chuco.play = clamp((chuco.play * 0.75) + 0.12, 0, 1);
+    chuco.attachment = clamp((chuco.attachment * 0.75) + 0.08, 0, 1);
+    const saved=persist();
+    if(saved){
+      try{localStorage.setItem(PROFILE_KEY,'trained');}catch(_){ }
+    }
+    log(saved?'Baked axolotl priors loaded: seek, approach, playful curiosity.':'Baked axolotl priors computed, but local persistence failed.');
+  }
+
+  function runLispTreat(){
+    edge('LISP->INSIGHT',.24); edge('LIGHT->CURIOUS',.08); reward(.2); chuco.curiosity=clamp(chuco.curiosity+.12,0,1);
+    lispProgram=`(lisp-treat (if (> curiosity ${chuco.curiosity.toFixed(2)}) 'explore 'bond) (residual ${chuco.rewardResidual.toFixed(2)}))`;
+    log('LISP Treat evaluated symbolic curiosity pathway.');
+  }
+  function think(){
+    const weighted={seek_food:graph.edges['HUNGER->SEEK'].w*chuco.hunger+.04,approach:graph.edges['TRUST->APPROACH'].w*chuco.trust+chuco.attachment*.2,spin:graph.edges['PLAY->SPIN'].w*chuco.play+chuco.rhythm*.15,explore:graph.edges['LIGHT->CURIOUS'].w*chuco.curiosity+graph.edges['LISP->INSIGHT'].w*.12,follow_fish:(graph.edges['TOY->PLAY'].w+graph.edges['TRUST->APPROACH'].w)*.5*(chuco.play+.25),rest:(1-chuco.energy)*.7+chuco.comfort*.15,idle:.08+chuco.comfort*.2};
+    let best='idle',top=-Infinity; for(const [k,v] of Object.entries(weighted)){if(v>top){best=k;top=v;}} chuco.morphology=best;
+    if(best==='seek_food'&&food.length){let t=food[0],bd=Infinity; for(const f of food){const d=Math.hypot(chuco.x-f.x,chuco.y-f.y); if(d<bd){bd=d;t=f;}} chuco.vx+=(t.x-chuco.x)*.0011; chuco.vy+=(t.y-chuco.y)*.0011; edge('HUNGER->SEEK',.006);} else if(best==='approach'){chuco.vx+=(mouse.x-chuco.x)*.0007; chuco.vy+=(mouse.y-chuco.y)*.0007; edge('TRUST->APPROACH',.004);} else if(best==='spin'){chuco.heading+=.08; chuco.vx+=Math.sin(chuco.heading)*.18; chuco.vy+=Math.cos(chuco.heading)*.18; edge('PLAY->SPIN',.004);} else if(best==='explore'){chuco.vx+=(Math.random()-.5)*.11; chuco.vy+=(Math.random()-.5)*.11; edge('LIGHT->CURIOUS',.003);} else if(best==='follow_fish'&&fish.length){let t=fish[0],bd=Infinity; for(const f of fish){const d=Math.hypot(chuco.x-f.x,chuco.y-f.y); if(d<bd){bd=d;t=f;}} chuco.vx+=(t.x-chuco.x)*.0009; chuco.vy+=(t.y-chuco.y)*.0009; edge('TOY->PLAY',.005);} else if(best==='rest'){chuco.vx*=.95; chuco.vy*=.95; chuco.energy=clamp(chuco.energy+.0018,0,1);} 
+    const rp=(graph.edges['REWARD->REPEAT'].w+graph.edges['TRUST->APPROACH'].w+graph.edges['LISP->INSIGHT'].w)*.333; chuco.rewardResidual=clamp(1-rp*chuco.trust,0,1);
+  }
+
+  async function generateSkin(){
+    ensureAudioGesture();
+    const remoteStyle = await requestGeneratedStyle();
+    if(remoteStyle && remoteStyle.body && remoteStyle.gill && remoteStyle.spots){
+      chuco.skin = remoteStyle;
+      capPush(ripples,{x:chuco.x,y:chuco.y,r:16,a:.75,c:'rgba(255,255,255,'},MAX_RIPPLES);
+      edge('LISP->INSIGHT',.08);
+      log('Generated style applied from /api/generate-style.');
+      sendTelemetry('generate-style',{source:'api'});
+      return;
+    }
+    const hue=Math.floor(Math.random()*360);
+    chuco.skin={
+      body:`hsl(${hue} 58% 42%)`,
+      gill:`hsl(${(hue+36)%360} 78% 54%)`,
+      spots:`hsla(${(hue+180)%360} 92% 82% / .9)`
+    };
+    capPush(ripples,{x:chuco.x,y:chuco.y,r:16,a:.75,c:'rgba(255,255,255,'},MAX_RIPPLES);
+    edge('LISP->INSIGHT',.08);
+    log(`Image-gen skin mutation applied: hue ${hue}.`);
+    sendTelemetry('generate-style',{source:'local-fallback',hue});
+  }
+
+  function drawAxolotl(x,y,heading,scale,skin,alpha=1){ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y); ctx.rotate(heading*.15); ctx.scale(scale,scale); const bodyGrad=ctx.createRadialGradient(10,-10,8,0,0,52); bodyGrad.addColorStop(0,skin.spots); bodyGrad.addColorStop(1,skin.body); ctx.fillStyle=bodyGrad; ctx.beginPath(); ctx.ellipse(0,0,44,30,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle='rgba(0,0,0,.22)'; ctx.beginPath(); ctx.ellipse(6,14,30,9,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle=skin.gill; for(const yy of [-15,0,15]){ctx.beginPath(); ctx.ellipse(-39,yy,14,6,.5,0,Math.PI*2); ctx.fill();} ctx.fillStyle='rgba(255,255,255,.35)'; ctx.beginPath(); ctx.ellipse(16,-12,11,5,-.4,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(15,-7,5,0,Math.PI*2); ctx.arc(15,7,5,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(16,-7,2,0,Math.PI*2); ctx.arc(16,7,2,0,Math.PI*2); ctx.fill(); ctx.restore();}
+
+  function draw(){ctx.clearRect(0,0,W,H); const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#0a2c3f'); g.addColorStop(.45,'#0b3f52'); g.addColorStop(1,'#062433'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); for(const p of plants){ctx.strokeStyle='rgba(68,180,120,.55)'; ctx.lineWidth=p.s*.22; ctx.beginPath(); ctx.moveTo(p.x,H); ctx.bezierCurveTo(p.x-p.s,H-p.h*.35,p.x+p.s,H-p.h*.7,p.x,H-p.h); ctx.stroke();} for(const b of bubbles){ctx.fillStyle=`rgba(180,235,255,${b.a})`; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();} for(const f of food){ctx.fillStyle='#55ff99'; ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();} for(const sw of fish){ctx.save(); ctx.translate(sw.x,sw.y); ctx.rotate(sw.h); ctx.shadowColor=sw.c; ctx.shadowBlur=quality==='low'?2:quality==='high'?14:9; ctx.fillStyle=sw.c; ctx.beginPath(); ctx.ellipse(0,0,13,6,0,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(-10,0); ctx.lineTo(-18,6); ctx.lineTo(-18,-6); ctx.closePath(); ctx.fill(); ctx.restore();} for(let i=ripples.length-1;i>=0;i--){const r=ripples[i]; ctx.strokeStyle=`${r.c}${r.a})`; ctx.beginPath(); ctx.arc(r.x,r.y,r.r,0,Math.PI*2); ctx.stroke(); r.r+=2; r.a*=.94; if(r.a<.03)ripples.splice(i,1);} drawAxolotl(chuco.x,chuco.y+Math.sin(Date.now()*.002)*2.5,chuco.heading,1.02,chuco.skin,1); ctx.fillStyle='rgba(255,255,255,.08)'; ctx.fillRect(0,0,W,18);}
+  function bestEffortDrain(){return quality==='low'?.00035:quality==='high'?.00065:.0005;}
+  function render(){const residual=chuco.rewardResidual; chuco.mood=residual<.65?'learning':(chuco.energy<.3?'sleepy':'curious'); ui.mood.textContent=chuco.mood; ui.energy.textContent=chuco.energy.toFixed(2); ui.trust.textContent=chuco.trust.toFixed(2); ui.residual.textContent=residual.toFixed(2); ui.morphologyHud.textContent=chuco.morphology; ui.residualHud.textContent=residual.toFixed(2); ui.trustHud.textContent=chuco.trust.toFixed(2); ui.energyHud.textContent=chuco.energy.toFixed(2); ui.moodBar.style.width=`${(1-residual)*100}%`; ui.energyBar.style.width=`${chuco.energy*100}%`; ui.trustBar.style.width=`${chuco.trust*100}%`; if(!ui.researchPanel.classList.contains('on')) return; const frag=document.createDocumentFragment(); for(const [k,v] of Object.entries(graph.edges)){const d=document.createElement('div'); d.className='cell'; d.append(document.createTextNode(k)); const b=document.createElement('b'); b.textContent=`w:${v.w.toFixed(2)} p:${v.p.toFixed(2)}`; d.appendChild(b); frag.appendChild(d);} ui.graph.replaceChildren(frag); ui.lispTrace.textContent=lispProgram;}
+  function step(ts=performance.now()){
+    try {
+      frameDt=ts-lastTs; lastTs=ts; if(quality==='auto'){if(frameDt>26&&bubbles.length>12){quality='low'; ui.quality.textContent='Low'; setupTank();} else if(frameDt<18&&bubbles.length<20){quality='high'; ui.quality.textContent='High'; setupTank();}} think(); for(const sw of fish){sw.x+=sw.vx; sw.y+=sw.vy; sw.h=Math.atan2(sw.vy,sw.vx); if(sw.x<20||sw.x>W-20)sw.vx*=-1; if(sw.y<80||sw.y>H-20)sw.vy*=-1; sw.vx+=(Math.random()-.5)*.04; sw.vy+=(Math.random()-.5)*.03; sw.vx=clamp(sw.vx,-1.6,1.6); sw.vy=clamp(sw.vy,-1.2,1.2);} for(const b of bubbles){b.y-=b.v; b.x+=Math.sin((b.y+b.r)*.03)*.2; if(b.y<-10){b.y=H+Math.random()*40; b.x=Math.random()*W;}} chuco.vx*=.985; chuco.vy*=.985; chuco.x=clamp(chuco.x+chuco.vx,40,W-40); chuco.y=clamp(chuco.y+chuco.vy,90,H-40); chuco.energy=clamp(chuco.energy-(bestEffortDrain()),0,1); chuco.hunger=clamp(chuco.hunger+.0003,0,1); for(let i=food.length-1;i>=0;i--){if(Math.hypot(chuco.x-food[i].x,chuco.y-food[i].y)<28){food.splice(i,1); chuco.energy=clamp(chuco.energy+.25,0,1); chuco.hunger=clamp(chuco.hunger-.35,0,1); reward(.4); edge('HUNGER->SEEK',.2); capPush(ripples,{x:chuco.x,y:chuco.y,r:8,a:.9,c:'rgba(85,255,153,'},MAX_RIPPLES); log('Chuco reinforced HUNGER->SEEK.'); spawnFood();}} draw(); render(); flushPersist(ts);
+    } catch (err) {
+      quality = 'low';
+      ui.quality.textContent = 'Low';
+      if(!softFailLogged){
+        log(`Runtime soft-fail: ${(err && err.message) ? err.message : 'unknown error'}.`);
+        softFailLogged=true;
+      }
+      setupTank();
+    }
+    requestAnimationFrame(step);
+  }
+  function setResearch(on){ui.researchPanel.classList.toggle('on',on); ui.researchToggle.textContent=on?'On':'Off'; const u=new URL(location.href); if(on)u.searchParams.set('research','1'); else u.searchParams.delete('research'); history.replaceState({},'',u); if(!on){ui.graph.replaceChildren(); ui.lispTrace.textContent='';}}
+  window.addEventListener('resize',resize,{passive:true}); canvas.addEventListener('pointermove',(e)=>{const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;},{passive:true});
+  ui.quality.onclick=()=>{ensureAudioGesture();quality=quality==='auto'?'high':quality==='high'?'low':'auto'; ui.quality.textContent=quality[0].toUpperCase()+quality.slice(1); setupTank();}; $('skin').onclick=()=>{ensureAudioGesture(); generateSkin();}; $('feed').onclick=()=>{ensureAudioGesture();spawnFood();sendTelemetry('feed');reward(.10);capPush(ripples,{x:W*.5,y:H*.55,r:12,a:.7,c:'rgba(85,255,153,'},MAX_RIPPLES);log('Food dropped.');}; $('pet').onclick=()=>{ensureAudioGesture();sendTelemetry('pet');edge('PET->TRUST',.25);edge('TRUST->APPROACH',.18);chuco.trust=clamp(chuco.trust+.12,0,1);reward(.18);capPush(ripples,{x:chuco.x,y:chuco.y,r:10,a:.8,c:'rgba(255,160,230,'},MAX_RIPPLES);log('Pet reinforced TRUST->APPROACH.');}; $('light').onclick=()=>{ensureAudioGesture();sendTelemetry('light');edge('LIGHT->CURIOUS',.2);chuco.curiosity=clamp(chuco.curiosity+.08,0,1);for(let i=0;i<3;i++)capPush(ripples,{x:Math.random()*W,y:Math.random()*H*.7+50,r:8,a:.5,c:'rgba(77,227,255,'},MAX_RIPPLES);log('Light increased exploration pressure.');}; $('toy').onclick=()=>{ensureAudioGesture();sendTelemetry('toy');edge('TOY->PLAY',.22);edge('PLAY->SPIN',.18);chuco.play=clamp(chuco.play+.1,0,1);reward(.12);spawnFish(1);log('Toy strengthened PLAY recurrence and spawned a fish target.');}; $('lisp').onclick=()=>{ensureAudioGesture();sendTelemetry('lisp');runLispTreat();}; ui.researchToggle.onclick=()=>setResearch(!ui.researchPanel.classList.contains('on'));
+  const hasSavedEdges=load();
+  const isProfileTrained=(()=>{
+    try{return localStorage.getItem(PROFILE_KEY)==='trained';}catch(_){return false;}
+  })();
+  if(!hasSavedEdges || !isProfileTrained){
+    bakeAxolotlTraining();
+    if(persist()){
+      try{localStorage.setItem(PROFILE_KEY,'trained');}catch(_){ }
+    }
+  }
+  ui.quality.textContent='Auto'; resize(); spawnFood(); spawnFish(4); chuco.x=W/2; chuco.y=H/2; mouse.x=W/2; mouse.y=H/2; setResearch(new URLSearchParams(location.search).get('research')==='1'); log('Chuco initialized. NUMARA mini-brain online.'); flushPersist(); step();
+})();

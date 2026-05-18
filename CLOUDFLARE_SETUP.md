@@ -1,12 +1,35 @@
-# Cloudflare Worker setup for AI skin generation
+# Cloudflare Pages setup (CHUCO conference branch)
 
-1. Install Wrangler: `npm i -g wrangler`
-2. Authenticate: `wrangler login`
-3. Set API key secret: `wrangler secret put OPENAI_API_KEY`
-4. Deploy worker: `wrangler deploy`
-5. In the app, click **Generate AI Skin** and paste worker URL.
+Use **Cloudflare Pages** (not standalone Worker) for this branch.
 
-Endpoint used by app:
-- `POST /api/generate-axolotl-skin`
-- body: `{ "prompt": "..." }`
-- returns: `{ "imageBase64": "..." }`
+## Required Pages settings
+- Framework preset: `None`
+- Build command: `none`
+- Output directory: `/`
+- Root directory: `/`
+- Production branch: `feature/chuco-conference-v5`
+
+## Functions routing
+- `functions/api/[[path]].js` handles `/api/*`.
+- `_routes.json` keeps static assets static-first and only sends `/api/*` to Functions.
+
+## Expected API routes
+- `GET /api/health`
+- `POST /api/session`
+- `POST /api/telemetry`
+- `POST /api/generate-style`
+
+## Secrets
+- `OPENAI_API_KEY` is **optional**.
+- If missing, `/api/generate-style` returns a safe fallback style payload.
+
+## Local checks
+```bash
+node --check app.js
+node --check 'functions/api/[[path]].js'
+```
+
+If Wrangler is available:
+```bash
+npx wrangler pages dev . --compatibility-date=2025-12-01
+```
