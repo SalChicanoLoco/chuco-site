@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/build-fallback-models.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "node --check src/main.js && node --check functions/api/[[path]].js"
+    "check": "node --check src/main.js && node --check src/modelRegistry.js && node --check scripts/build-fallback-models.mjs && node --check functions/api/[[path]].js"
   },
   "dependencies": {
     "three": "0.183.2",
