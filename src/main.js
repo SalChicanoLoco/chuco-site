@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MODEL_REGISTRY } from './modelRegistry.js';
 
 const $ = (id) => document.getElementById(id);
 const root = $('threeRoot');
@@ -20,8 +21,8 @@ const meters = {
 
 const state = {
   started: false,
-  clock: new THREE.Clock(),
   time: 0,
+  clock: new THREE.Clock(),
   quality: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'battery' : 'conference',
   action: 'biofilter',
   hot: 5,
@@ -34,7 +35,8 @@ const state = {
   telemetry: { temp: 21.6, ph: 7.12, o2: 8.2, nh3: 0.03 },
   inhabitants: [],
   bubbles: [],
-  pellets: []
+  pellets: [],
+  modelTier: 'loading'
 };
 
 for (const label of ['P0','P1','P2','P3','P4','P5','P6','P7']) {
@@ -54,75 +56,65 @@ camera.position.set(0, 7.2, 26);
 camera.lookAt(0, 1.3, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 root.appendChild(renderer.domElement);
 
-const loadingManager = new THREE.LoadingManager();
-const gltfLoader = new GLTFLoader(loadingManager);
-const glbCache = new Map();
+const gltfLoader = new GLTFLoader();
+const modelCache = new Map();
 
 const tank = {
-  w: 24,
-  h: 11,
-  d: 12,
-  minX: -10.8,
-  maxX: 10.8,
-  minY: -3.8,
-  maxY: 4.7,
-  minZ: -4.8,
-  maxZ: 4.8
+  w: 24, h: 11, d: 12,
+  minX: -10.8, maxX: 10.8,
+  minY: -3.8, maxY: 4.7,
+  minZ: -4.8, maxZ: 4.8
 };
 
 const world = new THREE.Group();
 scene.add(world);
 
-function material(color, roughness = 0.55, metalness = 0.02, transparent = false, opacity = 1) {
-  return new THREE.MeshStandardMaterial({ color, roughness, metalness, transparent, opacity, depthWrite: !transparent });
-}
-
 const amb = new THREE.HemisphereLight(0x9afaff, 0x051114, 1.45);
 scene.add(amb);
-const sun = new THREE.DirectionalLight(0xcffcff, 2.25);
+const sun = new THREE.DirectionalLight(0xcffcff, 2.1);
 sun.position.set(-7, 12, 9);
 sun.castShadow = true;
 sun.shadow.mapSize.set(1024, 1024);
 scene.add(sun);
-const rim = new THREE.PointLight(0x8e55ff, 4, 60, 1.8);
+const rim = new THREE.PointLight(0x8e55ff, 3.5, 60, 1.8);
 rim.position.set(10, 4, -5);
 scene.add(rim);
-const mint = new THREE.PointLight(0x00ff9c, 2.7, 44, 1.7);
+const mint = new THREE.PointLight(0x00ff9c, 2.5, 44, 1.7);
 mint.position.set(-9, -1, 5);
 scene.add(mint);
 
+function rand(a, b) { return a + Math.random() * (b - a); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mat(color, roughness = 0.55, metalness = 0.02, transparent = false, opacity = 1) {
+  return new THREE.MeshStandardMaterial({ color, roughness, metalness, transparent, opacity, depthWrite: !transparent });
+}
+
 function makeTank() {
-  const g = new THREE.Group();
   const glassMat = new THREE.MeshPhysicalMaterial({
-    color: 0x72f7ff,
-    metalness: 0,
-    roughness: 0.05,
-    transparent: true,
-    opacity: 0.18,
-    transmission: 0.45,
-    thickness: 0.18,
-    side: THREE.DoubleSide,
-    depthWrite: false
+    color: 0x72f7ff, roughness: 0.05, transparent: true,
+    opacity: 0.17, transmission: 0.35, thickness: 0.12,
+    side: THREE.DoubleSide, depthWrite: false
   });
-  const edgeMat = material(0x1ee8ff, 0.18, 0.1, true, 0.42);
-  const bottomMat = material(0x071a17, 0.75, 0.02);
-  const back = new THREE.Mesh(new THREE.BoxGeometry(tank.w, tank.h, 0.08), glassMat);
-  back.position.set(0, 0.2, -tank.d / 2);
-  const front = new THREE.Mesh(new THREE.BoxGeometry(tank.w, tank.h, 0.08), glassMat);
-  front.position.set(0, 0.2, tank.d / 2);
-  const left = new THREE.Mesh(new THREE.BoxGeometry(0.08, tank.h, tank.d), glassMat);
-  left.position.set(-tank.w / 2, 0.2, 0);
-  const right = new THREE.Mesh(new THREE.BoxGeometry(0.08, tank.h, tank.d), glassMat);
-  right.position.set(tank.w / 2, 0.2, 0);
-  const floor = new THREE.Mesh(new THREE.BoxGeometry(tank.w, 0.22, tank.d), bottomMat);
-  floor.position.y = -tank.h / 2 + 0.05;
-  floor.receiveShadow = true;
+  const edgeMat = mat(0x1ee8ff, 0.18, 0.1, true, 0.42);
+  const bottomMat = mat(0x071a17, 0.75, 0.02);
+  const parts = [
+    [tank.w, tank.h, 0.08, 0, 0.2, -tank.d / 2, glassMat],
+    [tank.w, tank.h, 0.08, 0, 0.2, tank.d / 2, glassMat],
+    [0.08, tank.h, tank.d, -tank.w / 2, 0.2, 0, glassMat],
+    [0.08, tank.h, tank.d, tank.w / 2, 0.2, 0, glassMat],
+    [tank.w, 0.22, tank.d, 0, -tank.h / 2 + 0.05, 0, bottomMat]
+  ];
+  for (const p of parts) {
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(p[0], p[1], p[2]), p[6]);
+    mesh.position.set(p[3], p[4], p[5]);
+    mesh.receiveShadow = true;
+    world.add(mesh);
+  }
   const edges = [
     [tank.w, .08, .08, 0, tank.h/2+.2, tank.d/2], [tank.w, .08, .08, 0, tank.h/2+.2, -tank.d/2],
     [tank.w, .08, .08, 0, -tank.h/2+.2, tank.d/2], [tank.w, .08, .08, 0, -tank.h/2+.2, -tank.d/2],
@@ -130,24 +122,17 @@ function makeTank() {
     [.08, tank.h, .08, -tank.w/2, .2, -tank.d/2], [.08, tank.h, .08, tank.w/2, .2, -tank.d/2]
   ];
   for (const e of edges) {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(e[0], e[1], e[2]), edgeMat);
-    m.position.set(e[3], e[4], e[5]);
-    g.add(m);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(e[0], e[1], e[2]), edgeMat);
+    mesh.position.set(e[3], e[4], e[5]);
+    world.add(mesh);
   }
-  g.add(back, front, left, right, floor);
-  world.add(g);
 }
 
 const waterUniforms = {
-  time: { value: 0 },
-  shade: { value: 0 },
-  oxygen: { value: 0 },
-  biofilter: { value: 0 }
+  time: { value: 0 }, shade: { value: 0 }, oxygen: { value: 0 }, biofilter: { value: 0 }
 };
 const waterMat = new THREE.ShaderMaterial({
-  transparent: true,
-  depthWrite: false,
-  uniforms: waterUniforms,
+  transparent: true, depthWrite: false, uniforms: waterUniforms,
   vertexShader: `varying vec2 vUv; uniform float time; void main(){vUv=uv; vec3 p=position; p.z += sin(p.x*.55+time*.7)*.09 + sin(p.y*.4+time*.35)*.04; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}`,
   fragmentShader: `varying vec2 vUv; uniform float time; uniform float shade; uniform float oxygen; uniform float biofilter; void main(){float wave=sin(vUv.x*26.0+time*.55)*sin(vUv.y*13.0-time*.3); vec3 c=mix(vec3(.02,.26,.31),vec3(.09,.77,.86),smoothstep(.15,1.,wave)); c += vec3(0.,.45,.22)*biofilter*.22 + vec3(.2,.7,.9)*oxygen*.18; c *= 1.0 - shade*.32; gl_FragColor=vec4(c,.38);}`
 });
@@ -164,9 +149,9 @@ function makeWater() {
 }
 
 function makeEnvironment() {
-  const rockMat = material(0x1a4a55, .88, .05);
-  const plantMat = material(0x08aa76, .65, .02);
-  const violetPlant = material(0x875dff, .65, .02);
+  const rockMat = mat(0x1a4a55, .88, .05);
+  const plantMat = mat(0x08aa76, .65, .02);
+  const violetPlant = mat(0x875dff, .65, .02);
   for (let i = 0; i < 26; i++) {
     const r = new THREE.Mesh(new THREE.DodecahedronGeometry(rand(.18, .55), 0), rockMat);
     r.position.set(rand(tank.minX, tank.maxX), tank.minY + rand(.02, .35), rand(tank.minZ, tank.maxZ));
@@ -180,15 +165,8 @@ function makeEnvironment() {
     stem.position.set(rand(tank.minX, tank.maxX), tank.minY + stem.geometry.parameters.height / 2, rand(tank.minZ, tank.maxZ));
     stem.rotation.z = rand(-.25, .25);
     world.add(stem);
-    for (let j = 0; j < 3; j++) {
-      const leaf = new THREE.Mesh(new THREE.SphereGeometry(.12, 8, 4), stem.material);
-      leaf.scale.set(.35, .08, .9);
-      leaf.position.set(stem.position.x + rand(-.18, .18), stem.position.y + rand(.2, 1.2), stem.position.z + rand(-.18, .18));
-      leaf.rotation.set(rand(-.5,.5), rand(0,6.28), rand(-.5,.5));
-      world.add(leaf);
-    }
   }
-  const woodMat = material(0x4b2a18, .78, .02);
+  const woodMat = mat(0x4b2a18, .78, .02);
   for (let i = 0; i < 4; i++) {
     const branch = new THREE.Mesh(new THREE.CapsuleGeometry(.16, rand(2.8, 5.2), 6, 12), woodMat);
     branch.position.set(rand(-6, 6), tank.minY + rand(.35, 1.0), rand(-3.5, 3.5));
@@ -198,103 +176,59 @@ function makeEnvironment() {
   }
 }
 
-function rand(a, b) { return a + Math.random() * (b - a); }
-function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-
-function makeFishMesh(colorA, colorB, scale = 1) {
-  const group = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), new THREE.MeshStandardMaterial({ color: colorA, roughness: .35, metalness: .08, emissive: colorB, emissiveIntensity: .08 }));
-  body.scale.set(1.65 * scale, .58 * scale, .42 * scale);
-  body.castShadow = true;
-  group.add(body);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(.55 * scale, 18, 12), body.material);
-  head.position.x = 1.38 * scale;
-  head.scale.set(1.05, .9, .85);
-  group.add(head);
-  const tailMat = new THREE.MeshStandardMaterial({ color: colorB, roughness: .42, metalness: .02, transparent: true, opacity: .78, side: THREE.DoubleSide });
-  const tail = new THREE.Mesh(new THREE.ConeGeometry(.62 * scale, 1.1 * scale, 3), tailMat);
-  tail.position.x = -1.72 * scale;
-  tail.rotation.z = Math.PI / 2;
-  tail.scale.y = .72;
-  group.add(tail);
-  const finTop = new THREE.Mesh(new THREE.ConeGeometry(.38 * scale, 1.25 * scale, 3), tailMat);
-  finTop.position.set(-.1 * scale, .58 * scale, 0);
-  finTop.rotation.z = Math.PI;
-  finTop.scale.z = .18;
-  group.add(finTop);
-  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x020510, roughness: .1, metalness: .15 });
-  const eye1 = new THREE.Mesh(new THREE.SphereGeometry(.075 * scale, 10, 8), eyeMat);
-  eye1.position.set(1.85 * scale, .18 * scale, .32 * scale);
-  const eye2 = eye1.clone();
-  eye2.position.z = -.32 * scale;
-  group.add(eye1, eye2);
-  group.userData.tail = tail;
-  return group;
+function tintModel(rootMesh, color) {
+  rootMesh.traverse((obj) => {
+    if (obj.isMesh) {
+      obj.castShadow = true;
+      obj.receiveShadow = true;
+      if (obj.material) {
+        obj.material = obj.material.clone();
+        if (obj.material.color) obj.material.color.multiplyScalar(1.08).lerp(new THREE.Color(color), 0.16);
+        obj.material.roughness = Math.min(0.75, obj.material.roughness ?? 0.45);
+      }
+    }
+  });
 }
 
-function makeChucoMesh() {
-  const group = new THREE.Group();
-  const skin = new THREE.MeshStandardMaterial({ color: 0x7fffe6, roughness: .28, metalness: .04, emissive: 0x615cff, emissiveIntensity: .16 });
-  const body = new THREE.Mesh(new THREE.SphereGeometry(1, 28, 18), skin);
-  body.scale.set(2.45, .55, .48);
-  group.add(body);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(.78, 24, 16), skin);
-  head.position.x = 1.95;
-  head.scale.set(1.05, .86, .9);
-  group.add(head);
-  const tailMat = new THREE.MeshStandardMaterial({ color: 0xb09cff, roughness: .32, metalness: .02, transparent: true, opacity: .74, side: THREE.DoubleSide, emissive: 0x00f7ff, emissiveIntensity: .08 });
-  const tail = new THREE.Mesh(new THREE.ConeGeometry(.78, 1.75, 4), tailMat);
-  tail.position.x = -2.25;
+function emergencyMesh(role, color = 0x55eaff) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 10), mat(color, .42, .05));
+  body.scale.set(role === 'chuco' ? 2.2 : 1.55, role === 'cleaner' ? .24 : .44, role === 'cleaner' ? .24 : .32);
+  g.add(body);
+  const tail = new THREE.Mesh(new THREE.ConeGeometry(.55, 1.0, 3), mat(0x9b72ff, .45, .02, true, .75));
+  tail.position.x = -1.35;
   tail.rotation.z = Math.PI / 2;
-  group.add(tail);
-  for (let i = 0; i < 6; i++) {
-    const gill = new THREE.Mesh(new THREE.CapsuleGeometry(.045, .75, 4, 8), tailMat);
-    const side = i < 3 ? 1 : -1;
-    gill.position.set(2.15, .24 - (i % 3) * .18, side * .54);
-    gill.rotation.set(.25 * side, 0, .65 - (i % 3) * .25);
-    group.add(gill);
-  }
-  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x06121a, roughness: .1, metalness: .15, emissive: 0x33e8ff, emissiveIntensity: .15 });
-  const eye1 = new THREE.Mesh(new THREE.SphereGeometry(.09, 12, 8), eyeMat);
-  eye1.position.set(2.63, .16, .38);
-  const eye2 = eye1.clone(); eye2.position.z = -.38;
-  group.add(eye1, eye2);
-  group.scale.setScalar(.78);
-  group.userData.tail = tail;
-  return group;
+  g.add(tail);
+  g.userData.tail = tail;
+  return g;
 }
 
-function makeShrimpMesh() {
-  const group = new THREE.Group();
-  const mat = new THREE.MeshStandardMaterial({ color: 0xa6f7ff, roughness: .28, metalness: .02, transparent: true, opacity: .78, emissive: 0x9b5cff, emissiveIntensity: .12 });
-  for (let i = 0; i < 6; i++) {
-    const seg = new THREE.Mesh(new THREE.SphereGeometry(.34, 12, 8), mat);
-    seg.position.x = i * -.32;
-    seg.scale.set(1, .62, .5);
-    group.add(seg);
+async function loadRegistryModel(key, color) {
+  const entry = MODEL_REGISTRY[key];
+  if (!entry) return emergencyMesh('fish', color);
+  try {
+    if (modelCache.has(key)) return modelCache.get(key).clone(true);
+    const gltf = await gltfLoader.loadAsync(entry.path);
+    const model = gltf.scene || gltf.scenes[0];
+    model.scale.setScalar(entry.scale || 1);
+    model.rotation.y = entry.rotationY || 0;
+    tintModel(model, color);
+    model.userData.modelSource = entry.path;
+    modelCache.set(key, model);
+    state.modelTier = 'committed-base-gltf';
+    livePill.textContent = 'BASE GLTF';
+    return model.clone(true);
+  } catch (err) {
+    console.warn('Model load failed, using emergency mesh:', key, err);
+    state.modelTier = 'procedural-emergency';
+    livePill.textContent = '3D FALLBACK';
+    return emergencyMesh(entry.role || 'fish', color);
   }
-  for (let i = 0; i < 8; i++) {
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(.012, .015, .55, 5), mat);
-    leg.position.set(-.2 - i * .15, -.32, i % 2 ? .18 : -.18);
-    leg.rotation.x = i % 2 ? .55 : -.55;
-    group.add(leg);
-  }
-  const antennaMat = new THREE.MeshBasicMaterial({ color: 0xffb3ff, transparent: true, opacity: .75 });
-  for (let i = 0; i < 2; i++) {
-    const ant = new THREE.Mesh(new THREE.CylinderGeometry(.01, .01, 1.5, 5), antennaMat);
-    ant.position.set(.35, .2, i ? .22 : -.22);
-    ant.rotation.z = -1.05;
-    ant.rotation.y = i ? .4 : -.4;
-    group.add(ant);
-  }
-  group.scale.setScalar(.72);
-  return group;
 }
 
 function addInhabitant(kind, mesh, opts) {
   const item = {
-    kind,
-    mesh,
+    kind, mesh,
     pos: new THREE.Vector3(opts.x, opts.y, opts.z),
     vel: new THREE.Vector3(rand(-.18, .18), rand(-.04, .04), rand(-.08, .08)),
     target: new THREE.Vector3(opts.x, opts.y, opts.z),
@@ -310,29 +244,30 @@ function addInhabitant(kind, mesh, opts) {
   state.inhabitants.push(item);
 }
 
-function resetInhabitants() {
+async function resetInhabitants() {
   for (const item of state.inhabitants) world.remove(item.mesh);
   state.inhabitants.length = 0;
   const palettes = [
-    [0x4eeaff, 0x8f5cff, 7],
-    [0xffa51f, 0x00ffcc, 5],
-    [0x47ffd4, 0x8c5cff, 6]
+    [0x4eeaff, 0x8f5cff, 7, 'fish_schooling'],
+    [0xffa51f, 0x00ffcc, 5, 'fish_cichlid'],
+    [0x47ffd4, 0x8c5cff, 6, 'fish_schooling']
   ];
   const p = palettes[state.speciesSet % palettes.length];
   for (let i = 0; i < p[2]; i++) {
-    addInhabitant('fish', makeFishMesh(p[0], p[1], rand(.55, .78)), {
+    const model = await loadRegistryModel(p[3], p[0]);
+    addInhabitant('fish', model, {
       x: rand(tank.minX + 1, tank.maxX - 1), y: rand(-.8, 3.2), z: rand(tank.minZ + .5, tank.maxZ - .5),
       zoneY: rand(-.6, 3.4), speed: rand(.95, 1.35), feedable: true
     });
   }
-  addInhabitant('chuco', makeChucoMesh(), { x: -5.8, y: -2.25, z: 1.8, zoneY: -2.0, speed: .72, feedable: false, bio: true });
-  addInhabitant('cleaner', makeShrimpMesh(), { x: 6.5, y: -3.28, z: -2.6, zoneY: -3.3, speed: .25, feedable: false, bottom: true });
+  addInhabitant('chuco', await loadRegistryModel('chuco_guardian', 0x7fffe6), { x: -5.8, y: -2.25, z: 1.8, zoneY: -2.0, speed: .72, feedable: false, bio: true });
+  addInhabitant('cleaner', await loadRegistryModel('bottom_cleaner', 0xc29cff), { x: 6.5, y: -3.28, z: -2.6, zoneY: -3.3, speed: .25, feedable: false, bottom: true });
 }
 
 function spawnBubbles(n = 28) {
-  const mat = new THREE.MeshBasicMaterial({ color: 0xbdfbff, transparent: true, opacity: .55 });
+  const bubbleMat = new THREE.MeshBasicMaterial({ color: 0xbdfbff, transparent: true, opacity: .55 });
   for (let i = 0; i < n; i++) {
-    const b = new THREE.Mesh(new THREE.SphereGeometry(rand(.035, .11), 8, 6), mat);
+    const b = new THREE.Mesh(new THREE.SphereGeometry(rand(.035, .11), 8, 6), bubbleMat);
     b.position.set(rand(7, 9.6), tank.minY + rand(.1, .8), rand(-3.8, 3.8));
     world.add(b);
     state.bubbles.push({ mesh: b, speed: rand(.7, 1.8), wobble: rand(0, 6.28) });
@@ -340,22 +275,22 @@ function spawnBubbles(n = 28) {
 }
 
 function spawnPellets(n = 14) {
-  const mat = new THREE.MeshStandardMaterial({ color: 0xb67a39, roughness: .75 });
+  const pelletMat = mat(0xb67a39, .75, 0);
   for (let i = 0; i < n; i++) {
-    const p = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), mat);
+    const p = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), pelletMat);
     p.position.set(rand(-1.8, 2.2), tank.maxY - .35, rand(-2.5, 2.5));
     world.add(p);
     state.pellets.push({ mesh: p, vel: new THREE.Vector3(rand(-.05,.05), -rand(.35,.65), rand(-.05,.05)), ttl: 10 });
   }
 }
 
-function initScene() {
+async function initScene() {
   makeTank();
   makeWater();
   makeEnvironment();
-  resetInhabitants();
+  await resetInhabitants();
   spawnBubbles(16);
-  livePill.textContent = 'REAL 3D';
+  livePill.textContent = state.modelTier === 'committed-base-gltf' ? 'BASE GLTF' : 'REAL 3D';
 }
 
 let audio = null;
@@ -386,7 +321,7 @@ function actionSound(type) {
   audio.filter.frequency.setTargetAtTime(type === 'biofilter' ? 980 : 520, n, .05);
 }
 
-function trigger(action) {
+async function trigger(action) {
   state.action = action;
   state.hot = { feed:2, oxygen:3, shade:4, biofilter:5, scan:6, species:7 }[action] ?? 0;
   graphState.textContent = 'S:' + action[0].toUpperCase() + action.slice(1);
@@ -396,7 +331,7 @@ function trigger(action) {
     shade: 'P5 locality cools: water column dims and temperature drops.',
     biofilter: 'P7 selection: Chuco patrols the algae/biofilter edge.',
     scan: 'P6 recursion visible: NUMARA trace scans the tank volume.',
-    species: 'P1 relation remaps: model population and depth roles rotate.'
+    species: 'P1 relation remaps: committed base models rotate by role.'
   };
   graphLine.textContent = lines[action] || graphLine.textContent;
   if (action === 'feed') { state.feed = 1; state.telemetry.nh3 += .012; spawnPellets(); }
@@ -404,10 +339,10 @@ function trigger(action) {
   if (action === 'shade') { state.shade = 1; state.telemetry.temp = Math.max(19.2, state.telemetry.temp - .28); }
   if (action === 'biofilter') { state.biofilter = 1; state.telemetry.nh3 = Math.max(.005, state.telemetry.nh3 - .025); }
   if (action === 'scan') state.scan = 1;
-  if (action === 'species') { state.speciesSet += 1; resetInhabitants(); }
+  if (action === 'species') { state.speciesSet += 1; await resetInhabitants(); }
   document.querySelectorAll('.controls button').forEach((b) => b.classList.toggle('active', b.dataset.action === action));
   actionSound(action);
-  fetch('/api/telemetry', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action, telemetry: state.telemetry, time: Date.now() }) }).catch(() => {});
+  fetch('/api/telemetry', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action, telemetry: state.telemetry, time: Date.now(), modelTier: state.modelTier }) }).catch(() => {});
 }
 
 function steer(item, dt) {
@@ -432,7 +367,6 @@ function steer(item, dt) {
   const yaw = Math.atan2(-item.vel.z, item.vel.x || .001);
   item.mesh.rotation.y = yaw;
   item.mesh.rotation.z = Math.sin(t * 1.8 + item.phase) * .035;
-  if (item.mesh.userData.tail) item.mesh.userData.tail.rotation.y = Math.sin(t * 5.2 + item.phase) * .28;
 }
 
 function update(dt) {
@@ -515,6 +449,6 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-initScene();
+await initScene();
 resize();
 animate();
