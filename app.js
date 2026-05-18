@@ -47,6 +47,34 @@
     }
   };
   const capPush = (arr, item, max) => { arr.push(item); if (arr.length > max) arr.splice(0, arr.length - max); };
+
+  let audioCtx = null;
+  function ensureAudioGesture(){
+    if(audioCtx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    audioCtx = new AC();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = 220; g.gain.value = 0.0001;
+    o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.03);
+  }
+  async function sendTelemetry(event, detail={}){
+    try{
+      await fetch('/api/telemetry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,detail,at:Date.now()})});
+    }catch(_){}
+  }
+  async function requestGeneratedStyle(){
+    try{
+      const res=await fetch('/api/generate-style',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:'algae-surfing biofilter guardian'})});
+      if(!res.ok) return null;
+      const data=await res.json();
+      return data && data.style ? data.style : null;
+    }catch(_){
+      return null;
+    }
+  }
+
   function log(m){const n=document.createElement('div'); n.className='entry'; n.textContent=String(m).slice(0,220); ui.log.prepend(n); while(ui.log.children.length>18)ui.log.lastChild.remove();}
   function resize(){const dpr=Math.min(2,window.devicePixelRatio||1); W=canvas.parentElement.clientWidth; H=canvas.parentElement.clientHeight; canvas.width=Math.floor(W*dpr); canvas.height=Math.floor(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); setupTank();}
   function spawnFood(){capPush(food,{x:Math.random()*W*.78+W*.1,y:Math.random()*H*.64+H*.22,r:10},MAX_FOOD);}
@@ -103,7 +131,17 @@
     const rp=(graph.edges['REWARD->REPEAT'].w+graph.edges['TRUST->APPROACH'].w+graph.edges['LISP->INSIGHT'].w)*.333; chuco.rewardResidual=clamp(1-rp*chuco.trust,0,1);
   }
 
-  function generateSkin(){
+  async function generateSkin(){
+    ensureAudioGesture();
+    const remoteStyle = await requestGeneratedStyle();
+    if(remoteStyle && remoteStyle.body && remoteStyle.gill && remoteStyle.spots){
+      chuco.skin = remoteStyle;
+      capPush(ripples,{x:chuco.x,y:chuco.y,r:16,a:.75,c:'rgba(255,255,255,'},MAX_RIPPLES);
+      edge('LISP->INSIGHT',.08);
+      log('Generated style applied from /api/generate-style.');
+      sendTelemetry('generate-style',{source:'api'});
+      return;
+    }
     const hue=Math.floor(Math.random()*360);
     chuco.skin={
       body:`hsl(${hue} 58% 42%)`,
@@ -113,6 +151,7 @@
     capPush(ripples,{x:chuco.x,y:chuco.y,r:16,a:.75,c:'rgba(255,255,255,'},MAX_RIPPLES);
     edge('LISP->INSIGHT',.08);
     log(`Image-gen skin mutation applied: hue ${hue}.`);
+    sendTelemetry('generate-style',{source:'local-fallback',hue});
   }
 
   function drawAxolotl(x,y,heading,scale,skin,alpha=1){ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y); ctx.rotate(heading*.15); ctx.scale(scale,scale); const bodyGrad=ctx.createRadialGradient(10,-10,8,0,0,52); bodyGrad.addColorStop(0,skin.spots); bodyGrad.addColorStop(1,skin.body); ctx.fillStyle=bodyGrad; ctx.beginPath(); ctx.ellipse(0,0,44,30,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle='rgba(0,0,0,.22)'; ctx.beginPath(); ctx.ellipse(6,14,30,9,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle=skin.gill; for(const yy of [-15,0,15]){ctx.beginPath(); ctx.ellipse(-39,yy,14,6,.5,0,Math.PI*2); ctx.fill();} ctx.fillStyle='rgba(255,255,255,.35)'; ctx.beginPath(); ctx.ellipse(16,-12,11,5,-.4,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(15,-7,5,0,Math.PI*2); ctx.arc(15,7,5,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(16,-7,2,0,Math.PI*2); ctx.arc(16,7,2,0,Math.PI*2); ctx.fill(); ctx.restore();}
@@ -136,7 +175,7 @@
   }
   function setResearch(on){ui.researchPanel.classList.toggle('on',on); ui.researchToggle.textContent=on?'On':'Off'; const u=new URL(location.href); if(on)u.searchParams.set('research','1'); else u.searchParams.delete('research'); history.replaceState({},'',u); if(!on){ui.graph.replaceChildren(); ui.lispTrace.textContent='';}}
   window.addEventListener('resize',resize,{passive:true}); canvas.addEventListener('pointermove',(e)=>{const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;},{passive:true});
-  ui.quality.onclick=()=>{quality=quality==='auto'?'high':quality==='high'?'low':'auto'; ui.quality.textContent=quality[0].toUpperCase()+quality.slice(1); setupTank();}; $('skin').onclick=generateSkin; $('feed').onclick=()=>{spawnFood();reward(.10);capPush(ripples,{x:W*.5,y:H*.55,r:12,a:.7,c:'rgba(85,255,153,'},MAX_RIPPLES);log('Food dropped.');}; $('pet').onclick=()=>{edge('PET->TRUST',.25);edge('TRUST->APPROACH',.18);chuco.trust=clamp(chuco.trust+.12,0,1);reward(.18);capPush(ripples,{x:chuco.x,y:chuco.y,r:10,a:.8,c:'rgba(255,160,230,'},MAX_RIPPLES);log('Pet reinforced TRUST->APPROACH.');}; $('light').onclick=()=>{edge('LIGHT->CURIOUS',.2);chuco.curiosity=clamp(chuco.curiosity+.08,0,1);for(let i=0;i<3;i++)capPush(ripples,{x:Math.random()*W,y:Math.random()*H*.7+50,r:8,a:.5,c:'rgba(77,227,255,'},MAX_RIPPLES);log('Light increased exploration pressure.');}; $('toy').onclick=()=>{edge('TOY->PLAY',.22);edge('PLAY->SPIN',.18);chuco.play=clamp(chuco.play+.1,0,1);reward(.12);spawnFish(1);log('Toy strengthened PLAY recurrence and spawned a fish target.');}; $('lisp').onclick=runLispTreat; ui.researchToggle.onclick=()=>setResearch(!ui.researchPanel.classList.contains('on'));
+  ui.quality.onclick=()=>{ensureAudioGesture();quality=quality==='auto'?'high':quality==='high'?'low':'auto'; ui.quality.textContent=quality[0].toUpperCase()+quality.slice(1); setupTank();}; $('skin').onclick=()=>{ensureAudioGesture(); generateSkin();}; $('feed').onclick=()=>{ensureAudioGesture();spawnFood();sendTelemetry('feed');reward(.10);capPush(ripples,{x:W*.5,y:H*.55,r:12,a:.7,c:'rgba(85,255,153,'},MAX_RIPPLES);log('Food dropped.');}; $('pet').onclick=()=>{ensureAudioGesture();sendTelemetry('pet');edge('PET->TRUST',.25);edge('TRUST->APPROACH',.18);chuco.trust=clamp(chuco.trust+.12,0,1);reward(.18);capPush(ripples,{x:chuco.x,y:chuco.y,r:10,a:.8,c:'rgba(255,160,230,'},MAX_RIPPLES);log('Pet reinforced TRUST->APPROACH.');}; $('light').onclick=()=>{ensureAudioGesture();sendTelemetry('light');edge('LIGHT->CURIOUS',.2);chuco.curiosity=clamp(chuco.curiosity+.08,0,1);for(let i=0;i<3;i++)capPush(ripples,{x:Math.random()*W,y:Math.random()*H*.7+50,r:8,a:.5,c:'rgba(77,227,255,'},MAX_RIPPLES);log('Light increased exploration pressure.');}; $('toy').onclick=()=>{ensureAudioGesture();sendTelemetry('toy');edge('TOY->PLAY',.22);edge('PLAY->SPIN',.18);chuco.play=clamp(chuco.play+.1,0,1);reward(.12);spawnFish(1);log('Toy strengthened PLAY recurrence and spawned a fish target.');}; $('lisp').onclick=()=>{ensureAudioGesture();sendTelemetry('lisp');runLispTreat();}; ui.researchToggle.onclick=()=>setResearch(!ui.researchPanel.classList.contains('on'));
   const hasSavedEdges=load();
   const isProfileTrained=(()=>{
     try{return localStorage.getItem(PROFILE_KEY)==='trained';}catch(_){return false;}

@@ -1,0 +1,35 @@
+name: Cloudflare Pages Validate
+
+on:
+  pull_request:
+  push:
+    branches: [feature/chuco-conference-v5]
+
+jobs:
+  pages-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Syntax checks
+        run: |
+          node --check app.js
+          node --check 'functions/api/[[path]].js'
+
+      - name: Build Pages Functions bundle
+        run: |
+          npx --yes wrangler@4 pages functions build --outfile /tmp/functions-bundle.mjs ./functions
+
+      - name: Validate static root files
+        run: |
+          test -f index.html
+          test -f app.js
+          test -f styles.css
+          test -f _headers
+          test -f _routes.json
