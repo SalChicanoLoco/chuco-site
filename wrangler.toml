@@ -1,6 +1,6 @@
 name = "chuco-cgs-tank"
 compatibility_date = "2025-12-01"
-pages_build_output_dir = "."
+pages_build_output_dir = "dist"
 
 [vars]
 APP_NAME = "CHUCO CGS Tank"
