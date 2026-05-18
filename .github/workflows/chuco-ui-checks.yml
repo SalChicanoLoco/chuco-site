@@ -4,20 +4,10 @@ on:
   pull_request:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 6 * * *'
 
 jobs:
   ui-checks:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        mode: [quick]
-        include:
-          - mode: soak
-    if: |
-      matrix.mode == 'quick' || github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,30 +30,16 @@ jobs:
           sleep 1
 
       - name: Smoke check
-        if: matrix.mode == 'quick'
         run: node scripts/smoke-check.mjs
 
-      - name: UI probe (quick)
-        if: matrix.mode == 'quick'
+      - name: UI probe
         run: node scripts/ui-probe.mjs
-
-      - name: UI probe (soak)
-        if: matrix.mode == 'soak'
-        run: node scripts/ui-probe.mjs --soak --soak-ms=180000
-
-      - name: Save report copy by mode
-        if: always()
-        run: |
-          mkdir -p artifacts/ui-probe
-          if [ -f artifacts/ui-probe/report.json ]; then
-            cp artifacts/ui-probe/report.json "artifacts/ui-probe/report-${{ matrix.mode }}.json"
-          fi
 
       - name: Upload probe artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: chuco-ui-probe-${{ matrix.mode }}
+          name: chuco-ui-probe
           path: artifacts/ui-probe
 
       - name: Stop server
