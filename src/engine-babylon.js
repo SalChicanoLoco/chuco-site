@@ -186,16 +186,18 @@ function resetSpecies() {
     const f = makeFish('school fish ' + i, palette, 'fish');
     f.root.position.set(-9 + Math.random() * 18, -0.9 + Math.random() * 4.0, -4 + Math.random() * 8);
     f.velocity.set(-0.06 + Math.random() * 0.12, -0.02 + Math.random() * 0.04, -0.05 + Math.random() * 0.1);
-    f.target.copy(f.root.position);
+    f.target.copyFrom(f.root.position);
     f.speed = 0.9 + Math.random() * 0.55;
     state.fish.push(f);
   }
   const chuco = makeFish('Chuco guardian', mats.chuco, 'chuco');
   chuco.root.position.set(-5.7, -2.25, 1.6);
+  chuco.target.copyFrom(chuco.root.position);
   chuco.speed = 0.72;
   state.fish.push(chuco);
   const cleaner = makeFish('bottom cleaner', mats.violet, 'cleaner');
   cleaner.root.position.set(6.3, -3.25, -2.6);
+  cleaner.target.copyFrom(cleaner.root.position);
   cleaner.speed = 0.28;
   state.fish.push(cleaner);
 }
@@ -221,7 +223,7 @@ function steerFish(f, dt) {
   if (Math.random() < dt * 0.28 || Vector3.Distance(p, f.target) < 1.1) {
     f.target.set(-10 + Math.random() * 20, f.bottom ? -3.35 + Math.random() * 0.7 : -2.0 + Math.random() * 5.2, -4.7 + Math.random() * 9.4);
     if (f.feedable && state.feed > 0.1) f.target.set(-1.7 + Math.random() * 3.4, 0.4 + Math.random() * 3.2, -1.8 + Math.random() * 3.6);
-    if (f.bio && state.biofilter > 0.1) f.target.copy(state.algaeTarget);
+    if (f.bio && state.biofilter > 0.1) f.target.copyFrom(state.algaeTarget);
   }
   const desired = f.target.subtract(p).normalize().scale(f.speed * dt * 0.09);
   f.velocity.addInPlace(desired).scaleInPlace(0.988);
