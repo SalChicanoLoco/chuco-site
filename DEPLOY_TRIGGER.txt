@@ -1,0 +1,11 @@
+CHUCO static WebGL redeploy trigger
+
+Timestamp: 2026-05-18
+Purpose: force Cloudflare/GitHub to pick up the self-contained WebGL runtime on feature/chuco-conference-v5.
+
+Expected live proof after deployment:
+- Browser console no longer reports Failed to resolve module specifier 'three'.
+- Header pill changes from 3D READY to SELF WEBGL.
+- Tank renders WebGL geometry instead of a blank stage.
+
+Deploy branch baseline commit: 1b0d0f82caccf5d375bac9cda3771c1a2a52d74a
