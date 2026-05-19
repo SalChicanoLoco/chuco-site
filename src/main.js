@@ -36,6 +36,8 @@ const state = {
   speciesSet: 0,
   telemetry: { temp: 21.6, ph: 7.12, o2: 8.2, nh3: 0.03 },
   fish: [],
+  bubbles: [],
+  pellets: [],
   dpr: 1,
   w: 1,
   h: 1
@@ -55,22 +57,27 @@ attribute vec3 normal;
 uniform mat4 mvp;
 uniform mat4 model;
 varying vec3 vN;
+varying vec3 vP;
 void main(){
+  vec4 wp = model * vec4(position,1.0);
+  vP = wp.xyz;
   vN = mat3(model) * normal;
   gl_Position = mvp * vec4(position,1.0);
 }`;
 const FRAG = `
 precision mediump float;
 varying vec3 vN;
+varying vec3 vP;
 uniform vec3 color;
 uniform float alpha;
+uniform float time;
 uniform float glow;
 void main(){
   vec3 n = normalize(vN);
   vec3 light = normalize(vec3(-0.45,0.8,0.55));
   float d = max(dot(n,light),0.0);
-  float rim = pow(1.0 - abs(n.z),2.0);
-  vec3 c = color * (0.35 + 0.76*d) + vec3(0.0,0.9,0.7)*rim*0.20 + glow*vec3(0.2,0.8,1.0);
+  float rim = pow(1.0 - max(dot(n,normalize(vec3(0.0,0.2,1.0))),0.0),2.0);
+  vec3 c = color * (0.32 + 0.78*d) + vec3(0.0,0.9,0.7)*rim*0.22 + glow*vec3(0.2,0.8,1.0);
   gl_FragColor = vec4(c, alpha);
 }`;
 const WATER_VERT = `
@@ -143,7 +150,6 @@ const chucoMesh = sphere(2.05,.46,.38,20,10);
 const cleanerMesh = sphere(.82,.25,.25,14,7);
 const tailMesh = box(.08,.9,.55);
 const waterMesh = plane(23,11.4);
-const floorMesh = box(24,.18,12);
 const rockMesh = sphere(.55,.3,.45,10,5);
 const plantMesh = box(.07,2.0,.07);
 
@@ -157,7 +163,7 @@ function initEnv(){for(let i=0;i<30;i++)rocks.push({pos:[rand(-10,10),-4.25,rand
 
 const proj=mat4(),view=mat4(),pv=mat4(),mvp=mat4();
 function bindMesh(p, mesh){const locP=gl.getAttribLocation(p,'position'),locN=gl.getAttribLocation(p,'normal');gl.bindBuffer(gl.ARRAY_BUFFER,mesh.pb);gl.enableVertexAttribArray(locP);gl.vertexAttribPointer(locP,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,mesh.nb);gl.enableVertexAttribArray(locN);gl.vertexAttribPointer(locN,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,mesh.ib)}
-function drawMesh(mesh, model, color, alpha=1, glow=0){gl.useProgram(meshProg);bindMesh(meshProg,mesh);mul(mvp,pv,model);gl.uniformMatrix4fv(gl.getUniformLocation(meshProg,'mvp'),false,mvp);gl.uniformMatrix4fv(gl.getUniformLocation(meshProg,'model'),false,model);gl.uniform3fv(gl.getUniformLocation(meshProg,'color'),new Float32Array(color));gl.uniform1f(gl.getUniformLocation(meshProg,'alpha'),alpha);gl.uniform1f(gl.getUniformLocation(meshProg,'glow'),glow);gl.drawElements(gl.TRIANGLES,mesh.count,gl.UNSIGNED_SHORT,0)}
+function drawMesh(mesh, model, color, alpha=1, glow=0){gl.useProgram(meshProg);bindMesh(meshProg,mesh);mul(mvp,pv,model);gl.uniformMatrix4fv(gl.getUniformLocation(meshProg,'mvp'),false,mvp);gl.uniformMatrix4fv(gl.getUniformLocation(meshProg,'model'),false,model);gl.uniform3fv(gl.getUniformLocation(meshProg,'color'),new Float32Array(color));gl.uniform1f(gl.getUniformLocation(meshProg,'alpha'),alpha);gl.uniform1f(gl.getUniformLocation(meshProg,'time'),state.t);gl.uniform1f(gl.getUniformLocation(meshProg,'glow'),glow);gl.drawElements(gl.TRIANGLES,mesh.count,gl.UNSIGNED_SHORT,0)}
 function drawWater(){gl.useProgram(waterProg);bindMesh(waterProg,waterMesh);const model=compose([0,4.25,0],0,[1,1,1]);mul(mvp,pv,model);gl.uniformMatrix4fv(gl.getUniformLocation(waterProg,'mvp'),false,mvp);gl.uniform1f(gl.getUniformLocation(waterProg,'time'),state.t);gl.uniform1f(gl.getUniformLocation(waterProg,'shade'),state.shade);gl.uniform1f(gl.getUniformLocation(waterProg,'oxygen'),state.oxygen);gl.uniform1f(gl.getUniformLocation(waterProg,'biofilter'),state.biofilter);gl.drawElements(gl.TRIANGLES,waterMesh.count,gl.UNSIGNED_SHORT,0)}
 
 function steer(e,dt){let target=e.target;if(Math.random()<dt*.25){target=[rand(-10,10),e.bottom?rand(-3.6,-2.8):rand(-2.5,3.5),rand(-4.6,4.6)];if(e.bio&&state.biofilter>.1)target=[rand(-10,-7),rand(-3,-1.6),rand(-3,3)];if(e.feedable&&state.feed>.1)target=[rand(-2,2),rand(.5,3.2),rand(-2,2)];e.target=target}const dx=target[0]-e.pos[0],dy=target[1]-e.pos[1],dz=target[2]-e.pos[2],l=Math.hypot(dx,dy,dz)||1;e.vel[0]=(e.vel[0]+dx/l*e.speed*dt*.08)*.99;e.vel[1]=(e.vel[1]+dy/l*e.speed*dt*.08)*.99;e.vel[2]=(e.vel[2]+dz/l*e.speed*dt*.08)*.99;for(let k=0;k<3;k++)e.pos[k]+=e.vel[k]*dt*5;e.pos[0]=clamp(e.pos[0],-10.8,10.8);e.pos[1]=clamp(e.pos[1],-3.6,3.8);e.pos[2]=clamp(e.pos[2],-4.8,4.8)}
@@ -169,6 +175,6 @@ addEventListener('resize',resize,{passive:true});
 let audio=null;function startAudio(){if(audio)return;const C=AudioContext||webkitAudioContext,ctx=new C(),g=ctx.createGain();g.gain.value=.12;g.connect(ctx.destination);const o=ctx.createOscillator();o.frequency.value=54;o.connect(g);o.start();audio={ctx,g};audioLabel.textContent='On'}
 function trigger(action){state.hot={feed:2,oxygen:3,shade:4,biofilter:5,scan:6,species:7}[action]??0;graphState.textContent='S:'+action[0].toUpperCase()+action.slice(1);const lines={feed:'P2 magnitude rises: fish steer toward pellet field.',oxygen:'P3 distribution shifts: bubble column increases dissolved oxygen.',shade:'P5 locality cools: water column dims and temperature drops.',biofilter:'P7 selection: Chuco patrols the algae/biofilter edge.',scan:'P6 recursion visible: NUMARA trace scans the tank volume.',species:'P1 relation remaps: base model species set rotates.'};graphLine.textContent=lines[action]||graphLine.textContent;if(action==='feed'){state.feed=1;state.telemetry.nh3+=.012}if(action==='oxygen'){state.oxygen=1;state.telemetry.o2=Math.min(9.7,state.telemetry.o2+.55)}if(action==='shade'){state.shade=1;state.telemetry.temp=Math.max(19.2,state.telemetry.temp-.28)}if(action==='biofilter'){state.biofilter=1;state.telemetry.nh3=Math.max(.005,state.telemetry.nh3-.025)}if(action==='scan')state.scan=1;if(action==='species'){state.speciesSet++;resetEntities()}document.querySelectorAll('.controls button').forEach(b=>b.classList.toggle('active',b.dataset.action===action));fetch('/api/telemetry',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,telemetry:state.telemetry,time:Date.now(),runtime:'self-contained-webgl'})}).catch(()=>{})}
 startBtn.addEventListener('click',()=>{state.started=true;app.classList.add('started');startAudio();trigger('scan')});document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>{if(!state.started){state.started=true;app.classList.add('started');startAudio()}trigger(b.dataset.action)}));
-function render(){gl.clearColor(.01,.05,.065,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);look(view,[Math.sin(state.t*.08)*.8,5.7,22],[0,.2,0],[0,1,0]);mul(pv,proj,view);drawMesh(floorMesh,compose([0,-4.05,0],0,[1,1,1]),[.03,.12,.10],1,0);for(const r of rocks)drawMesh(rockMesh,compose(r.pos,0,r.scale),r.color,1,0);for(const p of plants)drawMesh(plantMesh,compose(p.pos,0,p.scale),p.color,.88,0);for(const e of entities){const yaw=Math.atan2(-e.vel[2],e.vel[0]||.001);drawMesh(e.mesh,compose(e.pos,yaw,e.scale),e.color,1,e.bio?state.biofilter*.45:state.feed*.12);if(e.tail)drawMesh(tailMesh,compose([e.pos[0]-Math.cos(yaw)*1.2,e.pos[1],e.pos[2]+Math.sin(yaw)*1.2],yaw+Math.sin(state.t*5+e.phase)*.35,[1,1,1]),[.65,.45,1],.78,0)}drawWater()}
+function render(){gl.clearColor(.01,.05,.065,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);look(view,[Math.sin(state.t*.08)*.8,5.7,22],[0,.2,0],[0,1,0]);mul(pv,proj,view);drawMesh(box(24,.18,12),compose([0,-4.05,0],0,[1,1,1]),[.03,.12,.10],1,0);for(const r of rocks)drawMesh(rockMesh,compose(r.pos,0,r.scale),r.color,1,0);for(const p of plants)drawMesh(plantMesh,compose(p.pos,0,p.scale),p.color,.88,0);for(const e of entities){const yaw=Math.atan2(-e.vel[2],e.vel[0]||.001);drawMesh(e.mesh,compose(e.pos,yaw,e.scale),e.color,1,e.bio?state.biofilter*.45:state.feed*.12);if(e.tail)drawMesh(tailMesh,compose([e.pos[0]-Math.cos(yaw)*1.2,e.pos[1],e.pos[2]+Math.sin(yaw)*1.2],yaw+Math.sin(state.t*5+e.phase)*.35,[1,1,1]),[.65,.45,1],.78,0)}drawWater()}
 let h=0;function loop(now){const dt=Math.min(.05,(now-state.last)/1000||.016);state.last=now;update(dt);render();h+=dt;if(h>.12){hud();h=0}requestAnimationFrame(loop)}
 initEnv();resetEntities();resize();livePill.textContent='SELF WEBGL';requestAnimationFrame(loop);
