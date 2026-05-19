@@ -1,15 +1,18 @@
 {
   "name": "chuco-cgs-tank",
-  "version": "0.5.2-static-webgl",
+  "version": "0.6.0-babylon-engine",
   "private": true,
   "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
-    "dev": "python3 -m http.server 4173",
-    "build": "node scripts/verify-static.mjs",
-    "preview": "python3 -m http.server 4173",
-    "check": "node --check src/main.js && node --check scripts/verify-static.mjs && node --check functions/api/[[path]].js"
+    "dev": "vite --host 0.0.0.0 --port 4173",
+    "build": "vite build && node scripts/verify-babylon-build.mjs",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "check": "node --check src/engine-babylon.js && node --check scripts/verify-babylon-build.mjs && node --check functions/api/[[path]].js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babylonjs/core": "8.33.1",
+    "vite": "5.4.11"
+  },
   "devDependencies": {}
 }
