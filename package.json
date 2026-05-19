@@ -1,18 +1,17 @@
 {
   "name": "chuco-cgs-tank",
-  "version": "0.5.1-conference",
+  "version": "0.6.1-babylon-hardened",
   "private": true,
   "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "prebuild": "node scripts/build-fallback-models.mjs",
-    "build": "vite build && node scripts/verify-build.mjs",
-    "preview": "vite preview",
-    "check": "node --check src/main.js && node --check src/modelRegistry.js && node --check scripts/build-fallback-models.mjs && node --check scripts/verify-build.mjs && node --check functions/api/[[path]].js"
+    "dev": "vite --host 0.0.0.0 --port 4173",
+    "build": "vite build && node scripts/verify-babylon-build.mjs",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "check": "node --check src/engine-babylon.js && node --check scripts/verify-babylon-build.mjs && node --check scripts/check-runtime-source.mjs && node scripts/check-runtime-source.mjs && node --check functions/api/[[path]].js"
   },
   "dependencies": {
-    "three": "0.160.1",
+    "@babylonjs/core": "8.33.1",
     "vite": "5.4.11"
   },
   "devDependencies": {}
