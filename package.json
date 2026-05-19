@@ -1,19 +1,19 @@
 {
   "name": "chuco-cgs-tank",
-  "version": "0.5.0-conference",
+  "version": "0.5.1-conference",
   "private": true,
   "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/build-fallback-models.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/verify-build.mjs",
     "preview": "vite preview",
-    "check": "node --check src/main.js && node --check src/modelRegistry.js && node --check scripts/build-fallback-models.mjs && node --check functions/api/[[path]].js"
+    "check": "node --check src/main.js && node --check src/modelRegistry.js && node --check scripts/build-fallback-models.mjs && node --check scripts/verify-build.mjs && node --check functions/api/[[path]].js"
   },
   "dependencies": {
-    "three": "0.183.2",
-    "vite": "8.0.13"
+    "three": "0.160.1",
+    "vite": "5.4.11"
   },
   "devDependencies": {}
 }
