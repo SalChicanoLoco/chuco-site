@@ -1,6 +1,6 @@
 {
   "name": "chuco-cgs-tank",
-  "version": "0.6.1-babylon-hardened",
+  "version": "0.7.0-smoke-probe",
   "private": true,
   "license": "GPL-3.0-or-later",
   "type": "module",
@@ -8,7 +8,8 @@
     "dev": "vite --host 0.0.0.0 --port 4173",
     "build": "vite build && node scripts/verify-babylon-build.mjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
-    "check": "node --check src/engine-babylon.js && node --check scripts/verify-babylon-build.mjs && node --check scripts/check-runtime-source.mjs && node scripts/check-runtime-source.mjs && node --check functions/api/[[path]].js"
+    "check": "node --check src/engine-babylon.js && node --check scripts/verify-babylon-build.mjs && node --check scripts/check-runtime-source.mjs && node --check scripts/smoke-built-bundle.mjs && node scripts/check-runtime-source.mjs && node --check functions/api/[[path]].js",
+    "smoke": "npm run build && node scripts/smoke-built-bundle.mjs"
   },
   "dependencies": {
     "@babylonjs/core": "8.33.1",
